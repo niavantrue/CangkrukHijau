@@ -1,0 +1,165 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Form Pengaduan | Cangkruk Hijau"
+  description="Form Pengaduan Pelanggaran Lingkungan: Laporkan pelanggaran atau kerusakan lingkungan di sekitarmu dengan foto dan lokasi agar cepat ditindaklanjuti."
+  activeNav="laporan"
+  lang="id"
+>
+  <main class="container" style="padding: 52px 0 72px;">
+    <div class="wrap" style="max-width: 1000px; margin: 0 auto; padding: 0 22px;">
+      <div style="margin-bottom: 24px;">
+        <a class="back" href="/">← Kembali ke beranda</a>
+      </div>
+
+      <div class="panel">
+        <div class="eyebrow">Pengaduan lingkungan</div>
+        <h1 class="title">Form Pengaduan Pelanggaran Lingkungan</h1>
+        <p class="lead" style="margin-top: 12px; color: var(--muted); max-width: 62ch;">
+          Laporkan pelanggaran kerusakan lingkungan yang kalian temui. Isi detail kejadian, lokasi, serta upload bukti foto atau video agar proses penanganan lebih cepat dan akurat.
+        </p>
+
+        <div class="grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 22px; margin-top: 24px;">
+          <!-- Form -->
+          <form id="pengaduanForm" action="mailto:CangkrukHijau@gmail.com" method="post" enctype="text/plain">
+            <div class="field">
+              <label for="nama">Nama / Alias</label>
+              <input id="nama" name="nama" type="text" placeholder="Masukkan nama atau inisial Anda" required />
+            </div>
+
+            <div class="field">
+              <label for="deskripsi">Deskripsi Pengaduan</label>
+              <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan pelanggaran yang terjadi, waktu kejadian, dan dampak yang ditimbulkan..." required></textarea>
+            </div>
+
+            <div class="field">
+              <label for="lokasi">Lokasi Pelanggaran</label>
+              <input id="lokasi" name="lokasi" type="text" placeholder="Contoh: Jalan ... , RT/RW ..., Kecamatan ..., Kota Surabaya" required />
+            </div>
+
+            <div class="field">
+              <label for="buktiFile">Upload Bukti Foto / Video</label>
+              <div class="filebox">
+                <input id="buktiFile" name="buktiFile" type="file" accept="image/*,video/*" multiple />
+                <div class="notice">Format yang didukung: foto JPG/PNG dan video MP4/WEBM. Bisa upload lebih dari satu file.</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="kontak">Nomor HP / WhatsApp Pelapor (Opsional)</label>
+              <input id="kontak" name="kontak" type="text" placeholder="08..." />
+              <div class="notice">Data kontak dijaga kerahasiaannya dan hanya digunakan untuk klarifikasi bukti.</div>
+            </div>
+
+            <div class="actions">
+              <button class="primary" type="submit">Kirim Pengaduan</button>
+              <a
+                class="secondary"
+                href="https://wa.me/6288127371159?text=Halo%20Cangkruk%20Hijau%2C%20saya%20ingin%20mengajukan%20pengaduan%20lingkungan."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Lapor via WhatsApp
+              </a>
+            </div>
+
+            <div id="laporanFeedback" class="notice hide" style="color: var(--g700); font-weight: 700; margin-top: 16px;">
+              Laporan Anda sedang disiapkan untuk dikirim ke email kami.
+            </div>
+          </form>
+
+          <!-- Sidebar Info -->
+          <div class="sidebar">
+            <div class="info">
+              <h3>⚡ Respon Cepat</h3>
+              <p style="font-size: 13.5px; color: var(--muted);">
+                Untuk kejadian darurat seperti pembuangan limbah B3 ilegal atau kebakaran lahan, segera hubungi nomor hotline kami.
+              </p>
+              <a
+                class="cta"
+                href="https://wa.me/6288127371159?text=Halo%20Cangkruk%20Hijau%2C%20saya%20ingin%20mengajukan%20pengaduan%20darurat."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp: 0881-273-71159
+              </a>
+            </div>
+
+            <div class="info">
+              <h3>📌 Layanan Lainnya</h3>
+              <p style="font-size: 13.5px; color: var(--muted);">Kirim surat resmi atau dokumentasi lengkap melalui kanal pengaduan kami:</p>
+              <a href="mailto:CangkrukHijau@gmail.com">✉ CangkrukHijau@gmail.com</a>
+              <a href="https://www.instagram.com/CangkrukHijau_id/" target="_blank" rel="noopener noreferrer">📷 Instagram: @CangkrukHijau_id</a>
+            </div>
+
+            <div class="info">
+              <h3>💡 Tips Pelaporan</h3>
+              <ul style="font-size: 13px; color: var(--muted); margin-left: 18px; margin-top: 8px;">
+                <li>Sertakan foto dengan sudut yang jelas</li>
+                <li>Cantumkan patokan lokasi atau koordinat peta</li>
+                <li>Sebutkan perkiraan waktu kejadian</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .info {
+      background: #f5faf4;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .info h3 {
+      color: var(--green);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .info a {
+      display: block;
+      margin-top: 8px;
+      color: var(--green);
+      font-weight: 700;
+    }
+    .cta {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 100px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e5588e, #b93b6c);
+      color: #fff !important;
+      margin-top: 10px;
+    }
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('pengaduanForm') as HTMLFormElement | null;
+    const feedback = document.getElementById('laporanFeedback');
+
+    if (form) {
+      form.addEventListener('submit', () => {
+        if (feedback) {
+          feedback.classList.remove('hide');
+          feedback.style.display = 'block';
+        }
+      });
+    }
+  </script>
+</Layout>

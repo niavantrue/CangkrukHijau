@@ -1,0 +1,150 @@
+---
+interface ContactItem {
+  type: 'whatsapp' | 'email' | 'instagram' | 'phone' | 'url';
+  label: string;
+  href: string;
+}
+
+interface Props {
+  id?: string;
+  name: string;
+  logo?: string;
+  scope?: string;
+  badge?: string;
+  description: string;
+  address?: string;
+  contacts?: ContactItem[];
+  joinHref?: string;
+  joinText?: string;
+  variant?: 'simple' | 'detailed';
+  isJoined?: boolean;
+}
+
+const {
+  id = '',
+  name,
+  logo,
+  scope,
+  badge,
+  description,
+  address,
+  contacts = [],
+  joinHref = '#komunitas',
+  joinText = 'Cara bergabung →',
+  variant = 'detailed',
+  isJoined = false,
+} = Astro.props;
+
+const communityId = id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+{variant === 'simple' ? (
+  <li data-scope={scope?.toLowerCase()} class="simple-kom-item">
+    {badge && <div class="scope">{badge}</div>}
+    <div class="simple-head">
+      {logo && <img src={logo} alt={name} class="kom-logo-thumb" loading="lazy" onerror="this.style.display='none'" />}
+      <h3>{name}</h3>
+    </div>
+    <p>{description}</p>
+    <a class="join" href={joinHref}>{joinText}</a>
+  </li>
+) : (
+  <article class={`card community-card ${isJoined ? 'is-joined' : ''}`} data-community-id={communityId} data-community-name={name}>
+    <div class="card-top">
+      {logo && <img src={logo} alt={name} class="kom-logo-avatar" loading="lazy" onerror="this.style.display='none'" />}
+      {badge && <span class="chip">{badge}</span>}
+      {isJoined ? (
+        <span class="badge visi" style="margin-left: auto; background: var(--g500);">✓ Sudah Bergabung</span>
+      ) : (
+        scope && <span class="badge green" style="margin-left: auto;">{scope}</span>
+      )}
+    </div>
+    <h3>{name}</h3>
+    <p>{description}</p>
+    
+    {address && (
+      <div class="meta">
+        <strong>Kantor:</strong> {address}
+      </div>
+    )}
+
+    {contacts.length > 0 && (
+      <div class="contact-list">
+        {contacts.map((contact) => (
+          <div class="contact-item">
+            <span class="dot"></span>
+            <strong>{contact.label}:</strong>
+            <a href={contact.href} target="_blank" rel="noopener noreferrer" style="color:var(--g700); text-decoration:underline;">
+              {contact.href.replace(/^https?:\/\//, '').replace(/^mailto:/, '').replace(/^tel:/, '')}
+            </a>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="actions">
+      <button
+        type="button"
+        class={`btn ${isJoined ? 'btn-leave' : 'btn-join primary'}`}
+        data-action={isJoined ? 'leave' : 'join'}
+        data-id={communityId}
+        data-name={name}
+      >
+        {isJoined ? 'Batal Gabung' : 'Gabung Komunitas'}
+      </button>
+
+      {contacts.find(c => c.type === 'instagram') && (
+        <a class="btn" href={contacts.find(c => c.type === 'instagram')?.href} target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+      )}
+
+      {contacts.find(c => c.type === 'whatsapp') && (
+        <a class="btn" href={contacts.find(c => c.type === 'whatsapp')?.href} target="_blank" rel="noopener noreferrer">
+          WhatsApp
+        </a>
+      )}
+    </div>
+  </article>
+)}
+
+<style>
+  .kom-logo-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: var(--g50, #eaf5ec);
+    border: 1px solid var(--line, #e2ece3);
+    margin-right: 10px;
+  }
+  .simple-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .kom-logo-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--g50, #eaf5ec);
+    border: 1px solid var(--line, #e2ece3);
+  }
+  .btn-leave {
+    background: #FDE8E8 !important;
+    border-color: #F8B4B4 !important;
+    color: #9B1C1C !important;
+    cursor: pointer;
+  }
+  .btn-leave:hover {
+    background: #F8B4B4 !important;
+  }
+  .btn-join {
+    cursor: pointer;
+  }
+  .is-joined {
+    border-color: var(--g500) !important;
+  }
+</style>

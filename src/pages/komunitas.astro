@@ -1,0 +1,479 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CommunityCard from '../components/CommunityCard.astro';
+
+const user = Astro.locals.user;
+const supabase = Astro.locals.supabase;
+
+const communities = [
+  {
+    id: 'walhi-jatim',
+    name: 'WALHI Jawa Timur',
+    badge: 'Advokasi Lingkungan',
+    scope: 'Advokasi & Kebijakan',
+    logo: '/images/komunitas/sahabat-mangrove-sby.webp',
+    description: 'Fokus pada advokasi kebijakan lingkungan, pendampingan warga terdampak konflik ekologis, dan kampanye perlindungan ruang hidup.',
+    address: 'Jl. Kutisari Indah Barat VIII No. 12, Tenggilis Mejoyo, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6281234567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:walhijatim@walhi.or.id' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/walhijatim' },
+    ],
+  },
+  {
+    id: 'ecoton-foundation',
+    name: 'Ecoton Foundation',
+    badge: 'Kesehatan Sungai & Mikroplastik',
+    scope: 'Riset & Konservasi',
+    logo: '/images/komunitas/ecoton-foundation.webp',
+    description: 'Melakukan riset polusi mikroplastik, ekspedisi sungai, edukasi konservasi lahan basah, dan advokasi kualitas air Kali Surabaya.',
+    address: 'Jl. Raya Wringinanom No. 24, Kec. Wringinanom, Kab. Gresik',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6282134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:info@ecoton.id' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/ecoton.id' },
+    ],
+  },
+  {
+    id: 'nol-sampah-surabaya',
+    name: 'Nol Sampah Surabaya',
+    badge: 'Pengelolaan Sampah',
+    scope: 'Kampanye & Aksi Nyata',
+    logo: '/images/komunitas/nol-sampah-sby.webp',
+    description: 'Gerakan pengurangan sampah plastik, pendampingan bank sampah rukun warga, aksi bersih pantai Kenjeran, dan audit merek sampah.',
+    address: 'Jl. Gayungsari Timur No. 18, Gayungan, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6283134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:nolsampah.surabaya@gmail.com' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/nolsampah' },
+    ],
+  },
+  {
+    id: 'tunas-hijau-indonesia',
+    name: 'Tunas Hijau Indonesia',
+    badge: 'Edukasi Anak & Pemuda',
+    scope: 'Pendidikan Lingkungan',
+    logo: '/images/komunitas/tunas-hijau-indonesia.webp',
+    description: 'Pendidikan lingkungan hidup generasi muda, kader lingkungan sekolah, program Sekolah Adiwiyata, dan kompetisi lingkungan keluarga.',
+    address: 'Jl. Simo Sidomulyo V No. 34, Sawahan, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6284134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:tunashijau@gmail.com' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/tunashijauid' },
+    ],
+  },
+  {
+    id: 'kophi-jatim',
+    name: 'KOPHI Jawa Timur',
+    badge: 'Gerakan Pemuda',
+    scope: 'Kolaborasi Pemuda',
+    logo: '/images/komunitas/kophi-jatim.webp',
+    description: 'Koalisi Pemuda Hijau Indonesia chapter Jatim yang menggerakkan pemuda lewat workshop iklim, aksi tanam bibit, dan pameran hijau.',
+    address: 'Jl. Nginden Semolo No. 44, Sukolilo, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6285134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:kophijatim@kophi.or.id' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/kophijatim' },
+    ],
+  },
+  {
+    id: 'surabaya-berkebun',
+    name: 'Surabaya Berkebun (Indonesia Berkebun)',
+    badge: 'Urban Farming',
+    scope: 'Pertanian Perkotaan',
+    logo: '/images/berita/urban-farming-jambangan.webp',
+    description: 'Mengajak warga memanfaatkan pekarangan dan lahan tidur menjadi kebun sayur kota produktif, berbagi benih, dan pelatihan kompos.',
+    address: 'Jl. Ketintang Madya No. 8, Wonokromo, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6286134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:surabayaberkebun@gmail.com' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/suberkebun' },
+    ],
+  },
+  {
+    id: 'sahabat-mangrove-surabaya',
+    name: 'Sahabat Mangrove Surabaya',
+    badge: 'Konservasi Pesisir',
+    scope: 'Rehabilitasi Pesisir',
+    logo: '/images/taman/kebun-raya-mangrove.webp',
+    description: 'Rehabilitasi hutan mangrove kawasan Wonorejo dan Gunung Anyar, adopsi bibit mangrove, dan susur pantai edukatif.',
+    address: 'Jl. Raya Wonorejo Mangrove No. 2, Rungkut, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6287134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:sahabatmangrove@gmail.com' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/sahabatmangrovesby' },
+    ],
+  },
+  {
+    id: 'trash-hero-surabaya',
+    name: 'Trash Hero Surabaya',
+    badge: 'Aksi Bersih Sampah',
+    scope: 'Aksi Bersih',
+    logo: '/images/berita/bank-sampah-rungkut.webp',
+    description: 'Aksi rutin mingguan pungut sampah di ruang publik dan taman terbuka kota Surabaya tanpa biaya dan terbuka untuk umum.',
+    address: 'Basecamp Car Free Day Darmo / Taman Flora, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6288134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:surabaya@trashhero.org' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/trashherosurabaya' },
+    ],
+  },
+  {
+    id: 'bank-sampah-induk-surabaya',
+    name: 'Bank Sampah Induk Surabaya',
+    badge: 'Sirkular Ekonomi',
+    scope: 'Pengelolaan Limbah',
+    logo: '/images/edukasi/modul-pilah-sampah.webp',
+    description: 'Pusat integrasi bank sampah unit tingkat RT/RW se-Surabaya untuk pemilahan sampah anorganik dan pemberdayaan ekonomi sirkular.',
+    address: 'Jl. Raya Menur No. 31, Sukolilo, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6289134567890' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:bsisurabaya@gmail.com' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/banksampahsurabaya' },
+    ],
+  },
+  {
+    id: 'greenpeace-youth-surabaya',
+    name: 'Greenpeace Youth Surabaya',
+    badge: 'Aksi Iklim & Energi',
+    scope: 'Kampanye Terbuka',
+    logo: '/images/komunitas/greenpeace-id.webp',
+    description: 'Kader relawan muda penggerak aksi transisi energi bersih, kampanye keanekaragaman hayati, dan pawai iklim.',
+    address: 'Jl. Manyar Kertoarjo IV No. 17, Gubeng, Surabaya',
+    contacts: [
+      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6281145678901' },
+      { type: 'email' as const, label: 'Email', href: 'mailto:youth.surabaya@greenpeace.org' },
+      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/greenpeaceyouthsby' },
+    ],
+  },
+];
+
+const joinedCommunityIds = new Set<string>();
+
+if (user && supabase) {
+  try {
+    const { data: userComms } = await supabase
+      .from('user_communities')
+      .select('community_id')
+      .eq('user_id', user.id);
+
+    if (userComms) {
+      userComms.forEach((c: { community_id: string }) => joinedCommunityIds.add(c.community_id));
+    }
+  } catch (err) {
+    // In case table or connection is in mock/unconnected state, fail gracefully
+  }
+}
+---
+
+<Layout
+  title="Komunitas | Cangkruk Hijau"
+  description="Temukan dan daftarkan komunitas lingkungan di Surabaya yang aktif dalam pengelolaan sampah, ruang hijau, dan aksi konservasi."
+  activeNav="komunitas"
+  lang="id"
+>
+  <div class="hero">
+    <div class="wrap">
+      <div style="margin-bottom: 14px;">
+        <a class="back" href="/">← Kembali ke Beranda</a>
+      </div>
+      <div class="eyebrow">Komunitas peduli lingkungan</div>
+      <h1 class="title">Temukan komunitas lingkungan di Surabaya</h1>
+      <p class="lead">
+        Jelajahi referensi komunitas lingkungan di Surabaya yang aktif dalam pengelolaan sampah, ruang hijau, konservasi, edukasi, dan aksi komunitas.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong>{communities.length}</strong><span>referensi komunitas</span></div>
+        <div class="stat"><strong>5+</strong><span>jenis aksi lingkungan</span></div>
+        <div class="stat"><strong>24/7</strong><span>siap bergabung</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="content">
+    <div class="wrap">
+      <div id="toastNotification" class="toast-notice hide"></div>
+
+      <div class="form-grid">
+        <!-- List Komunitas -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <h2 style="font-size: 24px; color: var(--g700);">Daftar Komunitas</h2>
+            {user && (
+              <a href="/komunitas-saya" class="slink">
+                Lihat Komunitas Saya ({joinedCommunityIds.size}) →
+              </a>
+            )}
+          </div>
+
+          <div class="list" style="display: grid; gap: 18px;">
+            {communities.map((item) => (
+              <CommunityCard
+                id={item.id}
+                name={item.name}
+                logo={item.logo}
+                badge={item.badge}
+                scope={item.scope}
+                description={item.description}
+                address={item.address}
+                contacts={item.contacts}
+                variant="detailed"
+                isJoined={joinedCommunityIds.has(item.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <!-- Form Pendaftaran -->
+        <div>
+          <div class="form-panel" id="daftarKomunitas">
+            <div class="form-header">
+              <div class="form-title">Daftarkan Komunitas</div>
+              <span class="badge visi">Gratis</span>
+            </div>
+            <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 16px;">
+              Punya komunitas atau ingin mengusulkan aksi lingkungan baru di Surabaya? Daftarkan di sini agar terhubung dengan relawan lain.
+            </p>
+
+            <form id="daftarKomunitasForm" class="form-box">
+              <div>
+                <label for="namaKomunitas">Nama Komunitas</label>
+                <input id="namaKomunitas" name="namaKomunitas" type="text" placeholder="Contoh: Green Heroes SBY" required />
+              </div>
+              <div>
+                <label for="fokus">Fokus Gerakan</label>
+                <select id="fokus" name="fokus" required>
+                  <option value="">Pilih Fokus Gerakan</option>
+                  <option value="Sampah & Daur Ulang">Pengelolaan Sampah & Daur Ulang</option>
+                  <option value="Ruang Hijau & Pohon">Penanaman Pohon & Ruang Hijau</option>
+                  <option value="Sungai & Pesisir">Kebersihan Sungai & Pesisir</option>
+                  <option value="Edukasi & Advokasi">Edukasi & Advokasi Kebijakan</option>
+                  <option value="Energi & Iklim">Transisi Energi & Aksi Iklim</option>
+                </select>
+              </div>
+              <div>
+                <label for="alamat">Alamat / Wilayah Aksi</label>
+                <input id="alamat" name="alamat" type="text" placeholder="Kecamatan atau Kota" required />
+              </div>
+              <div>
+                <label for="kontak">Kontak WhatsApp / Email</label>
+                <input id="kontak" name="kontak" type="text" placeholder="08... atau email@domain.com" required />
+              </div>
+              <div>
+                <label for="deskripsi">Deskripsi Singkat</label>
+                <textarea id="deskripsi" name="deskripsi" placeholder="Ceritakan misi dan kegiatan rutin komunitas..." required></textarea>
+              </div>
+              <button class="submit" type="submit">Kirim Pendaftaran</button>
+              <div id="formFeedback" class="notice hide" style="color: var(--g700); font-weight: 700;">
+                Terima kasih! Data komunitas Anda berhasil dikirim dan akan diverifikasi.
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+    .stat strong {
+      display: block;
+      color: var(--green);
+      font-size: 28px;
+      font-family: var(--logo);
+    }
+    .stat span {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .content {
+      padding: 24px 0 70px;
+    }
+    .form-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 95px;
+    }
+    .form-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .form-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--green);
+      font-family: var(--logo);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .form-box {
+      display: grid;
+      gap: 16px;
+    }
+    .toast-notice {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: var(--g900);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      transition: opacity 0.3s;
+    }
+    @media (max-width: 980px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-panel {
+        position: static;
+      }
+    }
+    @media (max-width: 640px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script define:vars={{ isLoggedIn: !!user }}>
+    const toast = document.getElementById('toastNotification');
+
+    function showToast(message, isError = false) {
+      if (!toast) return;
+      toast.textContent = message;
+      toast.style.background = isError ? '#9B1C1C' : '#0E3A21';
+      toast.classList.remove('hide');
+      setTimeout(() => {
+        toast.classList.add('hide');
+      }, 3500);
+    }
+
+    document.querySelectorAll('.community-card button[data-action]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!isLoggedIn) {
+          showToast('Harap login terlebih dahulu untuk bergabung.', true);
+          setTimeout(() => {
+            window.location.href = '/login?redirect=/komunitas';
+          }, 800);
+          return;
+        }
+
+        const action = btn.getAttribute('data-action');
+        const communityId = btn.getAttribute('data-id');
+        const communityName = btn.getAttribute('data-name');
+        const card = btn.closest('.community-card');
+
+        btn.disabled = true;
+
+        try {
+          if (action === 'join') {
+            const res = await fetch('/api/communities/join', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                community_id: communityId,
+                community_name: communityName,
+              }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+              showToast(data.error || 'Gagal bergabung dengan komunitas.', true);
+              btn.disabled = false;
+              return;
+            }
+
+            showToast(`Berhasil bergabung dengan ${communityName}!`);
+            btn.setAttribute('data-action', 'leave');
+            btn.textContent = 'Batal Gabung';
+            btn.className = 'btn btn-leave';
+            if (card) {
+              card.classList.add('is-joined');
+              const topEl = card.querySelector('.card-top');
+              if (topEl && !topEl.querySelector('.badge.visi')) {
+                const badge = document.createElement('span');
+                badge.className = 'badge visi';
+                badge.style.marginLeft = 'auto';
+                badge.style.background = 'var(--g500)';
+                badge.textContent = '✓ Sudah Bergabung';
+                topEl.appendChild(badge);
+              }
+            }
+          } else {
+            const res = await fetch('/api/communities/leave', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                community_id: communityId,
+              }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+              showToast(data.error || 'Gagal keluar dari komunitas.', true);
+              btn.disabled = false;
+              return;
+            }
+
+            showToast(`Berhasil keluar dari ${communityName}.`);
+            btn.setAttribute('data-action', 'join');
+            btn.textContent = 'Gabung Komunitas';
+            btn.className = 'btn btn-join primary';
+            if (card) {
+              card.classList.remove('is-joined');
+              const badge = card.querySelector('.badge.visi');
+              if (badge) badge.remove();
+            }
+          }
+        } catch (err) {
+          showToast('Terjadi kesalahan jaringan.', true);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+
+    // Form pendaftaran komunitas baru
+    const form = document.getElementById('daftarKomunitasForm');
+    const feedback = document.getElementById('formFeedback');
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (feedback) {
+          feedback.classList.remove('hide');
+          feedback.style.display = 'block';
+        }
+        form.reset();
+      });
+    }
+  </script>
+</Layout>

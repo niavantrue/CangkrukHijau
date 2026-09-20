@@ -1,0 +1,266 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const user = Astro.locals.user;
+const redirectParam = Astro.url.searchParams.get('redirect') || '/komunitas';
+
+if (user) {
+  return Astro.redirect(redirectParam);
+}
+---
+
+<Layout
+  title="Daftar Akun | Cangkruk Hijau"
+  description="Daftar akun baru di Cangkruk Hijau untuk bergabung dengan komunitas lingkungan dan ikut aksi nyata menjaga bumi."
+  activeNav="daftar"
+  lang="id"
+>
+  <main class="auth-page">
+    <div class="wrap auth-wrap">
+      <div class="auth-panel panel">
+        <div class="auth-header">
+          <div class="eyebrow">Mari Bergabung</div>
+          <h1 class="title" style="font-size: 32px; margin-top: 4px;">Buat Akun Baru</h1>
+          <p class="intro" style="font-size: 14.5px; margin-top: 8px;">
+            Bergabunglah dengan jejaring relawan dan komunitas lingkungan di Surabaya.
+          </p>
+        </div>
+
+        <div id="authAlert" class="auth-alert hide" role="alert"></div>
+
+        <form id="registerForm" class="auth-form" method="POST">
+          <input type="hidden" id="redirectInput" value={redirectParam} />
+
+          <div class="field">
+            <label for="fullName">Nama Lengkap / Inisial</label>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              placeholder="Contoh: Rahmat Hidayat"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="email">Alamat Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="nama@email.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="password">Kata Sandi (Min. 6 Karakter)</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+          </div>
+
+          <button id="submitBtn" class="submit auth-btn" type="submit">
+            <span class="btn-text">Daftar Akun</span>
+            <span class="btn-spinner hide">Mendaftarkan...</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>
+            Sudah punya akun? <a href={`/login?redirect=${encodeURIComponent(redirectParam)}`}>Masuk di sini</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .auth-page {
+      padding: 48px 0 80px;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+    }
+    .auth-wrap {
+      max-width: 520px;
+      width: 100%;
+    }
+    .auth-panel {
+      padding: 36px 32px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-header {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .auth-header .intro {
+      margin: 8px auto 0;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .auth-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 14px 20px;
+      font-size: 15px;
+    }
+    .auth-footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .auth-footer a {
+      color: var(--g700);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+    .auth-footer a:hover {
+      color: var(--pink);
+    }
+    .auth-alert {
+      padding: 12px 16px;
+      border-radius: var(--r-sm);
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .auth-alert.error {
+      background: #FDE8E8;
+      border: 1px solid #F8B4B4;
+      color: #9B1C1C;
+    }
+    .auth-alert.success {
+      background: #DEF7EC;
+      border: 1px solid #BCF0DA;
+      color: #03543F;
+    }
+  </style>
+
+  <script>
+    import { supabase } from '../lib/supabase.js';
+
+    const form = document.getElementById('registerForm') as HTMLFormElement | null;
+    const alertBox = document.getElementById('authAlert');
+    const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+    const btnText = submitBtn?.querySelector('.btn-text');
+    const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+    const redirectInput = document.getElementById('redirectInput') as HTMLInputElement | null;
+
+    function showAlert(message: string, type: 'error' | 'success') {
+      if (!alertBox) return;
+      alertBox.textContent = message;
+      alertBox.className = `auth-alert ${type}`;
+      alertBox.classList.remove('hide');
+    }
+
+    function setLoading(isLoading: boolean) {
+      if (!submitBtn) return;
+      submitBtn.disabled = isLoading;
+      if (isLoading) {
+        btnText?.classList.add('hide');
+        btnSpinner?.classList.remove('hide');
+      } else {
+        btnText?.classList.remove('hide');
+        btnSpinner?.classList.add('hide');
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = (document.getElementById('fullName') as HTMLInputElement)?.value.trim();
+        const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
+        const password = (document.getElementById('password') as HTMLInputElement)?.value;
+        const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+
+        if (!fullName || !email || !password) {
+          showAlert('Harap isi semua kolom pendaftaran.', 'error');
+          return;
+        }
+
+        if (password.length < 6) {
+          showAlert('Kata sandi harus memiliki minimal 6 karakter.', 'error');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showAlert('Konfirmasi kata sandi tidak cocok.', 'error');
+          return;
+        }
+
+        setLoading(true);
+        if (alertBox) alertBox.classList.add('hide');
+
+        try {
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                full_name: fullName,
+              },
+            },
+          });
+
+          if (error) {
+            showAlert(error.message, 'error');
+            setLoading(false);
+            return;
+          }
+
+          if (data?.session) {
+            showAlert('Pendaftaran berhasil! Mengalihkan...', 'success');
+            const redirectUrl = redirectInput?.value || '/komunitas';
+            setTimeout(() => {
+              window.location.href = redirectUrl;
+            }, 800);
+          } else {
+            showAlert(
+              'Pendaftaran berhasil! Silakan periksa email Anda untuk verifikasi atau masuk menggunakan akun baru.',
+              'success'
+            );
+            setLoading(false);
+            setTimeout(() => {
+              window.location.href = `/login?redirect=${encodeURIComponent(redirectInput?.value || '/komunitas')}`;
+            }, 2000);
+          }
+        } catch (err: any) {
+          showAlert(err?.message || 'Terjadi kesalahan saat pendaftaran.', 'error');
+          setLoading(false);
+        }
+      });
+    }
+  </script>
+</Layout>

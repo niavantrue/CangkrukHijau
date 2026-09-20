@@ -1,0 +1,17 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'articleModal' } = Astro.props;
+---
+
+<div class="modal" id={id} role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" type="button" aria-label="Tutup artikel">×</button>
+    <div class="modal-label" id="modalLabel"></div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="modal-date" id="modalDate"></div>
+    <p class="modal-text" id="modalText"></p>
+  </div>
+</div>

@@ -1,0 +1,387 @@
+---
+interface Props {
+  id?: string;
+  title: string;
+  topic?: string;
+  type?: string;
+  fileSize?: string;
+  pagesCount?: number;
+  description: string;
+  highlights?: string[];
+  icon?: string;
+  coverImage?: string;
+  pdfUrl?: string;
+  downloadName?: string;
+  source?: string;
+  badge?: string;
+  variant?: 'card' | 'journal';
+  href?: string;
+}
+
+const {
+  id,
+  title,
+  topic = 'Edukasi Lingkungan',
+  type = 'Modul Panduan',
+  fileSize = '1.5 MB',
+  pagesCount = 12,
+  description,
+  highlights = [],
+  icon = '🌱',
+  coverImage,
+  pdfUrl = '/documents/panduan-kompos-rumah-tangga.pdf',
+  downloadName,
+  source,
+  badge = 'Modul Edukasi',
+  variant = 'card',
+  href = '#',
+} = Astro.props;
+
+const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() : 'dokumen-edukasi.pdf');
+---
+
+{variant === 'journal' ? (
+  <a class="ncard" href={href}>
+    <div class="art">
+      <slot name="art">
+        {coverImage ? (
+          <img src={coverImage} alt={title} loading="lazy" class="journal-cover-img" />
+        ) : (
+          <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="300" height="132" fill="#EAF5EC"/>
+            <circle cx="80" cy="60" r="28" fill="#4FAE6F"/>
+            <circle cx="150" cy="52" r="34" fill="#3E9B5F"/>
+            <circle cx="216" cy="64" r="26" fill="#2F8A50"/>
+            <rect x="0" y="104" width="300" height="28" fill="#CFE3D5"/>
+          </svg>
+        )}
+      </slot>
+      <span class="pill p-soft">{badge}</span>
+    </div>
+    <div class="body">
+      <h3>{title}</h3>
+      {source && <div class="src">{source}</div>}
+      <div class="foot">
+        <span></span>
+        <span class="read">Baca Artikel →</span>
+      </div>
+    </div>
+  </a>
+) : (
+  <article class="edu-card card" data-topic={topic.toLowerCase()} data-id={id}>
+    {coverImage && (
+      <div class="edu-cover-wrap">
+        <img
+          src={coverImage}
+          alt={title}
+          loading="lazy"
+          class="edu-cover-img"
+          onerror="this.style.display='none'"
+        />
+        <div class="edu-cover-overlay"></div>
+      </div>
+    )}
+
+    <div class="edu-card-inner">
+      <div class="edu-head">
+        <div class="edu-icon-wrap" aria-hidden="true">
+          <span class="edu-icon">{icon}</span>
+        </div>
+        <div class="edu-badges">
+          <span class="pill p-green">{topic}</span>
+          <span class="pill p-soft">{type}</span>
+        </div>
+      </div>
+
+      <div class="edu-body">
+        <h3 class="edu-title">{title}</h3>
+        <p class="edu-desc">{description}</p>
+
+        {highlights && highlights.length > 0 && (
+          <details class="edu-details lesson">
+            <summary class="edu-summary">
+              <span>Lihat Poin Pembahasan ({highlights.length})</span>
+            </summary>
+            <ul class="edu-highlights-list">
+              {highlights.map((item) => (
+                <li>
+                  <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor" width="15" height="15" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </div>
+
+      <div class="edu-footer">
+        <div class="edu-meta">
+          <span class="meta-item">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            {pagesCount} Halaman
+          </span>
+          <span class="meta-sep">•</span>
+          <span class="meta-item">{fileSize}</span>
+        </div>
+
+        <div class="edu-actions">
+          {pdfUrl && (
+            <a
+              class="btn btn-download"
+              href={pdfUrl}
+              download={effectiveDownloadName}
+              title={`Unduh file ${effectiveDownloadName}`}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Unduh PDF</span>
+            </a>
+          )}
+          {pdfUrl && (
+            <a
+              class="btn-preview-link"
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Buka PDF di tab baru"
+            >
+              Buka ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </article>
+)}
+
+<style>
+  .edu-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md, 16px);
+    overflow: hidden;
+    padding: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+  }
+
+  .edu-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(18, 60, 34, 0.1);
+    border-color: #bcdbc3;
+  }
+
+  .edu-cover-wrap {
+    position: relative;
+    width: 100%;
+    height: 148px;
+    background: var(--g50, #eaf5ec);
+    overflow: hidden;
+  }
+
+  .edu-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .edu-card:hover .edu-cover-img {
+    transform: scale(1.05);
+  }
+
+  .edu-card-inner {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  .journal-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .edu-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .edu-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--g50, #eaf5ec);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(79, 174, 111, 0.15);
+  }
+
+  .edu-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .edu-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .edu-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .edu-title {
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--g900, #133a22);
+    line-height: 1.35;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .edu-desc {
+    font-size: 0.9rem;
+    color: var(--muted, #6c7e71);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .edu-details {
+    margin-top: auto;
+    margin-bottom: 16px;
+    background: #fbfdfa;
+    border: 1px solid #e7eee7;
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+
+  .edu-summary {
+    cursor: pointer;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--g700, #1b6b3a);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .edu-summary:hover {
+    color: var(--pink, #e5588e);
+  }
+
+  .edu-highlights-list {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .edu-highlights-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.83rem;
+    color: #31423a;
+    line-height: 1.45;
+  }
+
+  .check-icon {
+    color: var(--g500, #2f8a50);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .edu-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line, #e2ece3);
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+
+  .edu-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6c7e71;
+  }
+
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .meta-sep {
+    opacity: 0.5;
+  }
+
+  .edu-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--g700, #1b6b3a);
+    color: #ffffff !important;
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .btn-download:hover {
+    background: var(--g900, #133a22);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(27, 107, 58, 0.25);
+  }
+
+  .btn-preview-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6c7e71;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .btn-preview-link:hover {
+    color: var(--g700, #1b6b3a);
+    background: #eef5ef;
+  }
+</style>

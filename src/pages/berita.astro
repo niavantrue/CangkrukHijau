@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NewsCard from '../components/NewsCard.astro';
+import { newsArticles } from '../data/berita.js';
+---
+
+<Layout
+  title="Berita | Cangkruk Hijau"
+  description="Kabar lingkungan Surabaya dan sekitarnya: cerita, aksi, dan perkembangan lingkungan berkelanjutan di Surabaya, Sidoarjo, dan Gresik."
+  activeNav="berita"
+  lang="id"
+>
+  <main>
+    <div class="wrap">
+      <div style="margin-bottom: 24px;">
+        <a class="back" href="/">← Kembali ke Beranda</a>
+      </div>
+
+      <div class="eyebrow">Kabar lingkungan Surabaya dan sekitarnya</div>
+      <h1 class="title">Berita Terkini</h1>
+      <p class="intro">
+        Cerita, kabar, dan perkembangan aksi warga di Surabaya, Sidoarjo, dan Gresik untuk lingkungan yang lebih hijau dan berkelanjutan.
+      </p>
+
+      <div class="toolbar">
+        <span class="count">{newsArticles.length} berita terbaru</span>
+        <input class="search" id="search" type="search" placeholder="Cari berita..." aria-label="Cari berita" />
+      </div>
+
+      <div class="grid" id="newsList">
+        {newsArticles.map((article) => (
+          <NewsCard
+            title={article.title}
+            category={article.category}
+            categoryColor={article.categoryColor}
+            date={article.date}
+            summary={article.summary}
+            coverImage={article.coverImage}
+            href={`/berita/${article.slug}`}
+            asLink={false}
+          />
+        ))}
+      </div>
+
+      <p class="empty hide" id="empty">Berita yang kamu cari belum ditemukan.</p>
+    </div>
+  </main>
+
+  <script>
+    const input = document.getElementById('search') as HTMLInputElement | null;
+    const cards = document.querySelectorAll<HTMLElement>('.card');
+    const empty = document.getElementById('empty');
+
+    if (input) {
+      input.addEventListener('input', function () {
+        const query = input.value.toLowerCase();
+        let visible = 0;
+        cards.forEach(function (card) {
+          const show = (card.textContent || '').toLowerCase().indexOf(query) > -1;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        if (empty) {
+          empty.classList.toggle('hide', visible > 0);
+          empty.style.display = visible > 0 ? 'none' : 'block';
+        }
+      });
+    }
+  </script>
+</Layout>

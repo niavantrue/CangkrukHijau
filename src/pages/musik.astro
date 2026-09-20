@@ -1,0 +1,373 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const songs = [
+  {
+    title: 'Hutan Setelah Hujan',
+    artist: 'Cangkruk Hijau Sessions',
+    number: '01 · DEMO AUDIO',
+    desc: 'Nuansa hijau untuk menemani jeda.',
+    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    active: true,
+  },
+  {
+    title: 'Arus Kota',
+    artist: 'Cangkruk Hijau Sessions',
+    number: '02 · DEMO AUDIO',
+    desc: 'Ritme perjalanan dan ruang publik.',
+    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    active: false,
+  },
+  {
+    title: 'Langit Pesisir',
+    artist: 'Cangkruk Hijau Sessions',
+    number: '03 · DEMO AUDIO',
+    desc: 'Suasana sore dari tepian kota.',
+    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    active: false,
+  },
+];
+
+const artists = [
+  { name: 'Navicula', desc: 'Green grunge dari Bali dengan perhatian pada hutan dan habitat.' },
+  { name: 'Sisir Tanah', desc: 'Folk akar rumput yang dekat dengan isu agraria dan ekologi.' },
+  { name: 'Efek Rumah Kaca', desc: 'Lirik reflektif tentang manusia, kota, dan perubahan lingkungan.' },
+  { name: 'Silampukau', desc: 'Merekam cerita Surabaya dan perubahan wajah kotanya.' },
+  { name: 'Superman Is Dead', desc: 'Musik punk dan keterlibatan dalam gerakan warga Bali.' },
+  { name: 'Sukatani', desc: 'Kritik sosial dari skena musik akar rumput.' },
+];
+---
+
+<Layout
+  title="Musik | Cangkruk Hijau"
+  description="Ruang Musik Cangkruk Hijau: dengarkan track demo bertema alam dan kenali musisi yang menyuarakan isu lingkungan lewat karya mereka."
+  activeNav="musik"
+  lang="id"
+>
+  <main>
+    <div class="wrap">
+      <div style="margin-bottom: 24px;">
+        <a class="back" href="/">← Kembali ke Beranda</a>
+      </div>
+
+      <div class="eyebrow">Suara untuk bumi</div>
+      <h1 class="title">Ruang Musik</h1>
+      <p class="intro">
+        Dengarkan track demo bertema alam dan kenali musisi yang menyuarakan isu lingkungan lewat karya mereka.
+      </p>
+
+      <!-- Player Section -->
+      <section class="player" aria-label="Pemutar musik">
+        <div class="now">Sedang dipilih</div>
+        <h2 class="track-title" id="trackTitle">Hutan Setelah Hujan</h2>
+        <p class="track-artist" id="trackArtist">Cangkruk Hijau Sessions</p>
+        <div class="controls">
+          <button class="play" id="play" type="button" aria-label="Putar lagu">▶</button>
+          <input class="timeline" id="timeline" type="range" min="0" max="100" value="0" aria-label="Posisi lagu" />
+          <span class="time" id="time">00:00 / 00:00</span>
+          <input class="volume" id="volume" type="range" min="0" max="1" value="0.8" step="0.05" aria-label="Volume" />
+        </div>
+        <audio id="audio" preload="metadata"></audio>
+      </section>
+
+      <!-- Playlist -->
+      <div class="playlist" id="playlist">
+        {songs.map((song) => (
+          <article
+            class={`song ${song.active ? 'active' : ''}`}
+            data-title={song.title}
+            data-artist={song.artist}
+            data-audio={song.audio}
+          >
+            <span class="song-number">{song.number}</span>
+            <h2>{song.title}</h2>
+            <p>{song.desc}</p>
+            <button class="listen" type="button">Putar Lagu</button>
+          </article>
+        ))}
+      </div>
+
+      <p class="notice">
+        Track di atas adalah demo audio eksternal untuk pemutar. Untuk mendengarkan karya asli, cari musisi melalui kanal resmi mereka.
+      </p>
+
+      <!-- Musisi Section -->
+      <section class="artists">
+        <h2 class="section-title">Musisi yang menyuarakan lingkungan</h2>
+        <div class="artist-grid">
+          {artists.map((artist) => (
+            <article class="artist">
+              <h3>{artist.name}</h3>
+              <p>{artist.desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <style>
+    .player {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 18px;
+      background: var(--dark);
+      color: #e7f2e9;
+      box-shadow: 0 16px 36px rgba(14, 58, 33, 0.18);
+    }
+    .now {
+      color: #a8c4b0;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .track-title {
+      margin-top: 5px;
+      color: #fff;
+      font: 800 32px/1.15 var(--logo);
+    }
+    .track-artist {
+      margin-top: 4px;
+      color: #a8c4b0;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .play {
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--pink);
+      color: #fff;
+      font-size: 21px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.15s;
+    }
+    .play:hover {
+      background: #f078a7;
+    }
+    .timeline {
+      flex: 1;
+      accent-color: var(--pink);
+      cursor: pointer;
+    }
+    .time {
+      min-width: 92px;
+      color: #a8c4b0;
+      font-size: 12px;
+      text-align: right;
+    }
+    .volume {
+      width: 100px;
+      accent-color: #8fcba3;
+      cursor: pointer;
+    }
+    .playlist {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .song {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .song:hover,
+    .song.active {
+      border-color: var(--pink);
+      box-shadow: 0 8px 24px rgba(18, 60, 34, 0.1);
+    }
+    .song-number {
+      color: var(--pink);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .song h2 {
+      margin-top: 10px;
+      color: var(--green);
+      font-size: 18px;
+    }
+    .song p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .listen {
+      margin-top: 15px;
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      font: 700 13px var(--sans);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .listen:hover,
+    .song.active .listen {
+      background: var(--pink);
+    }
+    .artists {
+      margin-top: 44px;
+    }
+    .artist-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .artist {
+      padding: 18px;
+      border-left: 4px solid var(--pink);
+      background: #fff;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      border-radius: 0 12px 12px 0;
+    }
+    .artist h3 {
+      color: var(--green);
+      font-size: 17px;
+    }
+    .artist p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 760px) {
+      .playlist, .artist-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .controls {
+        flex-wrap: wrap;
+      }
+      .timeline {
+        order: 3;
+        flex-basis: 100%;
+      }
+    }
+    @media (max-width: 520px) {
+      .playlist, .artist-grid {
+        grid-template-columns: 1fr;
+      }
+      .player {
+        padding: 22px;
+      }
+      .volume {
+        width: 80px;
+      }
+    }
+  </style>
+
+  <script>
+    const audio = document.getElementById('audio') as HTMLAudioElement | null;
+    const play = document.getElementById('play') as HTMLButtonElement | null;
+    const timeline = document.getElementById('timeline') as HTMLInputElement | null;
+    const volume = document.getElementById('volume') as HTMLInputElement | null;
+    const time = document.getElementById('time');
+    const trackTitle = document.getElementById('trackTitle');
+    const trackArtist = document.getElementById('trackArtist');
+    const songs = document.querySelectorAll<HTMLElement>('.song');
+
+    if (audio && volume) {
+      audio.volume = parseFloat(volume.value);
+    }
+
+    function formatTime(value: number): string {
+      if (!isFinite(value)) return '00:00';
+      const minutes = Math.floor(value / 60)
+        .toString()
+        .padStart(2, '0');
+      const seconds = Math.floor(value % 60)
+        .toString()
+        .padStart(2, '0');
+      return minutes + ':' + seconds;
+    }
+
+    function updateTime() {
+      if (!audio || !timeline || !time) return;
+      timeline.value = audio.duration ? ((audio.currentTime / audio.duration) * 100).toString() : '0';
+      time.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+    }
+
+    function selectSong(song: HTMLElement) {
+      if (!audio || !play || !trackTitle || !trackArtist) return;
+      songs.forEach((item) => item.classList.remove('active'));
+      song.classList.add('active');
+      trackTitle.textContent = song.dataset.title || '';
+      trackArtist.textContent = song.dataset.artist || '';
+      audio.src = song.dataset.audio || '';
+      audio.load();
+      audio
+        .play()
+        .then(() => {
+          play.textContent = '❚❚';
+        })
+        .catch(() => {
+          play.textContent = '▶';
+        });
+    }
+
+    songs.forEach((song) => {
+      song.addEventListener('click', () => {
+        selectSong(song);
+      });
+    });
+
+    if (play && audio) {
+      play.addEventListener('click', () => {
+        if (audio.paused) {
+          audio
+            .play()
+            .then(() => {
+              play.textContent = '❚❚';
+            })
+            .catch(() => {
+              play.textContent = '▶';
+            });
+        } else {
+          audio.pause();
+          play.textContent = '▶';
+        }
+      });
+    }
+
+    if (audio) {
+      audio.addEventListener('timeupdate', updateTime);
+      audio.addEventListener('loadedmetadata', updateTime);
+      audio.addEventListener('ended', () => {
+        if (play) play.textContent = '▶';
+      });
+    }
+
+    if (timeline && audio) {
+      timeline.addEventListener('input', () => {
+        if (audio.duration) {
+          audio.currentTime = (parseFloat(timeline.value) / 100) * audio.duration;
+        }
+      });
+    }
+
+    if (volume && audio) {
+      volume.addEventListener('input', () => {
+        audio.volume = parseFloat(volume.value);
+      });
+    }
+
+    const activeSong = document.querySelector<HTMLElement>('.song.active');
+    if (activeSong && audio) {
+      audio.src = activeSong.dataset.audio || '';
+    }
+  </script>
+</Layout>

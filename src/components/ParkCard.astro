@@ -1,0 +1,72 @@
+---
+interface Props {
+  name: string;
+  area: string;
+  type: string;
+  address: string;
+  hours?: string;
+  mapsUrl: string;
+  icon?: string;
+  image?: string;
+}
+
+const {
+  name,
+  area,
+  type,
+  address,
+  hours = 'Buka setiap hari · Area hijau publik',
+  mapsUrl,
+  icon = '📍',
+  image,
+} = Astro.props;
+---
+
+<article class="card park-card" data-area={area}>
+  {image && (
+    <div class="park-cover-wrap">
+      <img src={image} alt={name} loading="lazy" class="park-cover-img" onerror="this.style.display='none'" />
+    </div>
+  )}
+  <div class="park-body">
+    <div class="pin">{icon}</div>
+    <h2>{name}</h2>
+    <span class="type">{type}</span>
+    <p class="address">{address}</p>
+    {hours && <p class="hours">{hours}</p>}
+    <a class="maps" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+      Lihat di Google Maps →
+    </a>
+  </div>
+</article>
+
+<style>
+  .park-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  .park-cover-wrap {
+    width: 100%;
+    height: 140px;
+    background: var(--g50, #eaf5ec);
+    overflow: hidden;
+  }
+  .park-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .park-card:hover .park-cover-img {
+    transform: scale(1.05);
+  }
+  .park-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+</style>

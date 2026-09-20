@@ -1,0 +1,197 @@
+---
+interface Props {
+  title: string;
+  category: string;
+  categoryColor?: 'pink' | 'green' | 'purple' | 'p-pink' | 'p-green' | 'p-purple' | 'p-soft';
+  date?: string;
+  summary?: string;
+  href?: string;
+  coverImage?: string;
+  external?: boolean;
+  asLink?: boolean;
+}
+
+const {
+  title,
+  category,
+  categoryColor = 'pink',
+  date = '15 Mei 2026',
+  summary = '',
+  href = '#',
+  coverImage,
+  external = false,
+  asLink = false,
+} = Astro.props;
+
+const pillColorClass = categoryColor.startsWith('p-') ? categoryColor : `p-${categoryColor}`;
+---
+
+{asLink ? (
+  <a class="ncard" href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>
+    <div class="art">
+      <slot name="art">
+        {coverImage ? (
+          <img
+            src={coverImage}
+            alt={title}
+            loading="lazy"
+            class="card-thumb-img"
+            onerror="this.style.display='none'"
+          />
+        ) : (
+          category.toLowerCase().includes('sampah') && (
+            <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="300" height="132" fill="#DDEFE1"/>
+              <path d="M0 96c60-16 110 14 170 4s90-24 130-12v44H0Z" fill="#3E9B5F"/>
+              <rect x="96" y="52" width="34" height="42" rx="7" fill="#4FAE6F"/>
+              <rect x="140" y="60" width="30" height="34" rx="6" fill="#2F8A50"/>
+              <circle cx="216" cy="44" r="18" fill="#E5588E" opacity=".45"/>
+            </svg>
+          )
+        )}
+        {!coverImage && category.toLowerCase().includes('ruang') && (
+          <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="300" height="132" fill="#E4F1E6"/>
+            <path d="M120 132c8-40 22-62 30-62s22 22 30 62Z" fill="#CFE3D5"/>
+            <circle cx="70" cy="52" r="30" fill="#3E9B5F"/>
+            <circle cx="42" cy="72" r="22" fill="#2F8A50"/>
+            <circle cx="238" cy="58" r="28" fill="#4FAE6F"/>
+            <rect x="66" y="72" width="8" height="40" fill="#7A6248"/>
+            <rect x="234" y="78" width="8" height="34" fill="#7A6248"/>
+          </svg>
+        )}
+        {!coverImage && category.toLowerCase().includes('udara') && (
+          <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="300" height="132" fill="#EDE4FA"/>
+            <g fill="#B79BE0">
+              <rect x="40" y="52" width="34" height="80" rx="3"/>
+              <rect x="86" y="30" width="28" height="102" rx="3"/>
+              <rect x="126" y="62" width="36" height="70" rx="3"/>
+              <rect x="176" y="42" width="30" height="90" rx="3"/>
+              <rect x="218" y="68" width="40" height="64" rx="3"/>
+            </g>
+            <path d="M0 100c70-12 130 10 200 2s70-10 100-6v36H0Z" fill="#8256C4" opacity=".35"/>
+          </svg>
+        )}
+        {!coverImage && category.toLowerCase().includes('air') && (
+          <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="300" height="132" fill="#DDEFE1"/>
+            <path d="M0 78c60 22 110-14 170-4s90 26 130 14v44H0Z" fill="#7FC3E0"/>
+            <path d="M0 100c70 14 120-10 180-2s80 16 120 8v26H0Z" fill="#5AA8CC"/>
+            <circle cx="60" cy="42" r="20" fill="#4FAE6F"/>
+            <circle cx="248" cy="36" r="24" fill="#3E9B5F"/>
+          </svg>
+        )}
+        {!coverImage && !['sampah', 'ruang', 'udara', 'air'].some(k => category.toLowerCase().includes(k)) && (
+          <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="300" height="132" fill="#EAF5EC"/>
+            <circle cx="80" cy="60" r="28" fill="#4FAE6F"/>
+            <circle cx="150" cy="52" r="34" fill="#3E9B5F"/>
+            <circle cx="216" cy="64" r="26" fill="#2F8A50"/>
+            <rect x="0" y="104" width="300" height="28" fill="#CFE3D5"/>
+          </svg>
+        )}
+      </slot>
+      <span class={`pill ${pillColorClass}`}>{category}</span>
+    </div>
+    <div class="body">
+      <h3>{title}</h3>
+      {summary && <div class="src">{summary}</div>}
+      <div class="foot">
+        <span>{date}</span>
+        <span class="read">Baca selengkapnya →</span>
+      </div>
+    </div>
+  </a>
+) : (
+  <article class="card" data-category={category}>
+    <div class="art">
+      <slot name="art">
+        {coverImage ? (
+          <img
+            src={coverImage}
+            alt={title}
+            loading="lazy"
+            class="card-thumb-img"
+            onerror="this.style.display='none'"
+          />
+        ) : (
+          category.toLowerCase().includes('sampah') && (
+            <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+              <rect width="300" height="170" fill="#DDEFE1"/>
+              <path d="M0 120c60-16 110 14 170 4s90-24 130-12v58H0Z" fill="#3E9B5F"/>
+              <rect x="96" y="62" width="34" height="52" rx="7" fill="#4FAE6F"/>
+              <rect x="140" y="70" width="30" height="44" rx="6" fill="#2F8A50"/>
+              <circle cx="216" cy="54" r="18" fill="#E5588E" opacity=".45"/>
+            </svg>
+          )
+        )}
+        {!coverImage && category.toLowerCase().includes('ruang') && (
+          <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+            <rect width="300" height="170" fill="#E4F1E6"/>
+            <path d="M120 170c8-40 22-62 30-62s22 22 30 62Z" fill="#CFE3D5"/>
+            <circle cx="70" cy="62" r="30" fill="#3E9B5F"/>
+            <circle cx="42" cy="82" r="22" fill="#2F8A50"/>
+            <circle cx="238" cy="68" r="28" fill="#4FAE6F"/>
+            <rect x="66" y="82" width="8" height="48" fill="#7A6248"/>
+            <rect x="234" y="88" width="8" height="42" fill="#7A6248"/>
+          </svg>
+        )}
+        {!coverImage && category.toLowerCase().includes('udara') && (
+          <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+            <rect width="300" height="170" fill="#EDE4FA"/>
+            <g fill="#B79BE0">
+              <rect x="40" y="62" width="34" height="108" rx="3"/>
+              <rect x="86" y="40" width="28" height="130" rx="3"/>
+              <rect x="126" y="72" width="36" height="98" rx="3"/>
+              <rect x="176" y="52" width="30" height="118" rx="3"/>
+              <rect x="218" y="78" width="40" height="92" rx="3"/>
+            </g>
+            <path d="M0 130c70-12 130 10 200 2s70-10 100-6v44H0Z" fill="#8256C4" opacity=".35"/>
+          </svg>
+        )}
+        {!coverImage && category.toLowerCase().includes('air') && (
+          <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+            <rect width="300" height="170" fill="#DDEFE1"/>
+            <path d="M0 98c60 22 110-14 170-4s90 26 130 14v62H0Z" fill="#7FC3E0"/>
+            <path d="M0 120c70 14 120-10 180-2s80 16 120 8v44H0Z" fill="#5AA8CC"/>
+            <circle cx="60" cy="52" r="20" fill="#4FAE6F"/>
+            <circle cx="248" cy="46" r="24" fill="#3E9B5F"/>
+          </svg>
+        )}
+        {!coverImage && !['sampah', 'ruang', 'udara', 'air'].some(k => category.toLowerCase().includes(k)) && (
+          <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+            <rect width="300" height="170" fill="#E8F3E9"/>
+            <circle cx="72" cy="63" r="34" fill="#3E9B5F"/>
+            <circle cx="112" cy="52" r="27" fill="#4FAE6F"/>
+            <rect x="87" y="78" width="10" height="65" fill="#7A6248"/>
+            <path d="M0 143c70-20 130-8 190-16s78-4 110 3v40H0Z" fill="#8BCB8C"/>
+          </svg>
+        )}
+      </slot>
+      <span class={`pill ${pillColorClass}`}>{category}</span>
+    </div>
+    <div class="body">
+      <h2>{title}</h2>
+      {date && <div class="date">{date}</div>}
+      <a class="read" href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>
+        Baca selengkapnya →
+      </a>
+    </div>
+  </article>
+)}
+
+<style>
+  .card-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--g50, #eaf5ec);
+    transition: transform 0.3s ease;
+  }
+  .ncard:hover .card-thumb-img,
+  .card:hover .card-thumb-img {
+    transform: scale(1.04);
+  }
+</style>

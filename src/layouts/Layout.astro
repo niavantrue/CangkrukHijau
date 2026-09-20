@@ -1,0 +1,223 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+  activeNav?: 'beranda' | 'berita' | 'edukasi' | 'ruang-hijau' | 'komunitas' | 'komunitas-saya' | 'musik' | 'laporan' | 'login' | 'daftar' | string;
+  showSearch?: boolean;
+}
+
+const {
+  title = 'Cangkruk Hijau — Ngobrol, Aksi, Jaga Bumi',
+  description = 'Cangkruk Hijau adalah ruang kolaborasi warga Surabaya untuk mewujudkan lingkungan yang sehat, hijau, dan berkelanjutan.',
+  lang = 'id',
+  activeNav = 'beranda',
+  showSearch = true,
+} = Astro.props;
+
+const user = Astro.locals.user;
+const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Relawan';
+const isEn = lang === 'en';
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#1B6B3A" />
+  <link rel="icon" type="image/svg+xml" href="/images/brand/logo.svg" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="generator" content={Astro.generator} />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL('/images/about/foto-kelompok.webp', Astro.url)} />
+  <meta property="og:site_name" content="Cangkruk Hijau" />
+
+  <!-- Twitter / X -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={title} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content={new URL('/images/about/foto-kelompok.webp', Astro.url)} />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <title>{title}</title>
+</head>
+<body>
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href={isEn ? "/en" : "/"} aria-label="Cangkruk Hijau Homepage">
+        <img src="/images/brand/logo.svg" class="mark" alt="Logo Cangkruk Hijau" width="42" height="42" />
+        <span>
+          <span class="name">Cangkruk Hijau</span>
+          <span class="tag">{isEn ? 'Talk, Act, Protect Our Earth.' : 'Ngobrol, Aksi, Jaga Bumi.'}</span>
+        </span>
+      </a>
+
+      <nav class="menu" aria-label={isEn ? "Main navigation" : "Navigasi utama"}>
+        <a href={isEn ? "/en" : "/"} class={activeNav === 'beranda' ? 'on' : ''}>{isEn ? 'Home' : 'Beranda'}</a>
+        <a href="/berita" class={activeNav === 'berita' ? 'on' : ''}>{isEn ? 'News' : 'Berita'}</a>
+        <a href="/edukasi" class={activeNav === 'edukasi' ? 'on' : ''}>{isEn ? 'Education' : 'Edukasi'}</a>
+        <a href="/peta-hijau" class={activeNav === 'ruang-hijau' ? 'on' : ''}>{isEn ? 'Green Space' : 'Ruang Hijau'}</a>
+        <a href="/komunitas" class={activeNav === 'komunitas' ? 'on' : ''}>{isEn ? 'Community' : 'Komunitas'}</a>
+        {user && (
+          <a href="/komunitas-saya" class={activeNav === 'komunitas-saya' ? 'on' : ''}>
+            {isEn ? 'My Communities' : 'Komunitas Saya'}
+          </a>
+        )}
+        <a href="/musik" class={activeNav === 'musik' ? 'on' : ''}>{isEn ? 'Music' : 'Musik'}</a>
+        <a href="/laporan" class={activeNav === 'laporan' ? 'on' : ''}>{isEn ? 'Report' : 'Laporan'}</a>
+
+        <div class="lang-switch" aria-label={isEn ? "Language selector" : "Pemilih bahasa"}>
+          <button class={`lang-btn ${!isEn ? 'is-active' : ''}`} type="button" data-lang="id">ID</button>
+          <button class={`lang-btn ${isEn ? 'is-active' : ''}`} type="button" data-lang="en">EN</button>
+        </div>
+
+        {user ? (
+          <div class="user-menu">
+            <a href="/komunitas-saya" class="user-greeting" title={user.email || ''}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5Zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4Z"/>
+              </svg>
+              <span>{userName}</span>
+            </a>
+            <form action="/api/auth/logout" method="POST" style="display:inline; margin:0;">
+              <button type="submit" class="btn-logout" title={isEn ? "Sign out" : "Keluar dari akun"}>
+                {isEn ? 'Logout' : 'Keluar'}
+              </button>
+            </form>
+          </div>
+        ) : (
+          <a href="/login" class="btn-auth">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 17v-3H3v-4h7V7l5 5-5 5Zm9-14h-8a2 2 0 0 0-2 2v2h2V5h8v14h-8v-2H9v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/>
+            </svg>
+            <span>{isEn ? 'Sign In' : 'Masuk / Daftar'}</span>
+          </a>
+        )}
+
+        {showSearch && (
+          <button class="searchbtn" id="btnCari" aria-expanded="false" aria-controls="kotakCari" aria-label={isEn ? "Open search" : "Buka pencarian"}>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
+          </button>
+        )}
+      </nav>
+
+      {showSearch && (
+        <div class="searchbar" id="kotakCari">
+          <label class="sr" for="cari">{isEn ? 'Search park or news' : 'Cari taman atau berita'}</label>
+          <input id="cari" type="search" placeholder={isEn ? "Search park, district, or news keywords" : "Cari taman, kecamatan, atau kata kunci berita"} autocomplete="off" />
+        </div>
+      )}
+    </div>
+  </header>
+
+  <!-- ============ PAGE CONTENT ============ -->
+  <slot />
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div>
+          <div class="quote">
+            {isEn ? '"The Earth is not inherited from our ancestors, but entrusted to our children." ♥' : '"Bumi bukan warisan nenek moyang, tapi titipan anak cucu kita." ♥'}
+          </div>
+          <div class="sosmed">
+            <a href="https://www.instagram.com/CangkrukHijau_id/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.2A4.8 4.8 0 1 0 16.8 12 4.8 4.8 0 0 0 12 7.2Zm0 2A2.8 2.8 0 1 1 9.2 12 2.8 2.8 0 0 1 12 9.2ZM17.6 6a1.2 1.2 0 1 0 1.2 1.2A1.2 1.2 0 0 0 17.6 6Z"/>
+              </svg>
+            </a>
+            <a href="#" aria-label="TikTok">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2h3a5.6 5.6 0 0 0 4.4 4.4v3A8.6 8.6 0 0 1 17 8v6.6a6.6 6.6 0 1 1-6.6-6.6c.4 0 .7 0 1 .1v3.1a3.5 3.5 0 1 0 2.6 3.4Z"/>
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22 12s0-3.4-.4-5a2.6 2.6 0 0 0-1.8-1.8C18 4.8 12 4.8 12 4.8s-6 0-7.8.4A2.6 2.6 0 0 0 2.4 7C2 8.6 2 12 2 12s0 3.4.4 5a2.6 2.6 0 0 0 1.8 1.8c1.8.4 7.8.4 7.8.4s6 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8c.4-1.6.4-5 .4-5ZM10 15.2V8.8L15.5 12Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h5>{isEn ? 'EXPLORE' : 'JELAJAHI'}</h5>
+          <ul>
+            <li><a href="/berita">{isEn ? 'News' : 'Berita'}</a></li>
+            <li><a href="/edukasi">{isEn ? 'Education' : 'Edukasi'}</a></li>
+            <li><a href="/peta-hijau">{isEn ? 'Green Space' : 'Ruang Hijau'}</a></li>
+            <li><a href="/komunitas">{isEn ? 'Community' : 'Komunitas'}</a></li>
+            <li><a href="/musik">{isEn ? 'Music' : 'Musik'}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>{isEn ? 'GET INVOLVED' : 'TERLIBAT'}</h5>
+          <ul>
+            <li><a href="/laporan">{isEn ? 'Report damage' : 'Lapor kerusakan'}</a></li>
+            <li><a href="/komunitas">{isEn ? 'Join a community' : 'Daftarkan komunitas'}</a></li>
+            <li><a href="/musik">{isEn ? 'Suggest musicians' : 'Usulkan musisi'}</a></li>
+            <li><a href="/#tentang">{isEn ? 'About us' : 'Tentang kami'}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bot">
+        <span>© 2026 Cangkruk Hijau. {isEn ? 'All rights reserved.' : 'Semua hak dilindungi.'}</span>
+        <span>{isEn ? 'Surabaya community environmental initiative.' : 'Ruang aksi dan kolaborasi warga Surabaya.'}</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ INTERACTIVE SCRIPTS ============ -->
+  <script>
+    (function () {
+      // Toggle search bar if present
+      const btnCari = document.getElementById('btnCari');
+      const kotakCari = document.getElementById('kotakCari');
+      const inputCari = document.getElementById('cari') as HTMLInputElement | null;
+
+      if (btnCari && kotakCari) {
+        btnCari.addEventListener('click', () => {
+          const open = kotakCari.classList.toggle('open');
+          btnCari.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (open && inputCari) {
+            inputCari.focus();
+          }
+        });
+      }
+
+      // Language Switcher handler
+      const langButtons = document.querySelectorAll<HTMLButtonElement>('.lang-btn');
+      langButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const targetLang = btn.dataset.lang;
+          if (targetLang) {
+            localStorage.setItem('cangkruk_lang', targetLang);
+            const currentPath = window.location.pathname;
+            if (targetLang === 'en' && !currentPath.startsWith('/en')) {
+              window.location.href = '/en';
+            } else if (targetLang === 'id' && currentPath.startsWith('/en')) {
+              window.location.href = '/';
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

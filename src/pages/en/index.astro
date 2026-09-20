@@ -1,0 +1,124 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ReportBanner from '../../components/ReportBanner.astro';
+
+const exploreCards = [
+  {
+    title: 'News & Updates',
+    meta: 'Latest citizen actions in Surabaya, Sidoarjo, and Gresik.',
+    badge: 'News',
+    badgeColor: 'green',
+    href: '/berita',
+    linkText: 'Read stories →',
+  },
+  {
+    title: 'Environmental Education',
+    meta: 'Practical guides on waste sorting, circular economy, and air quality.',
+    badge: 'Education',
+    badgeColor: 'purple',
+    href: '/edukasi',
+    linkText: 'Explore materials →',
+  },
+  {
+    title: 'Urban Green Space',
+    meta: 'Find public parks, botanical gardens, and mangrove forests in Surabaya.',
+    badge: 'Map',
+    badgeColor: 'pink',
+    href: '/peta-hijau',
+    linkText: 'Open map →',
+  },
+  {
+    title: 'Community Network',
+    meta: 'Connect with local organizations, youth groups, and green activists.',
+    badge: 'Community',
+    badgeColor: 'green',
+    href: '/komunitas',
+    linkText: 'Join a group →',
+  },
+  {
+    title: 'Echoes for Nature (Music)',
+    meta: 'Discover Indonesian bands and musicians advocating for climate justice.',
+    badge: 'Music',
+    badgeColor: 'purple',
+    href: '/musik',
+    linkText: 'Listen & explore →',
+  },
+  {
+    title: 'Environmental Reporting',
+    meta: 'Report environmental violations and illegal dumping directly.',
+    badge: 'Hotline',
+    badgeColor: 'pink',
+    href: '/laporan',
+    linkText: 'File a report →',
+  },
+];
+---
+
+<Layout
+  title="Cangkruk Hijau — Talk, Act, Protect Our Earth"
+  description="Cangkruk Hijau is a collaborative community platform for Surabaya citizens to build a greener, cleaner, and sustainable city."
+  activeNav="beranda"
+  lang="en"
+>
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="beranda">
+    <div class="wrap">
+      <div>
+        <h1>Talk together,<br />Act for real,<br /><span class="pink">Protect our Earth.</span></h1>
+        <p>
+          Cangkruk Hijau is a collaborative community platform for Surabaya citizens to build a greener, cleaner, and sustainable city.
+        </p>
+        <a class="cta" href="/komunitas">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21 4c-9 0-14 4-14 11v5h3v-4c0-6 4-9 11-9V4Z"></path>
+          </svg>
+          Join Cangkruk Hijau!
+        </a>
+      </div>
+      <div class="hero-art-box" style="padding: 24px; text-align: center;">
+        <svg class="hero-art" viewBox="0 0 640 400" role="img" aria-label="Surabaya city park illustration">
+          <circle cx="500" cy="70" r="46" fill="#FBE9F1"></circle>
+          <path d="M60 96c14-16 40-14 48 4 16-8 32 2 32 16H50c-3-9 2-17 10-20Z" fill="#EAF4EC"></path>
+          <path d="M400 66c12-14 34-12 41 3 14-7 27 2 27 14h-78c-3-8 2-14 10-17Z" fill="#EAF4EC"></path>
+          <g fill="#CFE3D5">
+            <rect x="150" y="150" width="42" height="130" rx="4"></rect>
+            <rect x="200" y="112" width="34" height="168" rx="4"></rect>
+            <rect x="404" y="128" width="46" height="152" rx="4"></rect>
+            <rect x="458" y="164" width="34" height="116" rx="4"></rect>
+            <rect x="500" y="140" width="40" height="140" rx="4"></rect>
+          </g>
+          <path d="M0 288c110-14 200 10 330 8s210-20 310-6v110H0Z" fill="#CFE8D4"></path>
+          <path d="M0 322c120-10 210 12 340 10s190-16 300-8v76H0Z" fill="#B4DCBE"></path>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORE SECTION ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="panel">
+        <h2 class="section-title">Explore Initiatives</h2>
+        <div class="grid">
+          {exploreCards.map((card) => (
+            <div class="card">
+              <div class="art" style="height: 140px; background: #edf7ee; position: relative;">
+                <span class={`badge ${card.badgeColor}`}>{card.badge}</span>
+              </div>
+              <div class="body">
+                <h3>{card.title}</h3>
+                <div class="meta">{card.meta}</div>
+                <a class="cta-mini" href={card.href} style="margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--g700);">
+                  {card.linkText}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REPORT HOTLINE ============ -->
+  <ReportBanner isEn={true} />
+</Layout>
