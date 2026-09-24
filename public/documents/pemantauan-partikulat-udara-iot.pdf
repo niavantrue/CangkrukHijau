@@ -1,0 +1,83 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1278 >>
+stream
+BT
+/F1 18 Tf
+50 780 Td
+(CANGKRUK HIJAU - MODUL PRAKTIK) Tj
+/F2 10 Tf
+0 -18 Td
+(Portal Informasi & Kolaborasi Komunitas Lingkungan Surabaya) Tj
+0 -10 Td
+ET
+q
+0.11 0.42 0.23 rg
+50 742 512 3 re
+f
+Q
+BT
+/F1 13 Tf
+50 715 Td
+(Panduan Pembuatan & Pembacaan Sensor Kualitas Udara PM2.5 Berbasis IoT) Tj
+/F2 10.5 Tf
+0 -22 Td
+(Topik: Udara Bersih & Teknologi  |  Estimasi Tebal: 18 hlm  |  Edisi: 2026) Tj
+0 -24 Td
+/F1 11.5 Tf
+(Ringkasan Materi:) Tj
+/F2 10 Tf
+0 -18 Td
+(Rancang bangun stasiun pemantau debu mikro PM2.5 dan PM10 mandiri menggunakan mikrokontroler murah, terhubung ke dashboard web Cangkruk Hijau.) Tj
+0 -26 Td
+/F1 11.5 Tf
+(Poin-Poin Utama / Materi Pembahasan:) Tj
+/F2 10 Tf
+0 -18 Td
+(1. Skema rangkaian sensor optik partikulat laser dan mikrokontroler.) Tj
+0 -16 Td
+(2. Kalibrasi data sensor terhadap stasiun AQMS resmi pemerintah.) Tj
+0 -16 Td
+(3. Pengiriman data real-time via jaringan WiFi/Cellular IoT.) Tj
+0 -16 Td
+(4. Interpretasi data angka ISPU dan peringatan dini bagi warga rentan.) Tj
+0 -30 Td
+/F1 10.5 Tf
+(Hak Cipta & Penggunaan:) Tj
+/F2 9.5 Tf
+0 -16 Td
+(Materi ini diterbitkan secara terbuka oleh Cangkruk Hijau untuk kepentingan edukasi publik.) Tj
+0 -14 Td
+(Kunjungi website kami di https://cangkrukhijau.vercel.app/edukasi untuk update modul terbaru.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000001581 00000 n 
+0000001656 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1726
+%%EOF

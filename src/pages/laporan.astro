@@ -3,103 +3,188 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Form Pengaduan | Cangkruk Hijau"
-  description="Form Pengaduan Pelanggaran Lingkungan: Laporkan pelanggaran atau kerusakan lingkungan di sekitarmu dengan foto dan lokasi agar cepat ditindaklanjuti."
+  title="Layanan Pengaduan Lingkungan & Hotline Resmi DLH Surabaya | Cangkruk Hijau"
+  description="Form Pengaduan Pelanggaran Lingkungan Terpadu: Laporkan pencemaran, pohon tumbang, sampah liar, dan kerusakan ekosistem langsung ke DLH Surabaya dan Call Center 112."
   activeNav="laporan"
   lang="id"
 >
-  <main class="container" style="padding: 52px 0 72px;">
-    <div class="wrap" style="max-width: 1000px; margin: 0 auto; padding: 0 22px;">
+  <main class="container" style="padding: 48px 0 80px;">
+    <div class="wrap" style="max-width: 1040px; margin: 0 auto; padding: 0 22px;">
       <div style="margin-bottom: 24px;">
         <a class="back" href="/">← Kembali ke beranda</a>
       </div>
 
-      <div class="panel">
-        <div class="eyebrow">Pengaduan lingkungan</div>
-        <h1 class="title">Form Pengaduan Pelanggaran Lingkungan</h1>
-        <p class="lead" style="margin-top: 12px; color: var(--muted); max-width: 62ch;">
-          Laporkan pelanggaran kerusakan lingkungan yang kalian temui. Isi detail kejadian, lokasi, serta upload bukti foto atau video agar proses penanganan lebih cepat dan akurat.
+      <!-- Header Box -->
+      <div class="panel" style="margin-bottom: 28px;">
+        <div class="eyebrow" style="background: #FDE8E8; color: #9B1C1C; display: inline-flex; align-items: center; gap: 6px;">
+          <span>🚨</span> Layanan Terpadu Pengaduan Lingkungan
+        </div>
+        <h1 class="title" style="margin-top: 10px; font-size: 32px;">
+          Pengaduan Pelanggaran & Kerusakan Lingkungan
+        </h1>
+        <p class="lead" style="margin-top: 12px; color: var(--muted); max-width: 68ch; font-size: 15.5px;">
+          Saluran resmi kolaborasi warga dengan <strong>Dinas Lingkungan Hidup (DLH) Kota Surabaya</strong> dan <strong>Call Center Siaga 112</strong>. Laporkan pencemaran limbah, pembuangan sampah liar, pohon rawan tumbang, atau perusakan mangrove.
         </p>
 
-        <div class="grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 22px; margin-top: 24px;">
-          <!-- Form -->
-          <form id="pengaduanForm" action="mailto:CangkrukHijau@gmail.com" method="post" enctype="text/plain">
+        <!-- Quick Hotline Buttons -->
+        <div class="hotline-quick-grid">
+          <a
+            href="https://wa.me/628113112255?text=Halo%20Dinas%20Lingkungan%20Hidup%20Kota%20Surabaya%2C%20saya%20warga%20Surabaya%20ingin%20melaporkan%20pengaduan%20lingkungan."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hotline-box wa-box"
+          >
+            <div class="icon-wrap">💬</div>
+            <div>
+              <div class="label">WhatsApp Pengaduan DLH Surabaya</div>
+              <div class="number">0811-3112-255</div>
+              <div class="sub">Respon cepat hari kerja</div>
+            </div>
+          </a>
+
+          <a href="tel:112" class="hotline-box emergency-box">
+            <div class="icon-wrap">📞</div>
+            <div>
+              <div class="label">Surabaya Siaga 112 (Bebas Pulsa)</div>
+              <div class="number">Call Center 112</div>
+              <div class="sub">Darurat 24 Jam Non-Stop</div>
+            </div>
+          </a>
+
+          <a href="mailto:dlh@surabaya.go.id" class="hotline-box email-box">
+            <div class="icon-wrap">✉️</div>
+            <div>
+              <div class="label">Surat & Laporan Resmi</div>
+              <div class="number">dlh@surabaya.go.id</div>
+              <div class="sub">Lampirkan berkas & kajian</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- SOP Alur Penanganan -->
+      <section class="panel sop-panel" style="margin-bottom: 28px;">
+        <div class="stitle" style="font-size: 20px; margin-bottom: 16px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          SOP Alur Penanganan Laporan Warga
+        </div>
+
+        <div class="sop-steps-grid">
+          <div class="sop-step">
+            <div class="step-num">1</div>
+            <h4>Pengiriman Laporan</h4>
+            <p>Warga mengisi detail kejadian, titik lokasi presisi, dan bukti foto/video melalui form atau WhatsApp.</p>
+          </div>
+          <div class="sop-step">
+            <div class="step-num">2</div>
+            <h4>Verifikasi Awal (< 2 Jam)</h4>
+            <p>Tim admin DLH & relawan memverifikasi validitas data serta menentukan tingkat urgensi penanganan.</p>
+          </div>
+          <div class="sop-step">
+            <div class="step-num">3</div>
+            <h4>Tindakan Lapangan</h4>
+            <p>Satgas DLH Kota Surabaya, Satpol PP, atau dinas teknis terkait diterjunkan langsung ke titik koordinat.</p>
+          </div>
+          <div class="sop-step">
+            <div class="step-num">4</div>
+            <h4>Konfirmasi & Selesai</h4>
+            <p>Pelapor menerima notifikasi dokumentasi penanganan dan status kasus ditutup secara transparan.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Form & Sidebar -->
+      <div class="panel">
+        <div class="grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px;">
+          <!-- Form Pengaduan -->
+          <form id="pengaduanForm" action="mailto:dlh@surabaya.go.id" method="post" enctype="text/plain">
+            <div class="stitle" style="font-size: 18px; margin-bottom: 16px;">
+              Formulir Pengaduan Digital
+            </div>
+
             <div class="field">
-              <label for="nama">Nama / Alias</label>
+              <label for="nama">Nama Lengkap / Alias Pelapor <span style="color: #E02424;">*</span></label>
               <input id="nama" name="nama" type="text" placeholder="Masukkan nama atau inisial Anda" required />
             </div>
 
             <div class="field">
-              <label for="deskripsi">Deskripsi Pengaduan</label>
-              <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan pelanggaran yang terjadi, waktu kejadian, dan dampak yang ditimbulkan..." required></textarea>
+              <label for="kategoriLaporan">Kategori Masalah Lingkungan <span style="color: #E02424;">*</span></label>
+              <select id="kategoriLaporan" name="kategori" required>
+                <option value="">Pilih Kategori Masalah</option>
+                <option value="Pembuangan Sampah Liar / TPS Ilegal">Pembuangan Sampah Liar / TPS Ilegal</option>
+                <option value="Pencemaran Limbah Cair ke Sungai">Pencemaran Limbah Cair ke Sungai / Selokan</option>
+                <option value="Penebangan Liar / Kerusakan Mangrove">Penebangan Liar / Perusakan Mangrove</option>
+                <option value="Polusi Udara / Asap Pembakaran Sampah">Polusi Udara / Pembakaran Sampah Terbuka</option>
+                <option value="Pohon Rawan Tumbang / Membahayakan">Pohon Rawan Tumbang / Membahayakan Jalan</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
             </div>
 
             <div class="field">
-              <label for="lokasi">Lokasi Pelanggaran</label>
-              <input id="lokasi" name="lokasi" type="text" placeholder="Contoh: Jalan ... , RT/RW ..., Kecamatan ..., Kota Surabaya" required />
+              <label for="lokasi">Titik Lokasi Kejadian (Jalan, RT/RW, Kelurahan) <span style="color: #E02424;">*</span></label>
+              <input id="lokasi" name="lokasi" type="text" placeholder="Contoh: Jl. Raya Wonorejo RT 02 RW 03, Rungkut, Surabaya" required />
             </div>
 
             <div class="field">
-              <label for="buktiFile">Upload Bukti Foto / Video</label>
-              <div class="filebox">
-                <input id="buktiFile" name="buktiFile" type="file" accept="image/*,video/*" multiple />
-                <div class="notice">Format yang didukung: foto JPG/PNG dan video MP4/WEBM. Bisa upload lebih dari satu file.</div>
-              </div>
+              <label for="deskripsi">Kronologi & Deskripsi Dampak <span style="color: #E02424;">*</span></label>
+              <textarea id="deskripsi" name="deskripsi" rows="4" placeholder="Jelaskan detail waktu kejadian, sumber pencemar, dan dampak bau/genangan yang ditimbulkan..." required></textarea>
             </div>
 
             <div class="field">
-              <label for="kontak">Nomor HP / WhatsApp Pelapor (Opsional)</label>
-              <input id="kontak" name="kontak" type="text" placeholder="08..." />
-              <div class="notice">Data kontak dijaga kerahasiaannya dan hanya digunakan untuk klarifikasi bukti.</div>
+              <label for="kontak">Nomor WhatsApp Pelapor (Untuk Konfirmasi Lapangan) <span style="color: #E02424;">*</span></label>
+              <input id="kontak" name="kontak" type="tel" placeholder="Contoh: 081234567890" required />
+              <div class="notice">Kerahasiaan identitas pelapor dilindungi sesuai regulasi perlindungan pelapor (Whistleblower Protection).</div>
             </div>
 
-            <div class="actions">
-              <button class="primary" type="submit">Kirim Pengaduan</button>
+            <div class="actions" style="margin-top: 20px;">
+              <button class="primary" type="submit" style="padding: 13px 24px; font-weight: 800;">
+                Kirim Laporan Pengaduan
+              </button>
               <a
                 class="secondary"
-                href="https://wa.me/6288127371159?text=Halo%20Cangkruk%20Hijau%2C%20saya%20ingin%20mengajukan%20pengaduan%20lingkungan."
+                href="https://wa.me/628113112255?text=Halo%20Dinas%20Lingkungan%20Hidup%20Kota%20Surabaya%2C%20saya%20ingin%20melaporkan%20pengaduan%20lingkungan."
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Lapor via WhatsApp
+                Lapor via WA DLH
               </a>
             </div>
 
-            <div id="laporanFeedback" class="notice hide" style="color: var(--g700); font-weight: 700; margin-top: 16px;">
-              Laporan Anda sedang disiapkan untuk dikirim ke email kami.
+            <div id="laporanFeedback" class="notice hide" style="color: var(--g700); font-weight: 700; margin-top: 16px; background: var(--g50); padding: 12px; border-radius: 8px;">
+              Laporan Anda sedang disiapkan untuk diteruskan ke Dinas Lingkungan Hidup Kota Surabaya.
             </div>
           </form>
 
-          <!-- Sidebar Info -->
+          <!-- Sidebar Edukasi -->
           <div class="sidebar">
-            <div class="info">
-              <h3>⚡ Respon Cepat</h3>
-              <p style="font-size: 13.5px; color: var(--muted);">
-                Untuk kejadian darurat seperti pembuangan limbah B3 ilegal atau kebakaran lahan, segera hubungi nomor hotline kami.
+            <div class="info" style="background: #FDF2F2; border-color: #F8B4B4;">
+              <h3 style="color: #9B1C1C;">⚡ Respon Darurat 24 Jam</h3>
+              <p style="font-size: 13.5px; color: var(--text);">
+                Untuk insiden kritis yang mengancam keselamatan umum seperti tumpahan bahan kimia berbahaya (B3), kebakaran alang-alang, atau pohon tumbang di jalan protokol:
               </p>
-              <a
-                class="cta"
-                href="https://wa.me/6288127371159?text=Halo%20Cangkruk%20Hijau%2C%20saya%20ingin%20mengajukan%20pengaduan%20darurat."
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                WhatsApp: 0881-273-71159
+              <a class="cta" href="tel:112" style="background: #E02424; margin-top: 12px;">
+                📞 Hubungi Call Center 112
               </a>
             </div>
 
             <div class="info">
-              <h3>📌 Layanan Lainnya</h3>
-              <p style="font-size: 13.5px; color: var(--muted);">Kirim surat resmi atau dokumentasi lengkap melalui kanal pengaduan kami:</p>
-              <a href="mailto:CangkrukHijau@gmail.com">✉ CangkrukHijau@gmail.com</a>
-              <a href="https://www.instagram.com/CangkrukHijau_id/" target="_blank" rel="noopener noreferrer">📷 Instagram: @CangkrukHijau_id</a>
+              <h3>🏛️ Kantor DLH Kota Surabaya</h3>
+              <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+                Jl. Menur No. 31A, Manyar Sabrangan, Kec. Mulyorejo, Kota Surabaya, Jawa Timur 60116.
+              </p>
+              <a href="https://dlh.surabaya.go.id" target="_blank" rel="noopener noreferrer">🌐 Website: dlh.surabaya.go.id</a>
+              <a href="https://www.instagram.com/dlhsurabaya/" target="_blank" rel="noopener noreferrer">📷 Instagram: @dlhsurabaya</a>
             </div>
 
             <div class="info">
-              <h3>💡 Tips Pelaporan</h3>
-              <ul style="font-size: 13px; color: var(--muted); margin-left: 18px; margin-top: 8px;">
-                <li>Sertakan foto dengan sudut yang jelas</li>
-                <li>Cantumkan patokan lokasi atau koordinat peta</li>
-                <li>Sebutkan perkiraan waktu kejadian</li>
+              <h3>💡 Tips Agar Laporan Cepat Ditindak</h3>
+              <ul style="font-size: 13px; color: var(--muted); margin-left: 18px; margin-top: 8px; line-height: 1.6;">
+                <li>Sertakan foto dengan penanda waktu (time-stamp).</li>
+                <li>Bagikan titik pin lokasi Google Maps (share live location).</li>
+                <li>Jelaskan jenis limbah atau material pencemar secara spesifik.</li>
               </ul>
             </div>
           </div>
@@ -109,6 +194,99 @@ import Layout from '../layouts/Layout.astro';
   </main>
 
   <style>
+    .hotline-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .hotline-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .hotline-box:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .wa-box {
+      border-color: #BCF0DA;
+      background: #F3FAF7;
+    }
+    .emergency-box {
+      border-color: #F8B4B4;
+      background: #FEF5F5;
+    }
+    .email-box {
+      border-color: #E2ECE3;
+      background: #F8FAF7;
+    }
+    .icon-wrap {
+      font-size: 28px;
+      flex: none;
+    }
+    .hotline-box .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .hotline-box .number {
+      font-family: var(--logo);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--g900);
+      margin-top: 2px;
+    }
+    .hotline-box .sub {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    /* SOP Steps */
+    .sop-panel {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F9FAF8 100%);
+    }
+    .sop-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .sop-step {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 16px;
+      position: relative;
+    }
+    .step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--g700);
+      color: #FFFFFF;
+      font-family: var(--logo);
+      font-size: 16px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+    }
+    .sop-step h4 {
+      font-size: 14.5px;
+      color: var(--g900);
+      margin-bottom: 6px;
+    }
+    .sop-step p {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
     .sidebar {
       display: flex;
       flex-direction: column;
@@ -122,7 +300,7 @@ import Layout from '../layouts/Layout.astro';
     }
     .info h3 {
       color: var(--green);
-      font-size: 18px;
+      font-size: 17px;
       margin-bottom: 8px;
     }
     .info a {
@@ -130,6 +308,7 @@ import Layout from '../layouts/Layout.astro';
       margin-top: 8px;
       color: var(--green);
       font-weight: 700;
+      font-size: 13.5px;
     }
     .cta {
       display: inline-flex !important;
@@ -140,7 +319,6 @@ import Layout from '../layouts/Layout.astro';
       font-weight: 800;
       background: linear-gradient(135deg, #e5588e, #b93b6c);
       color: #fff !important;
-      margin-top: 10px;
     }
     @media (max-width: 760px) {
       .grid {

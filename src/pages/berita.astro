@@ -52,8 +52,8 @@ import { newsArticles } from '../data/berita.js';
     const empty = document.getElementById('empty');
 
     if (input) {
-      input.addEventListener('input', function () {
-        const query = input.value.toLowerCase();
+      function doSearch() {
+        const query = (input?.value || '').toLowerCase();
         let visible = 0;
         cards.forEach(function (card) {
           const show = (card.textContent || '').toLowerCase().indexOf(query) > -1;
@@ -64,7 +64,17 @@ import { newsArticles } from '../data/berita.js';
           empty.classList.toggle('hide', visible > 0);
           empty.style.display = visible > 0 ? 'none' : 'block';
         }
-      });
+      }
+
+      input.addEventListener('input', doSearch);
+
+      // Check URL query param ?q=
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialQuery = urlParams.get('q');
+      if (initialQuery) {
+        input.value = initialQuery;
+        doSearch();
+      }
     }
   </script>
 </Layout>

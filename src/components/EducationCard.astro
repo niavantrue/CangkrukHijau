@@ -45,7 +45,13 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     <div class="art">
       <slot name="art">
         {coverImage ? (
-          <img src={coverImage} alt={title} loading="lazy" class="journal-cover-img" />
+          <img
+            src={coverImage}
+            alt={title}
+            loading="lazy"
+            class="journal-cover-img"
+            onerror="this.onerror=null; this.src='/images/brand/logo.svg';"
+          />
         ) : (
           <svg viewBox="0 0 300 132" preserveAspectRatio="none" aria-hidden="true">
             <rect width="300" height="132" fill="#EAF5EC"/>
@@ -76,7 +82,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
           alt={title}
           loading="lazy"
           class="edu-cover-img"
-          onerror="this.style.display='none'"
+          onerror="this.onerror=null; this.src='/images/brand/logo.svg';"
         />
         <div class="edu-cover-overlay"></div>
       </div>

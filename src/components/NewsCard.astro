@@ -36,7 +36,7 @@ const pillColorClass = categoryColor.startsWith('p-') ? categoryColor : `p-${cat
             alt={title}
             loading="lazy"
             class="card-thumb-img"
-            onerror="this.style.display='none'"
+            onerror="this.onerror=null; this.src='/images/brand/logo.svg';"
           />
         ) : (
           category.toLowerCase().includes('sampah') && (
@@ -113,7 +113,7 @@ const pillColorClass = categoryColor.startsWith('p-') ? categoryColor : `p-${cat
             alt={title}
             loading="lazy"
             class="card-thumb-img"
-            onerror="this.style.display='none'"
+            onerror="this.onerror=null; this.src='/images/brand/logo.svg';"
           />
         ) : (
           category.toLowerCase().includes('sampah') && (

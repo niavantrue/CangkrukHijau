@@ -464,6 +464,15 @@ const allTopics = ['Semua', ...Array.from(new Set(educationMaterials.map(m => m.
         searchQuery = searchInput.value.toLowerCase().trim();
         applyFilter();
       });
+
+      // Check URL query param ?q=
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialQuery = urlParams.get('q');
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        searchQuery = initialQuery.toLowerCase().trim();
+        applyFilter();
+      }
     }
 
     if (resetBtn) {

@@ -2,479 +2,504 @@
 import Layout from '../layouts/Layout.astro';
 import ParkCard from '../components/ParkCard.astro';
 
-const primaryParks = [
+export const parksData = [
   {
-    name: 'Taman Apsari',
-    area: 'Surabaya Pusat',
-    type: 'Taman kota · Surabaya Pusat',
-    image: '/images/taman/taman-bungkul.webp',
-    address: 'Jl. Taman Apsari, Embong Kaliasin, Kec. Genteng, Surabaya.',
-    hours: 'Buka setiap hari · Area olahraga dan ruang santai',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Apsari+Surabaya',
-  },
-  {
+    id: 'bungkul',
     name: 'Taman Bungkul',
     area: 'Surabaya Pusat',
-    type: 'Taman kota · Surabaya Pusat',
+    type: 'Taman Kota Ikonik & Ramah Anak',
+    lat: -7.2913,
+    lng: 112.7398,
     image: '/images/taman/taman-bungkul.webp',
-    address: 'Jl. Taman Bungkul, Darmo, Kec. Wonokromo, Surabaya.',
-    hours: 'Buka setiap hari · Area bermain dan kuliner',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Bungkul+Surabaya',
+    address: 'Jl. Taman Bungkul, Darmo, Kec. Wonokromo, Surabaya',
+    hours: 'Buka 24 Jam · Area Olahraga, Kuliner & Ramah Anak',
+    facilities: ['Jogging Track', 'Skate Park', 'Sentra PKL', 'WiFi Gratis', 'Taman Bermain Anak'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2913,112.7398',
   },
   {
+    id: 'flora-bratang',
+    name: 'Taman Flora Bratang (Kebun Bibit Bratang)',
+    area: 'Surabaya Timur',
+    type: 'Kebun Botani & Edukasi Satwa',
+    lat: -7.2957,
+    lng: 112.7601,
+    image: '/images/taman/taman-flora.webp',
+    address: 'Jl. Bratang Binangun, Baratajaya, Kec. Gubeng, Surabaya',
+    hours: '06:00 - 18:00 WIB · Rindang, Edukasi Rusa & Burung',
+    facilities: ['Koleksi Tanaman Langka', 'Kandang Rusa', 'Kolam Ikan', 'Taman Baca Digital', 'Playground'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2957,112.7601',
+  },
+  {
+    id: 'bibit-wonorejo',
+    name: 'Kebun Bibit Wonorejo',
+    area: 'Surabaya Timur / Rungkut',
+    type: 'Ekowisata Danau & Pembibitan Kota',
+    lat: -7.3115,
+    lng: 112.7847,
+    image: '/images/taman/kebun-bibit-wonorejo.webp',
+    address: 'Jl. Kendalsari, Wonorejo, Kec. Rungkut, Surabaya',
+    hours: '06:00 - 18:00 WIB · Danau Resapan & Pembibitan Pohon',
+    facilities: ['Danau Buatan', 'Taman Bunga', 'Wall Climbing', 'Jogging Track', 'Sentra Bibit Gratis'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.3115,112.7847',
+  },
+  {
+    id: 'bambu-keputih',
+    name: 'Hutan Bambu Keputih',
+    area: 'Surabaya Timur',
+    type: 'Hutan Bambu Eksotis & Spot Foto Alam',
+    lat: -7.2934,
+    lng: 112.8021,
+    image: '/images/taman/hutan-bambu-keputih.webp',
+    address: 'Jl. Raya Marina Asri, Keputih, Kec. Sukolilo, Surabaya',
+    hours: '06:00 - 18:00 WIB · Kanopi Bambu Sejuk',
+    facilities: ['Spot Foto Populer', 'Jalur Pejalan Kaki Rindang', 'Kawasan Teduh'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2934,112.8021',
+  },
+  {
+    id: 'harmoni-keputih',
     name: 'Taman Harmoni Keputih',
     area: 'Surabaya Timur',
-    type: 'Taman kota · Surabaya Timur',
+    type: 'Taman Bunga Tematik & Hutan Kota',
+    lat: -7.2956,
+    lng: 112.8009,
     image: '/images/taman/taman-harmoni.webp',
-    address: 'Jl. Keputih Tegal, Keputih, Kec. Sukolilo, Surabaya.',
-    hours: 'Buka setiap hari · Kebun bunga dan area piknik',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Harmoni+Keputih+Surabaya',
+    address: 'Jl. Keputih Tegal Timur II, Keputih, Kec. Sukolilo, Surabaya',
+    hours: '06:00 - 18:00 WIB · Padang Bunga Sakura & Tabebuya',
+    facilities: ['Taman Bunga Warna-warni', 'Refleksi Kaki', 'Area Bermain Anak', 'Pusat Daur Ulang Kompos'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2956,112.8009',
   },
   {
-    name: 'Taman Flora Bratang',
-    area: 'Surabaya Timur',
-    type: 'Kebun botani · Surabaya Timur',
-    image: '/images/taman/taman-flora.webp',
-    address: 'Jl. Bratang Binangun, Baratajaya, Kec. Gubeng, Surabaya.',
-    hours: 'Buka setiap hari · Koleksi tanaman dan edukasi',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Flora+Bratang+Surabaya',
+    id: 'mangrove-sby',
+    name: 'Kebun Raya Mangrove Surabaya (Gunung Anyar & Wonorejo)',
+    area: 'Surabaya Timur / Pesisir',
+    type: 'Konservasi Mangrove & Suaka Burung Pesisir',
+    lat: -7.3072,
+    lng: 112.8256,
+    image: '/images/taman/kebun-raya-mangrove.webp',
+    address: 'Jl. Medokan Sawah Timur, Gunung Anyar Tambak, Surabaya',
+    hours: '07:00 - 17:00 WIB · Boardwalk Kayu & Perahu Susur',
+    facilities: ['Wooden Boardwalk 1.5 km', 'Menara Pandang Burung', 'Perahu Wisata Susur Sungai', 'Pusat Edukasi Bakau'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.3072,112.8256',
   },
   {
-    name: 'Kebun Bibit Wonorejo',
-    area: 'Surabaya Selatan',
-    type: 'Kebun bibit · Surabaya Selatan',
-    image: '/images/taman/kebun-bibit-wonorejo.webp',
-    address: 'Jl. Kendalsari, Wonorejo, Kec. Rungkut, Surabaya.',
-    hours: 'Buka setiap hari · Pembibitan dan ruang hijau',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Kebun+Bibit+Wonorejo+Surabaya',
+    id: 'prestasi',
+    name: 'Taman Prestasi Surabaya',
+    area: 'Surabaya Pusat / Genteng',
+    type: 'Taman Tepi Sungai Kalimas & Wisata Perahu',
+    lat: -7.2612,
+    lng: 112.7441,
+    image: '/images/taman/taman-prestasi.webp',
+    address: 'Jl. Ketabang Kali No. 6, Ketabang, Kec. Genteng, Surabaya',
+    hours: '08:00 - 21:00 WIB · Dermaga Perahu Kalimas & Rekreasi',
+    facilities: ['Dermaga Wisata Perahu', 'Panggung Terbuka', 'Taman Bermain Anak', 'Monumen Pesawat'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2612,112.7441',
   },
   {
-    name: 'Taman Pelangi',
+    id: 'hutan-pakal',
+    name: 'Hutan Kota Pakal',
     area: 'Surabaya Barat',
-    type: 'Taman kota · Surabaya Barat',
-    image: '/images/taman/hutan-bambu-keputih.webp',
-    address: 'Jl. Ahmad Yani, Gayungan, Kec. Gayungan, Surabaya.',
-    hours: 'Buka setiap hari · Ruang santai dan area foto',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Pelangi+Surabaya',
+    type: 'Hutan Lindung & Konservasi Hayati Barat',
+    lat: -7.2346,
+    lng: 112.6083,
+    image: '/images/taman/taman-cahaya.webp',
+    address: 'Jl. Raya Pakal, Sidorejo, Kec. Pakal, Surabaya',
+    hours: '06:00 - 17:00 WIB · Konservasi Pohon Kayu Keras & Danau',
+    facilities: ['Kolam Pemancingan', 'Arboretum Pohon Langka', 'Gazebo Teduh', 'Jalur Sepeda Tanah'],
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-7.2346,112.6083',
   },
 ];
-
-const extraParks = [
-  {
-    name: 'Taman Suroboyo',
-    area: 'Surabaya Utara',
-    type: 'Taman pesisir · Surabaya Utara',
-    image: '/images/berita/pesisir-kenjeran.webp',
-    address: 'Jl. Pantai Kenjeran, Kenjeran, Kec. Bulak, Surabaya.',
-    hours: 'Buka setiap hari · Ruang publik dan area pesisir',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Suroboyo+Surabaya',
-  },
-  {
-    name: 'Taman Ngagel',
-    area: 'Surabaya Timur',
-    type: 'Taman kota · Surabaya Timur',
-    image: '/images/taman/taman-flora.webp',
-    address: 'Jl. Ngagel Jaya Selatan, Ngagel, Kec. Wonokromo, Surabaya.',
-    hours: 'Buka setiap hari · Area olahraga dan santai',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Ngagel+Surabaya',
-  },
-  {
-    name: 'Taman Pakal',
-    area: 'Surabaya Barat',
-    type: 'Taman kota · Surabaya Barat',
-    image: '/images/taman/hutan-bambu-keputih.webp',
-    address: 'Jl. Raya Pakal, Pakal, Kec. Pakal, Surabaya.',
-    hours: 'Buka setiap hari · Area bermain dan olahraga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Pakal+Surabaya',
-  },
-  {
-    name: 'Taman Ronggolawe',
-    area: 'Surabaya Selatan',
-    type: 'Taman kota · Surabaya Selatan',
-    image: '/images/taman/taman-bungkul.webp',
-    address: 'Jl. Joyoboyo, Sawunggaling, Kec. Wonokromo, Surabaya.',
-    hours: 'Buka setiap hari · Ruang santai dan olahraga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Ronggolawe+Surabaya',
-  },
-  {
-    name: 'Taman Surya',
-    area: 'Surabaya Pusat',
-    type: 'Ruang hijau publik · Surabaya Pusat',
-    image: '/images/taman/taman-harmoni.webp',
-    address: 'Jl. Taman Surya, Ketabang, Kec. Genteng, Surabaya.',
-    hours: 'Buka setiap hari · Ruang publik pusat kota',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Surya+Surabaya',
-  },
-  {
-    name: 'Taman Prestasi',
-    area: 'Surabaya Pusat',
-    type: 'Taman kota · Surabaya Pusat',
-    image: '/images/taman/taman-bungkul.webp',
-    address: 'Jl. Ketabang Kali No. 6, Ketabang, Kec. Genteng, Surabaya.',
-    hours: 'Buka setiap hari · Wahana perahu dan rekreasi',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Prestasi+Surabaya',
-  },
-  {
-    name: 'Taman Mundu',
-    area: 'Surabaya Pusat',
-    type: 'Taman kota · Surabaya Pusat',
-    image: '/images/taman/taman-flora.webp',
-    address: 'Jl. Juwet, Tambaksari, Kec. Tambaksari, Surabaya.',
-    hours: 'Buka setiap hari · Air mancur dan jogging track',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Mundu+Surabaya',
-  },
-  {
-    name: 'Taman Lansia',
-    area: 'Surabaya Pusat',
-    type: 'Taman tematik · Surabaya Pusat',
-    image: '/images/taman/kebun-bibit-wonorejo.webp',
-    address: 'Jl. Kalimantan No. 12, Gubeng, Kec. Gubeng, Surabaya.',
-    hours: 'Buka setiap hari · Area refleksi dan santai',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Lansia+Surabaya',
-  },
-  {
-    address: 'Jl. Jambangan, Jambangan, Kec. Jambangan, Surabaya.',
-    hours: 'Buka setiap hari · Ruang bermain dan taman warga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Jambangan+Surabaya',
-  },
-  {
-    name: 'Taman Cahaya',
-    area: 'Surabaya Barat',
-    type: 'Taman kota · Surabaya Barat',
-    address: 'Jl. Raya Unesa, Lidah Wetan, Kec. Lakarsantri, Surabaya.',
-    hours: 'Buka setiap hari · Ruang olahraga dan rekreasi',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Cahaya+Surabaya',
-  },
-  {
-    name: 'Taman Manukan',
-    area: 'Surabaya Barat',
-    type: 'Taman kota · Surabaya Barat',
-    address: 'Jl. Manukan Dalam, Manukan Kulon, Kec. Tandes, Surabaya.',
-    hours: 'Buka setiap hari · Area bermain dan ruang warga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Manukan+Surabaya',
-  },
-  {
-    name: 'Taman Kalongan',
-    area: 'Surabaya Utara',
-    type: 'Taman kota · Surabaya Utara',
-    address: 'Jl. Kalongan, Krembangan, Kec. Krembangan, Surabaya.',
-    hours: 'Buka setiap hari · Ruang santai dan bermain',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Kalongan+Surabaya',
-  },
-  {
-    name: 'Taman Bulak',
-    area: 'Surabaya Utara',
-    type: 'Taman pesisir · Surabaya Utara',
-    address: 'Jl. Bulak Banteng, Bulak Banteng, Kec. Kenjeran, Surabaya.',
-    hours: 'Buka setiap hari · Ruang hijau dan aktivitas warga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Bulak+Banteng+Surabaya',
-  },
-  {
-    name: 'Taman Sidotopo',
-    area: 'Surabaya Utara',
-    type: 'Taman kota · Surabaya Utara',
-    address: 'Jl. Sidotopo Wetan, Sidotopo Wetan, Kec. Kenjeran, Surabaya.',
-    hours: 'Buka setiap hari · Area bermain dan ruang keluarga',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Taman+Sidotopo+Surabaya',
-  },
-];
-
-const totalParksCount = primaryParks.length + extraParks.length;
 ---
 
 <Layout
-  title="Peta Hijau | Cangkruk Hijau"
-  description="Peta Ruang Terbuka Hijau Surabaya: temukan taman, hutan kota, dan kebun bibit di Surabaya untuk beristirahat dan berolahraga."
+  title="Peta Interaktif Ruang Terbuka Hijau | Cangkruk Hijau"
+  description="Peta interaktif sebaran taman kota, kebun raya mangrove, dan ruang terbuka hijau (RTH) publik di Surabaya berbasis OpenStreetMap dan Leaflet.js."
   activeNav="ruang-hijau"
   lang="id"
 >
-  <main>
+  <!-- Leaflet CDN Stylesheet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <main class="map-page">
     <div class="wrap">
-      <div style="margin-bottom: 24px;">
+      <div style="margin-bottom: 20px;">
         <a class="back" href="/">← Kembali ke Beranda</a>
       </div>
 
-      <div class="eyebrow">Ruang terbuka hijau Surabaya</div>
-      <h1 class="title">Peta Hijau</h1>
-      <p class="intro">
-        Temukan taman, hutan kota, dan ruang publik hijau di Surabaya untuk beristirahat, berolahraga, atau menikmati suasana kota.
-      </p>
+      <header class="map-header">
+        <div class="eyebrow" style="display: inline-flex; align-items: center; gap: 8px;">
+          <span class="live-indicator"></span> Peta Interaktif RTH Surabaya
+        </div>
+        <h1 class="title" style="font-size: 34px; margin-top: 8px;">
+          Jelajahi Taman & Paru-Paru Hijau Surabaya
+        </h1>
+        <p class="intro" style="color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 68ch;">
+          Temukan ruang terbuka hijau terdekat untuk berolahraga, bersantai bersama keluarga, observasi keanekaragaman hayati, atau sekadar berteduh di bawah kanopi pohon kota.
+        </p>
+      </header>
 
-      <!-- Map Illustration -->
-      <div class="map-illustration" aria-label="Ilustrasi persebaran ruang terbuka hijau Surabaya">
-        <svg viewBox="0 0 1000 360" role="img" aria-labelledby="mapTitle mapDesc">
-          <title id="mapTitle">Ilustrasi peta ruang terbuka hijau Surabaya</title>
-          <desc id="mapDesc">Enam penanda lokasi taman dan kebun bibit di wilayah Surabaya.</desc>
-          <rect width="1000" height="360" fill="#E8F3E9" />
-          <path
-            d="M82 0c42 78 22 126 64 189s66 85 34 171M302 0c-25 71 19 117-4 190s-39 98-19 170M732 0c-34 64 12 118-22 185s-54 95-29 175M0 112c188 28 303-6 458 28s327 42 542 2M0 252c164-35 282 25 435-4s342-22 565 11"
-            fill="none"
-            stroke="#C4DED0"
-            stroke-width="13"
-            stroke-linecap="round"
-          />
-          <path
-            d="M0 110c190 28 302-6 458 30s331 40 542 2M0 253c165-35 281 25 435-4s342-22 565 11"
-            fill="none"
-            stroke="#FFF"
-            stroke-width="4"
-            stroke-linecap="round"
-          />
-          <path
-            d="M88 44h126v57H88zM412 52h174v72H412zM772 45h135v62H772zM125 268h145v57H125zM538 252h190v69H538z"
-            fill="#B8D7B8"
-            opacity=".7"
-          />
-          <g class="map-pin" data-location="Taman Apsari">
-            <circle cx="480" cy="126" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="494" y="130">Taman Apsari</text>
-          </g>
-          <g class="map-pin" data-location="Taman Bungkul">
-            <circle cx="400" cy="206" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="414" y="210">Taman Bungkul</text>
-          </g>
-          <g class="map-pin" data-location="Taman Harmoni Keputih">
-            <circle cx="806" cy="206" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="820" y="210">Taman Harmoni</text>
-          </g>
-          <g class="map-pin" data-location="Taman Flora Bratang">
-            <circle cx="676" cy="143" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="690" y="147">Taman Flora</text>
-          </g>
-          <g class="map-pin" data-location="Kebun Bibit Wonorejo">
-            <circle cx="748" cy="282" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="762" y="286">Wonorejo</text>
-          </g>
-          <g class="map-pin" data-location="Taman Pelangi">
-            <circle cx="270" cy="282" r="10" fill="#1B6B3A" stroke="#FFF" stroke-width="4" />
-            <text x="284" y="286">Taman Pelangi</text>
-          </g>
-          <text x="31" y="34" fill="#1B6B3A" font-weight="800" font-size="16px" font-family="'Plus Jakarta Sans'">SURABAYA</text>
-          <text x="31" y="55" fill="#6C7E71" font-size="12px" font-family="'Plus Jakarta Sans'">Ilustrasi persebaran ruang hijau</text>
-        </svg>
-        <span class="map-caption">Posisi pin bersifat ilustratif · Buka alamat aktual melalui Google Maps</span>
+      <!-- Map & Sidebar Grid -->
+      <div class="map-layout-grid" style="margin-top: 24px;">
+        <!-- Leaflet Map Container -->
+        <div class="map-card-wrapper panel">
+          <div class="map-toolbar">
+            <span class="map-status">📍 {parksData.length} Titik Taman RTH Terdata</span>
+            <div class="map-tips">Klik pin marker untuk melihat rincian taman & rute GPS</div>
+          </div>
+          <div id="leafletMap" class="leaflet-container-custom"></div>
+        </div>
+
+        <!-- Sidebar List Taman -->
+        <div class="parks-sidebar-wrap">
+          <div class="parks-sidebar-header">
+            <h3>Daftar Taman Kota</h3>
+            <span class="badge visi">Surabaya</span>
+          </div>
+
+          <div class="parks-scroll-list" id="parksList">
+            {parksData.map((park) => (
+              <article
+                class="park-item-card"
+                data-id={park.id}
+                data-lat={park.lat}
+                data-lng={park.lng}
+                data-name={park.name}
+              >
+                <div class="park-item-img">
+                  <img src={park.image} alt={park.name} loading="lazy" />
+                </div>
+                <div class="park-item-info">
+                  <span class="park-area-badge">{park.area}</span>
+                  <h4 class="park-name">{park.name}</h4>
+                  <p class="park-hours">{park.hours}</p>
+                  <div class="park-actions">
+                    <button type="button" class="btn-focus-map">
+                      🎯 Lihat di Peta
+                    </button>
+                    <a
+                      href={park.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn-gmaps"
+                    >
+                      🗺️ Google Maps
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
-
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <span class="count" id="count">{totalParksCount} lokasi tersedia</span>
-        <input class="search" id="search" type="search" placeholder="Cari nama atau alamat..." aria-label="Cari lokasi" />
-        <select class="filter" id="filter" aria-label="Filter wilayah">
-          <option value="">Semua wilayah</option>
-          <option value="Surabaya Pusat">Surabaya Pusat</option>
-          <option value="Surabaya Timur">Surabaya Timur</option>
-          <option value="Surabaya Selatan">Surabaya Selatan</option>
-          <option value="Surabaya Barat">Surabaya Barat</option>
-          <option value="Surabaya Utara">Surabaya Utara</option>
-        </select>
-      </div>
-
-      <!-- Primary Grid -->
-      <div class="grid" id="locationList">
-        {primaryParks.map((park) => (
-          <ParkCard
-            name={park.name}
-            area={park.area}
-            type={park.type}
-            image={park.image}
-            address={park.address}
-            hours={park.hours}
-            mapsUrl={park.mapsUrl}
-          />
-        ))}
-      </div>
-
-      <p class="empty hide" id="empty">Lokasi yang kamu cari belum ditemukan.</p>
     </div>
   </main>
 
-  <!-- Extra Locations -->
-  <section class="wrap extra-locations" style="margin-top: 20px; padding-bottom: 72px;">
-    <div class="grid" id="extraLocations">
-      {extraParks.map((park) => (
-        <ParkCard
-          name={park.name}
-          area={park.area}
-          type={park.type}
-          image={park.image}
-          address={park.address}
-          hours={park.hours}
-          mapsUrl={park.mapsUrl}
-        />
-      ))}
-    </div>
-  </section>
-
   <style>
-    .map-illustration {
-      position: relative;
-      overflow: hidden;
-      margin-top: 30px;
+    .map-page {
+      padding: 36px 0 80px;
+    }
+    .live-indicator {
+      width: 8px;
+      height: 8px;
+      background: #3E9B5F;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #3E9B5F;
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+    .map-layout-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .map-card-wrapper {
+      padding: 16px;
+      border-radius: var(--r);
+      background: #FFFFFF;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #e8f3e9;
-      box-shadow: 0 12px 28px rgba(18, 60, 34, 0.08);
+      box-shadow: var(--shadow);
     }
-    .map-illustration:before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 18% 30%, rgba(229, 88, 142, 0.22), transparent 18%),
-        radial-gradient(circle at 78% 22%, rgba(130, 86, 196, 0.2), transparent 20%),
-        radial-gradient(circle at 64% 78%, rgba(240, 178, 122, 0.25), transparent 22%);
+    .map-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 0 6px;
+      flex-wrap: wrap;
     }
-    .map-illustration svg {
-      display: block;
-      width: 100%;
-      height: auto;
-      min-height: 290px;
+    .map-status {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--g700);
     }
-    .map-caption {
-      position: absolute;
-      left: 20px;
-      bottom: 18px;
-      padding: 8px 13px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--muted);
+    .map-tips {
       font-size: 12px;
+      color: var(--muted);
     }
-    .map-pin {
+    .leaflet-container-custom {
+      width: 100%;
+      height: 580px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      z-index: 1;
+    }
+
+    /* Sidebar list */
+    .parks-sidebar-wrap {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      max-height: 640px;
+      display: flex;
+      flex-direction: column;
+    }
+    .parks-sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+    .parks-sidebar-header h3 {
+      font-size: 18px;
+      color: var(--g900);
+    }
+    .parks-scroll-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-right: 4px;
+    }
+    .park-item-card {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #FAFCFA;
+      transition: all 0.15s ease;
       cursor: pointer;
     }
-    .map-pin circle {
-      transition: transform 0.18s, fill 0.18s;
-      transform-origin: center;
+    .park-item-card:hover, .park-item-card.is-active {
+      border-color: var(--g700);
+      background: #F0F7F2;
+      transform: translateY(-2px);
     }
-    .map-pin:hover circle,
-    .map-pin:focus circle {
-      fill: #e5588e;
-      transform: scale(1.25);
+    .park-item-img {
+      border-radius: 10px;
+      overflow: hidden;
+      height: 84px;
+      background: #E5E7EB;
     }
-    .map-pin text {
-      fill: #31423A;
-      font: 700 11px var(--sans);
+    .park-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .pin {
-      width: 52px;
-      height: 52px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      background: #ddefe1;
-      color: var(--green);
-      font-size: 25px;
+    .park-item-info {
+      display: flex;
+      flex-direction: column;
     }
-    .type {
-      display: inline-block;
-      margin-top: 9px;
-      color: var(--pink);
-      font-size: 12px;
-      font-weight: 800;
+    .park-area-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--g700);
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
-    .address {
-      margin-top: 12px;
-      font-size: 14px;
+    .park-name {
+      font-size: 15px;
+      color: var(--g900);
+      margin-top: 2px;
+      line-height: 1.25;
     }
-    .hours {
-      margin-top: 8px;
+    .park-hours {
+      font-size: 12px;
       color: var(--muted);
-      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.35;
     }
-    .maps {
-      display: inline-block;
-      margin-top: 17px;
-      color: var(--green);
-      font-size: 13px;
+    .park-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-focus-map {
+      background: var(--g700);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-focus-map:hover {
+      background: var(--g900);
+    }
+    .btn-gmaps {
+      color: var(--g700);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* Popup leaflet styles */
+    :global(.leaflet-popup-content-wrapper) {
+      border-radius: 16px;
+      padding: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    :global(.popup-park-box) {
+      font-family: var(--sans);
+      max-width: 250px;
+    }
+    :global(.popup-park-img) {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    :global(.popup-park-title) {
+      font-size: 15px;
       font-weight: 800;
+      color: #0E3A21;
+      margin-bottom: 4px;
     }
-    .extra-locations {
-      margin-top: 20px;
+    :global(.popup-park-desc) {
+      font-size: 12px;
+      color: #4B5563;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    :global(.popup-park-link) {
+      display: inline-block;
+      background: #1B6B3A;
+      color: #FFFFFF !important;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .map-layout-grid {
+        grid-template-columns: 1fr;
+      }
+      .leaflet-container-custom {
+        height: 400px;
+      }
     }
   </style>
 
-  <script>
-    const search = document.getElementById('search') as HTMLInputElement | null;
-    const filter = document.getElementById('filter') as HTMLSelectElement | null;
-    const cards = document.querySelectorAll<HTMLElement>('.card');
-    const count = document.getElementById('count');
-    const empty = document.getElementById('empty');
+  <!-- Leaflet CDN JS -->
+  <script
+    is:inline
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
 
-    function filterLocations() {
-      const query = (search?.value || '').toLowerCase();
-      const area = filter?.value || '';
-      let visible = 0;
-      cards.forEach((card) => {
-        const matchesText = (card.textContent || '').toLowerCase().indexOf(query) > -1;
-        const matchesArea = !area || card.dataset.area === area;
-        const show = matchesText && matchesArea;
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
+  <script define:vars={{ parks: parksData }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof L === 'undefined') return;
+
+      // Inisialisasi peta berpusat di Surabaya
+      const map = L.map('leafletMap', {
+        center: [-7.285, 112.755],
+        zoom: 12,
+        scrollWheelZoom: false,
       });
-      if (count) count.textContent = visible + ' lokasi tersedia';
-      if (empty) {
-        empty.classList.toggle('hide', visible > 0);
-        empty.style.display = visible > 0 ? 'none' : 'block';
-      }
-    }
 
-    if (search) search.addEventListener('input', filterLocations);
-    if (filter) filter.addEventListener('change', filterLocations);
+      // Tambahkan tile layer OpenStreetMap
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+      }).addTo(map);
 
-    // Dynamic map pins
-    const map = document.querySelector('.map-illustration svg');
-    const newMapLocations = [
-      { name: 'Taman Suroboyo', x: 884, y: 288, color: '#E5588E', label: 'Taman Suroboyo' },
-      { name: 'Taman Ngagel', x: 596, y: 176, color: '#F0A15A', label: 'Taman Ngagel' },
-      { name: 'Taman Pakal', x: 146, y: 183, color: '#8256C4', label: 'Taman Pakal' },
-      { name: 'Taman Ronggolawe', x: 315, y: 244, color: '#3E9B5F', label: 'Taman Ronggolawe' },
-      { name: 'Taman Surya', x: 520, y: 82, color: '#E5B84B', label: 'Taman Surya' },
-      { name: 'Taman Prestasi', x: 560, y: 106, color: '#E5588E', label: 'Taman Prestasi' },
-      { name: 'Taman Lansia', x: 620, y: 156, color: '#F0A15A', label: 'Taman Lansia' },
-      { name: 'Taman Wira Agung', x: 250, y: 226, color: '#8256C4', label: 'Wira Agung' },
-      { name: 'Taman Pelangi Jambangan', x: 230, y: 260, color: '#3E9B5F', label: 'Jambangan' },
-      { name: 'Taman Cahaya', x: 190, y: 190, color: '#E5588E', label: 'Taman Cahaya' },
-      { name: 'Taman Manukan', x: 170, y: 140, color: '#3E9B5F', label: 'Taman Manukan' },
-      { name: 'Taman Kalongan', x: 440, y: 70, color: '#F0A15A', label: 'Taman Kalongan' },
-      { name: 'Taman Bulak', x: 820, y: 120, color: '#8256C4', label: 'Taman Bulak' },
-      { name: 'Taman Sidotopo', x: 670, y: 76, color: '#3E9B5F', label: 'Taman Sidotopo' },
-    ];
-
-    if (map) {
-      newMapLocations.forEach((item) => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('class', 'map-pin');
-        g.setAttribute('data-location', item.name);
-        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        c.setAttribute('cx', item.x.toString());
-        c.setAttribute('cy', item.y.toString());
-        c.setAttribute('r', '10');
-        c.setAttribute('fill', item.color);
-        c.setAttribute('stroke', '#FFF');
-        c.setAttribute('stroke-width', '4');
-        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t.setAttribute('x', (item.x + 14).toString());
-        t.setAttribute('y', (item.y + 4).toString());
-        t.textContent = item.label;
-        g.appendChild(c);
-        g.appendChild(t);
-        map.appendChild(g);
+      // Custom Green Icon
+      const greenIcon = L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: `<div style="
+          background: #1B6B3A;
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          display: grid;
+          place-items: center;
+          border: 2px solid white;
+          box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+        ">
+          <span style="transform: rotate(45deg); font-size: 14px;">🌳</span>
+        </div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
       });
-    }
 
-    document.querySelectorAll<SVGElement>('.map-pin').forEach((pin) => {
-      pin.addEventListener('click', () => {
-        const name = pin.getAttribute('data-location') || '';
-        cards.forEach((card) => {
-          const cardTitle = card.querySelector('h2')?.textContent || '';
-          if (cardTitle === name) {
-            card.classList.add('active');
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => card.classList.remove('active'), 2500);
-          } else {
-            card.classList.remove('active');
+      const markersMap = {};
+
+      // Tambahkan Marker untuk setiap taman
+      parks.forEach((park) => {
+        const popupContent = `
+          <div class="popup-park-box">
+            <img src="${park.image}" alt="${park.name}" class="popup-park-img" />
+            <div class="popup-park-title">${park.name}</div>
+            <div class="popup-park-desc">${park.hours}</div>
+            <a href="${park.mapsUrl}" target="_blank" rel="noopener noreferrer" class="popup-park-link">
+              Rute Google Maps →
+            </a>
+          </div>
+        `;
+
+        const marker = L.marker([park.lat, park.lng], { icon: greenIcon })
+          .addTo(map)
+          .bindPopup(popupContent);
+
+        markersMap[park.id] = marker;
+      });
+
+      // Bind klik pada item kartu sidebar
+      document.querySelectorAll('.park-item-card').forEach((card) => {
+        card.addEventListener('click', (e) => {
+          // Cegah jika klik link gmaps langsung
+          if (e.target.tagName.toLowerCase() === 'a') return;
+
+          const parkId = card.getAttribute('data-id');
+          const lat = parseFloat(card.getAttribute('data-lat'));
+          const lng = parseFloat(card.getAttribute('data-lng'));
+
+          document.querySelectorAll('.park-item-card').forEach((c) => c.classList.remove('is-active'));
+          card.classList.add('is-active');
+
+          map.flyTo([lat, lng], 15, { duration: 1.2 });
+
+          const marker = markersMap[parkId];
+          if (marker) {
+            setTimeout(() => {
+              marker.openPopup();
+            }, 600);
           }
         });
       });

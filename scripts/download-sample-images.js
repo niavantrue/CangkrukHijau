@@ -37,11 +37,11 @@ const logoSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" wid
 </svg>`;
 
 fs.writeFileSync(path.join(baseImagesDir, 'brand/logo.svg'), logoSvg.trim());
-console.log('Saved brand logo.svg');
+console.log('✓ Saved brand logo.svg');
 
-// List of curated real-world images from reliable public Unsplash photo IDs (Nature, Community, Parks, Mangroves, Waste Management)
+// Curated collection of high-resolution, web-optimized local-context images
 const imagesToFetch = [
-  // About / Foto Kelompok
+  // ==================== ABOUT / VOLUNTEERS ====================
   {
     category: 'about',
     filename: 'foto-kelompok.webp',
@@ -52,33 +52,39 @@ const imagesToFetch = [
     category: 'about',
     filename: 'aksi-penanaman.webp',
     url: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1000&q=80',
-    title: 'Aksi Bersama Tanam Pohon'
+    title: 'Aksi Bersama Tanam Pohon dan Mangrove'
+  },
+  {
+    category: 'about',
+    filename: 'susur-sungai.webp',
+    url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1000&q=80',
+    title: 'Dokumentasi Aksi Susur Sungai Kalimas'
   },
 
-  // Berita Images
+  // ==================== BERITA LINGKUNGAN ====================
   {
     category: 'berita',
     filename: 'bank-sampah-rungkut.webp',
     url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80',
-    title: 'Pemilahan Sampah Bank Sampah'
+    title: 'Pemilahan Sampah Bank Sampah Rungkut'
   },
   {
     category: 'berita',
     filename: 'taman-harmoni-keputih.webp',
     url: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=800&q=80',
-    title: 'Taman Kota RTH Surabaya'
+    title: 'Taman Harmoni Keputih Eks TPA'
   },
   {
     category: 'berita',
     filename: 'uji-emisi-kendaraan.webp',
     url: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80',
-    title: 'Langit Kota & Uji Emisi'
+    title: 'Uji Emisi Kendaraan & Langit Bersih Surabaya'
   },
   {
     category: 'berita',
     filename: 'kali-surabaya-bersih.webp',
     url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-    title: 'Aksi Bersih Sungai Brantas'
+    title: 'Aksi Bersih Sungai Kali Surabaya & Kali Jagir'
   },
   {
     category: 'berita',
@@ -90,65 +96,95 @@ const imagesToFetch = [
     category: 'berita',
     filename: 'urban-farming-jambangan.webp',
     url: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80',
-    title: 'Kebun Urban Farming Komunitas'
+    title: 'Kampung Nol Sampah & Urban Farming Jambangan'
   },
   {
     category: 'berita',
     filename: 'pesisir-kenjeran.webp',
     url: 'https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=800&q=80',
-    title: 'Aksi Bersih Pesisir Kenjeran'
+    title: 'Sapu Bersih Pesisir Pantai Kenjeran'
   },
   {
     category: 'berita',
     filename: 'edukasi-sekolah-hijau.webp',
     url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80',
-    title: 'Edukasi Lingkungan Sekolah'
+    title: 'Edukasi Lingkungan Sekolah Adiwiyata Surabaya'
+  },
+  {
+    category: 'berita',
+    filename: 'bus-listrik-trans-semanggi.webp',
+    url: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
+    title: 'Armada Bus Listrik Trans Semanggi Surabaya'
+  },
+  {
+    category: 'berita',
+    filename: 'plts-atap-surabaya.webp',
+    url: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    title: 'Instalasi PLTS Atap Energi Terbarukan Surabaya'
+  },
+  {
+    category: 'berita',
+    filename: 'tabebuya-darmo.webp',
+    url: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80',
+    title: 'Pohon Tabebuya Mekar di Jalan Protokol Surabaya'
   },
 
-  // Edukasi Images
+  // ==================== RUANG EDUKASI & MODUL ====================
   {
     category: 'edukasi',
     filename: 'panduan-kompos.webp',
     url: 'https://images.unsplash.com/photo-1584473457406-6240486418e9?auto=format&fit=crop&w=800&q=80',
-    title: 'Kompos Rumah Tangga'
+    title: 'Panduan Praktis Kompos Rumah Tangga Takakura'
   },
   {
     category: 'edukasi',
     filename: 'kajian-rth.webp',
     url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80',
-    title: 'Kajian RTH Surabaya'
+    title: 'Kajian Tata Ruang Hijau & Penyerapan Karbon'
   },
   {
     category: 'edukasi',
     filename: 'modul-pilah-sampah.webp',
     url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80',
-    title: 'Modul Pilah Sampah'
+    title: 'Modul Pilah Sampah Organik & Anorganik'
   },
   {
     category: 'edukasi',
     filename: 'buku-saku-air.webp',
     url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
-    title: 'Konservasi Air Bersih'
+    title: 'Buku Saku Konservasi Air Tanah & Biopori'
   },
   {
     category: 'edukasi',
     filename: 'urban-farming.webp',
     url: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=800&q=80',
-    title: 'Urban Farming Organik'
+    title: 'Petunjuk Teknis Urban Farming & Hidroponik'
   },
   {
     category: 'edukasi',
     filename: 'kualitas-udara.webp',
     url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80',
-    title: 'Kualitas Udara Kota'
+    title: 'Panduan Pemantauan Kualitas Udara ISPU'
+  },
+  {
+    category: 'edukasi',
+    filename: 'biopori-surabaya.webp',
+    url: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=800&q=80',
+    title: 'Panduan Pembuatan Lubang Resapan Biopori'
+  },
+  {
+    category: 'edukasi',
+    filename: 'uji-kualitas-air.webp',
+    url: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80',
+    title: 'Panduan Riset Citizen Science Uji Kualitas Air'
   },
 
-  // Taman RTH Images
+  // ==================== TAMAN & RTH SURABAYA ====================
   {
     category: 'taman',
     filename: 'taman-bungkul.webp',
     url: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=800&q=80',
-    title: 'Taman Bungkul Wonokromo'
+    title: 'Taman Bungkul Wonokromo Surabaya'
   },
   {
     category: 'taman',
@@ -160,7 +196,13 @@ const imagesToFetch = [
     category: 'taman',
     filename: 'taman-flora.webp',
     url: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=800&q=80',
-    title: 'Taman Flora Bratang'
+    title: 'Taman Flora Bratang Surabaya'
+  },
+  {
+    category: 'taman',
+    filename: 'taman-flora-bratang.webp',
+    url: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=800&q=80',
+    title: 'Taman Flora Bratang (Kebun Bibit Bratang)'
   },
   {
     category: 'taman',
@@ -172,55 +214,109 @@ const imagesToFetch = [
     category: 'taman',
     filename: 'kebun-bibit-wonorejo.webp',
     url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80',
-    title: 'Kebun Bibit Wonorejo Rungkut'
+    title: 'Kebun Bibit Wonorejo Danau Resapan'
   },
   {
     category: 'taman',
     filename: 'taman-harmoni.webp',
     url: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=800&q=80',
-    title: 'Taman Harmoni Keputih'
+    title: 'Taman Harmoni Keputih Sukolilo'
+  },
+  {
+    category: 'taman',
+    filename: 'taman-harmoni-keputih.webp',
+    url: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=800&q=80',
+    title: 'Taman Harmoni Keputih Surabaya'
+  },
+  {
+    category: 'taman',
+    filename: 'taman-prestasi.webp',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+    title: 'Taman Prestasi Surabaya Dermaga Kalimas'
+  },
+  {
+    category: 'taman',
+    filename: 'taman-cahaya.webp',
+    url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80',
+    title: 'Hutan Kota Pakal & Taman Cahaya Surabaya Barat'
   },
 
-  // Komunitas Avatars / Logos
+  // ==================== KOMUNITAS AVATAR / LOGO ====================
+  {
+    category: 'komunitas',
+    filename: 'walhi-jatim.webp',
+    url: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=400&q=80',
+    title: 'WALHI Jawa Timur'
+  },
   {
     category: 'komunitas',
     filename: 'nol-sampah-sby.webp',
-    url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=400&q=80',
     title: 'Komunitas Nol Sampah Surabaya'
   },
   {
     category: 'komunitas',
     filename: 'ecoton-foundation.webp',
-    url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80',
     title: 'ECOTON Foundation'
   },
   {
     category: 'komunitas',
     filename: 'tunas-hijau-indonesia.webp',
-    url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=400&q=80',
     title: 'Tunas Hijau Indonesia'
   },
   {
     category: 'komunitas',
     filename: 'kophi-jatim.webp',
-    url: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=400&q=80',
     title: 'KOPHI Jawa Timur'
   },
   {
     category: 'komunitas',
     filename: 'greenpeace-id.webp',
-    url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80',
     title: 'Greenpeace Indonesia Relawan'
   },
   {
     category: 'komunitas',
     filename: 'sahabat-mangrove-sby.webp',
-    url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=300&q=80',
+    url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=400&q=80',
     title: 'Sahabat Mangrove Surabaya'
+  },
+  {
+    category: 'komunitas',
+    filename: 'surabaya-berkebun.webp',
+    url: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=400&q=80',
+    title: 'Surabaya Berkebun'
+  },
+  {
+    category: 'komunitas',
+    filename: 'trash-hero-surabaya.webp',
+    url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=400&q=80',
+    title: 'Trash Hero Surabaya'
+  },
+  {
+    category: 'komunitas',
+    filename: 'bank-sampah-induk.webp',
+    url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=400&q=80',
+    title: 'Bank Sampah Induk Surabaya'
+  },
+  {
+    category: 'komunitas',
+    filename: 'relawan-kali-surabaya.webp',
+    url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80',
+    title: 'Relawan Penjaga Kali Surabaya'
+  },
+  {
+    category: 'komunitas',
+    filename: 'b2w-surabaya.webp',
+    url: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=80',
+    title: 'Bike to Work Surabaya'
   }
 ];
 
-// Fallback SVG generator in case network download fails or times out
+// Fallback visual generator in case network download is offline or times out
 function createFallbackImage(title, category) {
   const bgColors = {
     about: ['#1B6B3A', '#3E9B5F'],
@@ -251,6 +347,16 @@ async function downloadAll() {
   
   for (const item of imagesToFetch) {
     const destPath = path.join(baseImagesDir, item.category, item.filename);
+    
+    // Only fetch if not already present or if 0 bytes
+    if (fs.existsSync(destPath)) {
+      const stats = fs.statSync(destPath);
+      if (stats.size > 1000) {
+        console.log(`✓ Existing valid asset: ${item.category}/${item.filename} (${stats.size} bytes)`);
+        continue;
+      }
+    }
+
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 8000);

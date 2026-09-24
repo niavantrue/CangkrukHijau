@@ -42,7 +42,7 @@ const communityId = id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   <li data-scope={scope?.toLowerCase()} class="simple-kom-item">
     {badge && <div class="scope">{badge}</div>}
     <div class="simple-head">
-      {logo && <img src={logo} alt={name} class="kom-logo-thumb" loading="lazy" onerror="this.style.display='none'" />}
+      {logo && <img src={logo} alt={name} class="kom-logo-thumb" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />}
       <h3>{name}</h3>
     </div>
     <p>{description}</p>
@@ -51,7 +51,7 @@ const communityId = id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ) : (
   <article class={`card community-card ${isJoined ? 'is-joined' : ''}`} data-community-id={communityId} data-community-name={name}>
     <div class="card-top">
-      {logo && <img src={logo} alt={name} class="kom-logo-avatar" loading="lazy" onerror="this.style.display='none'" />}
+      {logo && <img src={logo} alt={name} class="kom-logo-avatar" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />}
       {badge && <span class="chip">{badge}</span>}
       {isJoined ? (
         <span class="badge visi" style="margin-left: auto; background: var(--g500);">✓ Sudah Bergabung</span>

@@ -5,7 +5,7 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string;
-  activeNav?: 'beranda' | 'berita' | 'edukasi' | 'ruang-hijau' | 'komunitas' | 'komunitas-saya' | 'musik' | 'laporan' | 'login' | 'daftar' | string;
+  activeNav?: 'beranda' | 'berita' | 'edukasi' | 'ruang-hijau' | 'komunitas' | 'komunitas-saya' | 'fgd' | 'musik' | 'laporan' | 'login' | 'daftar' | 'admin-login' | 'admin-dashboard' | string;
   showSearch?: boolean;
 }
 
@@ -14,7 +14,7 @@ const {
   description = 'Cangkruk Hijau adalah ruang kolaborasi warga Surabaya untuk mewujudkan lingkungan yang sehat, hijau, dan berkelanjutan.',
   lang = 'id',
   activeNav = 'beranda',
-  showSearch = true,
+  showSearch = activeNav !== 'beranda',
 } = Astro.props;
 
 const user = Astro.locals.user;
@@ -29,8 +29,9 @@ const isEn = lang === 'en';
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <meta name="theme-color" content="#1B6B3A" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/svg+xml" href="/images/brand/logo.svg" />
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="alternate icon" href="/favicon.ico" />
   <meta name="generator" content={Astro.generator} />
 
   <!-- Open Graph / Facebook -->
@@ -38,15 +39,15 @@ const isEn = lang === 'en';
   <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL('/images/about/foto-kelompok.webp', Astro.url)} />
-  <meta property="og:site_name" content="Cangkruk Hijau" />
+  <meta property="og:image" content={new URL('/images/brand/logo.svg', Astro.url)} />
+  <meta property="og:site_name" content="Cangkruk Hijau Surabaya" />
 
   <!-- Twitter / X -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content={Astro.url} />
   <meta property="twitter:title" content={title} />
   <meta property="twitter:description" content={description} />
-  <meta property="twitter:image" content={new URL('/images/about/foto-kelompok.webp', Astro.url)} />
+  <meta property="twitter:image" content={new URL('/images/brand/logo.svg', Astro.url)} />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,10 +60,10 @@ const isEn = lang === 'en';
   <header class="nav">
     <div class="wrap">
       <a class="logo" href={isEn ? "/en" : "/"} aria-label="Cangkruk Hijau Homepage">
-        <img src="/images/brand/logo.svg" class="mark" alt="Logo Cangkruk Hijau" width="42" height="42" />
+        <img src="/images/brand/logo.svg" class="mark" alt="Logo Resmi Cangkruk Hijau" width="46" height="46" />
         <span>
           <span class="name">Cangkruk Hijau</span>
-          <span class="tag">{isEn ? 'Talk, Act, Protect Our Earth.' : 'Ngobrol, Aksi, Jaga Bumi.'}</span>
+          <span class="tag">{isEn ? 'Surabaya Environmental Community Portal' : 'Portal Komunal Lingkungan Surabaya'}</span>
         </span>
       </a>
 
@@ -72,6 +73,7 @@ const isEn = lang === 'en';
         <a href="/edukasi" class={activeNav === 'edukasi' ? 'on' : ''}>{isEn ? 'Education' : 'Edukasi'}</a>
         <a href="/peta-hijau" class={activeNav === 'ruang-hijau' ? 'on' : ''}>{isEn ? 'Green Space' : 'Ruang Hijau'}</a>
         <a href="/komunitas" class={activeNav === 'komunitas' ? 'on' : ''}>{isEn ? 'Community' : 'Komunitas'}</a>
+        <a href="/fgd" class={activeNav === 'fgd' ? 'on' : ''}>{isEn ? 'FGD Forum' : 'Agenda FGD'}</a>
         {user && (
           <a href="/komunitas-saya" class={activeNav === 'komunitas-saya' ? 'on' : ''}>
             {isEn ? 'My Communities' : 'Komunitas Saya'}
@@ -81,8 +83,8 @@ const isEn = lang === 'en';
         <a href="/laporan" class={activeNav === 'laporan' ? 'on' : ''}>{isEn ? 'Report' : 'Laporan'}</a>
 
         <div class="lang-switch" aria-label={isEn ? "Language selector" : "Pemilih bahasa"}>
-          <button class={`lang-btn ${!isEn ? 'is-active' : ''}`} type="button" data-lang="id">ID</button>
-          <button class={`lang-btn ${isEn ? 'is-active' : ''}`} type="button" data-lang="en">EN</button>
+          <a href="/" class={`lang-btn ${!isEn ? 'is-active' : ''}`} data-lang="id">ID</a>
+          <a href="/en" class={`lang-btn ${isEn ? 'is-active' : ''}`} data-lang="en">EN</a>
         </div>
 
         {user ? (
@@ -163,6 +165,7 @@ const isEn = lang === 'en';
             <li><a href="/edukasi">{isEn ? 'Education' : 'Edukasi'}</a></li>
             <li><a href="/peta-hijau">{isEn ? 'Green Space' : 'Ruang Hijau'}</a></li>
             <li><a href="/komunitas">{isEn ? 'Community' : 'Komunitas'}</a></li>
+            <li><a href="/fgd">{isEn ? 'FGD Forum' : 'Agenda FGD'}</a></li>
             <li><a href="/musik">{isEn ? 'Music' : 'Musik'}</a></li>
           </ul>
         </div>
@@ -170,15 +173,22 @@ const isEn = lang === 'en';
           <h5>{isEn ? 'GET INVOLVED' : 'TERLIBAT'}</h5>
           <ul>
             <li><a href="/laporan">{isEn ? 'Report damage' : 'Lapor kerusakan'}</a></li>
+            <li><a href="/fgd">{isEn ? 'Register FGD' : 'Daftar Agenda FGD'}</a></li>
             <li><a href="/komunitas">{isEn ? 'Join a community' : 'Daftarkan komunitas'}</a></li>
             <li><a href="/musik">{isEn ? 'Suggest musicians' : 'Usulkan musisi'}</a></li>
             <li><a href="/#tentang">{isEn ? 'About us' : 'Tentang kami'}</a></li>
+            <li><a href="/admin/login" style="color: var(--g700); font-weight: 700;">🔒 {isEn ? 'Admin Portal' : 'Portal Admin'}</a></li>
           </ul>
         </div>
       </div>
       <div class="foot-bot">
         <span>© 2026 Cangkruk Hijau. {isEn ? 'All rights reserved.' : 'Semua hak dilindungi.'}</span>
-        <span>{isEn ? 'Surabaya community environmental initiative.' : 'Ruang aksi dan kolaborasi warga Surabaya.'}</span>
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <span>{isEn ? 'Surabaya community environmental initiative.' : 'Ruang aksi dan kolaborasi warga Surabaya.'}</span>
+          <a href="/admin/login" class="admin-foot-link" title="Akses Khusus Administrator">
+            🔒 Admin
+          </a>
+        </div>
       </div>
     </div>
   </footer>

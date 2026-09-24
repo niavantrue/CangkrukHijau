@@ -1,152 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CommunityCard from '../components/CommunityCard.astro';
+import { communities } from '../data/komunitas.js';
 
 const user = Astro.locals.user;
 const supabase = Astro.locals.supabase;
-
-const communities = [
-  {
-    id: 'walhi-jatim',
-    name: 'WALHI Jawa Timur',
-    badge: 'Advokasi Lingkungan',
-    scope: 'Advokasi & Kebijakan',
-    logo: '/images/komunitas/sahabat-mangrove-sby.webp',
-    description: 'Fokus pada advokasi kebijakan lingkungan, pendampingan warga terdampak konflik ekologis, dan kampanye perlindungan ruang hidup.',
-    address: 'Jl. Kutisari Indah Barat VIII No. 12, Tenggilis Mejoyo, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6281234567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:walhijatim@walhi.or.id' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/walhijatim' },
-    ],
-  },
-  {
-    id: 'ecoton-foundation',
-    name: 'Ecoton Foundation',
-    badge: 'Kesehatan Sungai & Mikroplastik',
-    scope: 'Riset & Konservasi',
-    logo: '/images/komunitas/ecoton-foundation.webp',
-    description: 'Melakukan riset polusi mikroplastik, ekspedisi sungai, edukasi konservasi lahan basah, dan advokasi kualitas air Kali Surabaya.',
-    address: 'Jl. Raya Wringinanom No. 24, Kec. Wringinanom, Kab. Gresik',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6282134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:info@ecoton.id' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/ecoton.id' },
-    ],
-  },
-  {
-    id: 'nol-sampah-surabaya',
-    name: 'Nol Sampah Surabaya',
-    badge: 'Pengelolaan Sampah',
-    scope: 'Kampanye & Aksi Nyata',
-    logo: '/images/komunitas/nol-sampah-sby.webp',
-    description: 'Gerakan pengurangan sampah plastik, pendampingan bank sampah rukun warga, aksi bersih pantai Kenjeran, dan audit merek sampah.',
-    address: 'Jl. Gayungsari Timur No. 18, Gayungan, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6283134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:nolsampah.surabaya@gmail.com' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/nolsampah' },
-    ],
-  },
-  {
-    id: 'tunas-hijau-indonesia',
-    name: 'Tunas Hijau Indonesia',
-    badge: 'Edukasi Anak & Pemuda',
-    scope: 'Pendidikan Lingkungan',
-    logo: '/images/komunitas/tunas-hijau-indonesia.webp',
-    description: 'Pendidikan lingkungan hidup generasi muda, kader lingkungan sekolah, program Sekolah Adiwiyata, dan kompetisi lingkungan keluarga.',
-    address: 'Jl. Simo Sidomulyo V No. 34, Sawahan, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6284134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:tunashijau@gmail.com' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/tunashijauid' },
-    ],
-  },
-  {
-    id: 'kophi-jatim',
-    name: 'KOPHI Jawa Timur',
-    badge: 'Gerakan Pemuda',
-    scope: 'Kolaborasi Pemuda',
-    logo: '/images/komunitas/kophi-jatim.webp',
-    description: 'Koalisi Pemuda Hijau Indonesia chapter Jatim yang menggerakkan pemuda lewat workshop iklim, aksi tanam bibit, dan pameran hijau.',
-    address: 'Jl. Nginden Semolo No. 44, Sukolilo, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6285134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:kophijatim@kophi.or.id' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/kophijatim' },
-    ],
-  },
-  {
-    id: 'surabaya-berkebun',
-    name: 'Surabaya Berkebun (Indonesia Berkebun)',
-    badge: 'Urban Farming',
-    scope: 'Pertanian Perkotaan',
-    logo: '/images/berita/urban-farming-jambangan.webp',
-    description: 'Mengajak warga memanfaatkan pekarangan dan lahan tidur menjadi kebun sayur kota produktif, berbagi benih, dan pelatihan kompos.',
-    address: 'Jl. Ketintang Madya No. 8, Wonokromo, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6286134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:surabayaberkebun@gmail.com' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/suberkebun' },
-    ],
-  },
-  {
-    id: 'sahabat-mangrove-surabaya',
-    name: 'Sahabat Mangrove Surabaya',
-    badge: 'Konservasi Pesisir',
-    scope: 'Rehabilitasi Pesisir',
-    logo: '/images/taman/kebun-raya-mangrove.webp',
-    description: 'Rehabilitasi hutan mangrove kawasan Wonorejo dan Gunung Anyar, adopsi bibit mangrove, dan susur pantai edukatif.',
-    address: 'Jl. Raya Wonorejo Mangrove No. 2, Rungkut, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6287134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:sahabatmangrove@gmail.com' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/sahabatmangrovesby' },
-    ],
-  },
-  {
-    id: 'trash-hero-surabaya',
-    name: 'Trash Hero Surabaya',
-    badge: 'Aksi Bersih Sampah',
-    scope: 'Aksi Bersih',
-    logo: '/images/berita/bank-sampah-rungkut.webp',
-    description: 'Aksi rutin mingguan pungut sampah di ruang publik dan taman terbuka kota Surabaya tanpa biaya dan terbuka untuk umum.',
-    address: 'Basecamp Car Free Day Darmo / Taman Flora, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6288134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:surabaya@trashhero.org' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/trashherosurabaya' },
-    ],
-  },
-  {
-    id: 'bank-sampah-induk-surabaya',
-    name: 'Bank Sampah Induk Surabaya',
-    badge: 'Sirkular Ekonomi',
-    scope: 'Pengelolaan Limbah',
-    logo: '/images/edukasi/modul-pilah-sampah.webp',
-    description: 'Pusat integrasi bank sampah unit tingkat RT/RW se-Surabaya untuk pemilahan sampah anorganik dan pemberdayaan ekonomi sirkular.',
-    address: 'Jl. Raya Menur No. 31, Sukolilo, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6289134567890' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:bsisurabaya@gmail.com' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/banksampahsurabaya' },
-    ],
-  },
-  {
-    id: 'greenpeace-youth-surabaya',
-    name: 'Greenpeace Youth Surabaya',
-    badge: 'Aksi Iklim & Energi',
-    scope: 'Kampanye Terbuka',
-    logo: '/images/komunitas/greenpeace-id.webp',
-    description: 'Kader relawan muda penggerak aksi transisi energi bersih, kampanye keanekaragaman hayati, dan pawai iklim.',
-    address: 'Jl. Manyar Kertoarjo IV No. 17, Gubeng, Surabaya',
-    contacts: [
-      { type: 'whatsapp' as const, label: 'WhatsApp', href: 'https://wa.me/6281145678901' },
-      { type: 'email' as const, label: 'Email', href: 'mailto:youth.surabaya@greenpeace.org' },
-      { type: 'instagram' as const, label: 'Instagram', href: 'https://instagram.com/greenpeaceyouthsby' },
-    ],
-  },
-];
 
 const joinedCommunityIds = new Set<string>();
 
@@ -161,7 +19,7 @@ if (user && supabase) {
       userComms.forEach((c: { community_id: string }) => joinedCommunityIds.add(c.community_id));
     }
   } catch (err) {
-    // In case table or connection is in mock/unconnected state, fail gracefully
+    // Graceful fallback
   }
 }
 ---
@@ -195,10 +53,15 @@ if (user && supabase) {
       <div id="toastNotification" class="toast-notice hide"></div>
 
       <div class="form-grid">
-        <!-- List Komunitas -->
+        <!-- List Komunitas dengan Pencarian & Pagination -->
         <div>
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-            <h2 style="font-size: 24px; color: var(--g700);">Daftar Komunitas</h2>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h2 style="font-size: 24px; color: var(--g700);">Daftar Komunitas</h2>
+              <p id="paginationInfo" style="font-size: 13.5px; color: var(--muted); margin-top: 2px;">
+                Menampilkan 1-8 dari {communities.length} komunitas
+              </p>
+            </div>
             {user && (
               <a href="/komunitas-saya" class="slink">
                 Lihat Komunitas Saya ({joinedCommunityIds.size}) →
@@ -206,25 +69,59 @@ if (user && supabase) {
             )}
           </div>
 
-          <div class="list" style="display: grid; gap: 18px;">
-            {communities.map((item) => (
-              <CommunityCard
-                id={item.id}
-                name={item.name}
-                logo={item.logo}
-                badge={item.badge}
-                scope={item.scope}
-                description={item.description}
-                address={item.address}
-                contacts={item.contacts}
-                variant="detailed"
-                isJoined={joinedCommunityIds.has(item.id)}
+          <!-- Filter / Search Bar -->
+          <div class="comm-toolbar">
+            <div class="search-wrap">
+              <input
+                id="searchCommunityInput"
+                type="text"
+                placeholder="Cari nama komunitas, fokus, atau lokasi..."
+                class="comm-search"
+                autocomplete="off"
               />
+            </div>
+          </div>
+
+          <div class="list" id="communityCardsList" style="display: grid; gap: 18px;">
+            {communities.map((item, index) => (
+              <div class="community-card-wrapper" data-index={index} data-name={item.name.toLowerCase()} data-scope={item.scope.toLowerCase()} data-desc={item.description.toLowerCase()}>
+                <CommunityCard
+                  id={item.id}
+                  name={item.name}
+                  logo={item.logo}
+                  badge={item.badge}
+                  scope={item.scope}
+                  description={item.description}
+                  address={item.address}
+                  contacts={item.contacts as any}
+                  variant="detailed"
+                  isJoined={joinedCommunityIds.has(item.id)}
+                />
+              </div>
             ))}
+          </div>
+
+          <div id="noCommunityFound" class="panel hide" style="text-align: center; padding: 40px 20px; margin-top: 18px; border: 1px dashed var(--line);">
+            <div style="font-size: 36px; margin-bottom: 8px;">🔍</div>
+            <h3 style="color: var(--g900); font-size: 18px;">Komunitas Tidak Ditemukan</h3>
+            <p style="color: var(--muted); font-size: 14px; margin-top: 4px;">
+              Coba gunakan kata kunci pencarian yang berbeda atau daftarkan komunitas baru melalui formulir di samping.
+            </p>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-bar" id="paginationControls">
+            <button type="button" class="btn-page-nav" id="prevPageBtn" disabled>
+              ← Sebelumnya
+            </button>
+            <div class="page-numbers" id="pageNumberButtons"></div>
+            <button type="button" class="btn-page-nav" id="nextPageBtn">
+              Berikutnya →
+            </button>
           </div>
         </div>
 
-        <!-- Form Pendaftaran -->
+        <!-- Form Pendaftaran Komunitas Baru -->
         <div>
           <div class="form-panel" id="daftarKomunitas">
             <div class="form-header">
@@ -301,6 +198,23 @@ if (user && supabase) {
     .content {
       padding: 24px 0 70px;
     }
+    .comm-toolbar {
+      margin-bottom: 20px;
+    }
+    .comm-search {
+      width: 100%;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-family: var(--sans);
+      font-size: 14.5px;
+      background: #fff;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    .comm-search:focus {
+      outline: 2px solid var(--g700);
+    }
     .form-panel {
       background: #fff;
       border: 1px solid var(--line);
@@ -334,6 +248,63 @@ if (user && supabase) {
       display: grid;
       gap: 16px;
     }
+
+    /* Pagination Styles */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .btn-page-nav {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-page-nav:hover:not(:disabled) {
+      background: var(--g700);
+      color: #fff;
+      border-color: var(--g700);
+    }
+    .btn-page-nav:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .page-numbers {
+      display: flex;
+      gap: 6px;
+    }
+    :global(.page-num-btn) {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13.5px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    :global(.page-num-btn.active) {
+      background: var(--g700);
+      color: #fff;
+      border-color: var(--g700);
+    }
+    :global(.page-num-btn:hover:not(.active)) {
+      background: var(--g100);
+    }
+
     .toast-notice {
       position: fixed;
       bottom: 24px;
@@ -376,6 +347,7 @@ if (user && supabase) {
       }, 3500);
     }
 
+    // Community card join/leave actions
     document.querySelectorAll('.community-card button[data-action]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         if (!isLoggedIn) {
@@ -475,5 +447,118 @@ if (user && supabase) {
         form.reset();
       });
     }
+
+    // Pagination & Search Logic
+    const ITEMS_PER_PAGE = 8;
+    let currentPage = 1;
+    let visibleWrappers = [];
+
+    const allWrappers = Array.from(document.querySelectorAll('.community-card-wrapper'));
+    const searchInput = document.getElementById('searchCommunityInput');
+    const paginationInfo = document.getElementById('paginationInfo');
+    const pageNumberButtons = document.getElementById('pageNumberButtons');
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    const noFoundBox = document.getElementById('noCommunityFound');
+
+    function applyFilterAndPagination() {
+      const query = (searchInput?.value || '').toLowerCase().trim();
+
+      // Filter
+      visibleWrappers = allWrappers.filter((wrapper) => {
+        if (!query) return true;
+        const name = wrapper.getAttribute('data-name') || '';
+        const scope = wrapper.getAttribute('data-scope') || '';
+        const desc = wrapper.getAttribute('data-desc') || '';
+        return name.includes(query) || scope.includes(query) || desc.includes(query);
+      });
+
+      const totalItems = visibleWrappers.length;
+      const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Hide all first
+      allWrappers.forEach((w) => (w.style.display = 'none'));
+
+      if (totalItems === 0) {
+        if (noFoundBox) noFoundBox.classList.remove('hide');
+        if (paginationInfo) paginationInfo.textContent = 'Tidak ada komunitas yang cocok.';
+      } else {
+        if (noFoundBox) noFoundBox.classList.add('hide');
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, totalItems);
+
+        for (let i = startIdx; i < endIdx; i++) {
+          visibleWrappers[i].style.display = 'block';
+        }
+
+        if (paginationInfo) {
+          paginationInfo.textContent = `Menampilkan ${startIdx + 1}-${endIdx} dari ${totalItems} komunitas`;
+        }
+      }
+
+      renderPaginationControls(totalPages);
+    }
+
+    function renderPaginationControls(totalPages) {
+      if (!pageNumberButtons) return;
+      pageNumberButtons.innerHTML = '';
+
+      if (totalPages <= 1) {
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = true;
+        return;
+      }
+
+      if (prevBtn) prevBtn.disabled = currentPage === 1;
+      if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `page-num-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = String(i);
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          applyFilterAndPagination();
+          window.scrollTo({ top: 380, behavior: 'smooth' });
+        });
+        pageNumberButtons.appendChild(btn);
+      }
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        applyFilterAndPagination();
+        window.scrollTo({ top: 380, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      const totalPages = Math.ceil(visibleWrappers.length / ITEMS_PER_PAGE) || 1;
+      if (currentPage < totalPages) {
+        currentPage++;
+        applyFilterAndPagination();
+        window.scrollTo({ top: 380, behavior: 'smooth' });
+      }
+    });
+
+    searchInput?.addEventListener('input', () => {
+      currentPage = 1;
+      applyFilterAndPagination();
+    });
+
+    // Check URL query param ?q=
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery && searchInput) {
+      searchInput.value = initialQuery;
+    }
+
+    // Initial run
+    applyFilterAndPagination();
   </script>
 </Layout>

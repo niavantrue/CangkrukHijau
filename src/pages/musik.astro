@@ -1,104 +1,169 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { musicTracks, artistProfiles } from '../data/musik.js';
 
-const songs = [
-  {
-    title: 'Hutan Setelah Hujan',
-    artist: 'Cangkruk Hijau Sessions',
-    number: '01 · DEMO AUDIO',
-    desc: 'Nuansa hijau untuk menemani jeda.',
-    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    active: true,
-  },
-  {
-    title: 'Arus Kota',
-    artist: 'Cangkruk Hijau Sessions',
-    number: '02 · DEMO AUDIO',
-    desc: 'Ritme perjalanan dan ruang publik.',
-    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    active: false,
-  },
-  {
-    title: 'Langit Pesisir',
-    artist: 'Cangkruk Hijau Sessions',
-    number: '03 · DEMO AUDIO',
-    desc: 'Suasana sore dari tepian kota.',
-    audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-    active: false,
-  },
-];
-
-const artists = [
-  { name: 'Navicula', desc: 'Green grunge dari Bali dengan perhatian pada hutan dan habitat.' },
-  { name: 'Sisir Tanah', desc: 'Folk akar rumput yang dekat dengan isu agraria dan ekologi.' },
-  { name: 'Efek Rumah Kaca', desc: 'Lirik reflektif tentang manusia, kota, dan perubahan lingkungan.' },
-  { name: 'Silampukau', desc: 'Merekam cerita Surabaya dan perubahan wajah kotanya.' },
-  { name: 'Superman Is Dead', desc: 'Musik punk dan keterlibatan dalam gerakan warga Bali.' },
-  { name: 'Sukatani', desc: 'Kritik sosial dari skena musik akar rumput.' },
-];
+const initialTrack = musicTracks[0];
 ---
 
 <Layout
-  title="Musik | Cangkruk Hijau"
-  description="Ruang Musik Cangkruk Hijau: dengarkan track demo bertema alam dan kenali musisi yang menyuarakan isu lingkungan lewat karya mereka."
+  title="Ruang Musik & Suara Bumi | Cangkruk Hijau"
+  description="Ruang Musik Cangkruk Hijau: dengarkan alunan musik bertema alam, pelajari pesan ekologis di balik karya musisi nusantara, dan temukan harmoni bersama bumi."
   activeNav="musik"
   lang="id"
 >
-  <main>
+  <main class="music-page">
     <div class="wrap">
       <div style="margin-bottom: 24px;">
         <a class="back" href="/">← Kembali ke Beranda</a>
       </div>
 
-      <div class="eyebrow">Suara untuk bumi</div>
-      <h1 class="title">Ruang Musik</h1>
-      <p class="intro">
-        Dengarkan track demo bertema alam dan kenali musisi yang menyuarakan isu lingkungan lewat karya mereka.
-      </p>
-
-      <!-- Player Section -->
-      <section class="player" aria-label="Pemutar musik">
-        <div class="now">Sedang dipilih</div>
-        <h2 class="track-title" id="trackTitle">Hutan Setelah Hujan</h2>
-        <p class="track-artist" id="trackArtist">Cangkruk Hijau Sessions</p>
-        <div class="controls">
-          <button class="play" id="play" type="button" aria-label="Putar lagu">▶</button>
-          <input class="timeline" id="timeline" type="range" min="0" max="100" value="0" aria-label="Posisi lagu" />
-          <span class="time" id="time">00:00 / 00:00</span>
-          <input class="volume" id="volume" type="range" min="0" max="1" value="0.8" step="0.05" aria-label="Volume" />
+      <div class="music-hero">
+        <div class="eyebrow" style="display: inline-flex; align-items: center; gap: 8px;">
+          <span class="music-note-icon">🎵</span> Suara & Melodi Untuk Bumi
         </div>
-        <audio id="audio" preload="metadata"></audio>
-      </section>
-
-      <!-- Playlist -->
-      <div class="playlist" id="playlist">
-        {songs.map((song) => (
-          <article
-            class={`song ${song.active ? 'active' : ''}`}
-            data-title={song.title}
-            data-artist={song.artist}
-            data-audio={song.audio}
-          >
-            <span class="song-number">{song.number}</span>
-            <h2>{song.title}</h2>
-            <p>{song.desc}</p>
-            <button class="listen" type="button">Putar Lagu</button>
-          </article>
-        ))}
+        <h1 class="title" style="font-size: 38px; margin-top: 10px; color: var(--g900);">
+          Ruang Musik Lingkungan
+        </h1>
+        <p class="intro" style="font-size: 16px; max-width: 68ch; margin-top: 10px; color: var(--muted);">
+          Eksplorasi karya musik dan musisi Indonesia yang konsisten menyuarakan isu perlindungan hutan, kebersihan sungai, krisis iklim, dan ruang hidup warga melalui nada dan lirik yang bermakna.
+        </p>
       </div>
 
-      <p class="notice">
-        Track di atas adalah demo audio eksternal untuk pemutar. Untuk mendengarkan karya asli, cari musisi melalui kanal resmi mereka.
-      </p>
+      <!-- Player Section -->
+      <section class="player-container panel" aria-label="Pemutar musik edukasi">
+        <div class="player-header">
+          <div class="now-playing-badge">
+            <span class="pulse-audio"></span> SEDANG DIPUTAR
+          </div>
+          <span class="track-genre-tag" id="trackGenre">{initialTrack.genre}</span>
+        </div>
 
-      <!-- Musisi Section -->
-      <section class="artists">
-        <h2 class="section-title">Musisi yang menyuarakan lingkungan</h2>
-        <div class="artist-grid">
-          {artists.map((artist) => (
-            <article class="artist">
-              <h3>{artist.name}</h3>
-              <p>{artist.desc}</p>
+        <div class="player-main">
+          <div class="track-meta">
+            <h2 class="track-title" id="trackTitle">{initialTrack.title}</h2>
+            <p class="track-artist" id="trackArtist">{initialTrack.artist}</p>
+            <div class="track-issue-box">
+              <span class="issue-label">Isu Lingkungan:</span>
+              <span class="issue-val" id="trackIssue">{initialTrack.issue}</span>
+            </div>
+            <p class="track-quote" id="trackQuote">{initialTrack.lyricsQuote}</p>
+          </div>
+
+          <div class="player-controls-wrap">
+            <div class="timeline-row">
+              <span class="time-label" id="currentTime">00:00</span>
+              <input class="timeline-slider" id="timeline" type="range" min="0" max="100" value="0" aria-label="Posisi pemutaran lagu" />
+              <span class="time-label" id="totalDuration">{initialTrack.duration}</span>
+            </div>
+
+            <div class="control-buttons">
+              <button type="button" class="btn-ctrl" id="prevTrackBtn" aria-label="Lagu sebelumnya" title="Lagu sebelumnya">
+                ⏮
+              </button>
+              <button type="button" class="btn-ctrl-play" id="playBtn" aria-label="Putar lagu">
+                <span id="playIcon">▶</span>
+              </button>
+              <button type="button" class="btn-ctrl" id="nextTrackBtn" aria-label="Lagu berikutnya" title="Lagu berikutnya">
+                ⏭
+              </button>
+
+              <div class="volume-box">
+                <span class="vol-icon">🔊</span>
+                <input class="volume-slider" id="volume" type="range" min="0" max="1" value="0.8" step="0.05" aria-label="Volume audio" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <audio id="audioElement" preload="metadata" src={initialTrack.audio}></audio>
+      </section>
+
+      <!-- Playlist Section -->
+      <section class="playlist-section">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+            Daftar Lagu Bertema Alam & Lingkungan ({musicTracks.length} Karya)
+          </div>
+          <span class="count">Klik untuk memutar</span>
+        </div>
+
+        <div class="tracks-grid" id="playlistGrid">
+          {musicTracks.map((song, idx) => (
+            <article
+              class={`song-card panel ${idx === 0 ? 'active' : ''}`}
+              data-id={song.id}
+              data-index={idx}
+              data-title={song.title}
+              data-artist={song.artist}
+              data-issue={song.issue}
+              data-quote={song.lyricsQuote}
+              data-genre={song.genre}
+              data-duration={song.duration}
+              data-audio={song.audio}
+            >
+              <div class="song-card-top">
+                <span class="song-number">#{String(idx + 1).padStart(2, '0')}</span>
+                <span class="song-duration">{song.duration}</span>
+              </div>
+
+              <h3 class="song-title">{song.title}</h3>
+              <p class="song-artist">{song.artist}</p>
+
+              <div class="song-issue-pill">
+                <span class="pin">🌱</span> {song.issue}
+              </div>
+
+              <blockquote class="song-quote">
+                {song.lyricsQuote}
+              </blockquote>
+
+              <div class="song-card-footer">
+                <span class="song-msg-preview" title={song.message}>{song.message}</span>
+                <button type="button" class="btn-play-song">
+                  <span class="play-text">Putar</span>
+                  <span class="play-icon">▶</span>
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- Musisi Profil Section -->
+      <section class="artists-section">
+        <div class="shead" style="margin-top: 48px;">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Musisi & Komunitas yang Bersuara untuk Lingkungan
+          </div>
+          <span class="count">{artistProfiles.length} Musisi Berdedikasi</span>
+        </div>
+
+        <div class="artists-grid">
+          {artistProfiles.map((artist) => (
+            <article class="artist-card panel">
+              <div class="artist-card-header">
+                <div class="artist-avatar">
+                  <span class="avatar-letter">{artist.name.charAt(0)}</span>
+                </div>
+                <div>
+                  <h3 class="artist-name">{artist.name}</h3>
+                  <div class="artist-meta">{artist.origin} · {artist.genre}</div>
+                </div>
+              </div>
+
+              <span class="artist-badge">{artist.badge}</span>
+              <p class="artist-desc">{artist.desc}</p>
             </article>
           ))}
         </div>
@@ -107,267 +172,511 @@ const artists = [
   </main>
 
   <style>
-    .player {
-      margin-top: 34px;
-      padding: 28px;
-      border-radius: 18px;
-      background: var(--dark);
-      color: #e7f2e9;
-      box-shadow: 0 16px 36px rgba(14, 58, 33, 0.18);
+    .music-page {
+      padding: 36px 0 80px;
     }
-    .now {
-      color: #a8c4b0;
-      font-size: 13px;
+    .music-hero {
+      margin-bottom: 28px;
+    }
+    .music-note-icon {
+      font-size: 16px;
+    }
+
+    /* Player styling */
+    .player-container {
+      background: linear-gradient(135deg, #0E3A21 0%, #155732 60%, #1B6B3A 100%);
+      color: #FFFFFF;
+      border-radius: var(--r);
+      padding: 32px 36px;
+      box-shadow: 0 16px 40px rgba(14, 58, 33, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .now-playing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11.5px;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      color: #8FCBA3;
+      letter-spacing: 0.06em;
+    }
+    .pulse-audio {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #8FCBA3;
+      box-shadow: 0 0 8px #8FCBA3;
+    }
+    .track-genre-tag {
+      font-size: 12px;
+      color: #DDEFE1;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+    .player-main {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
     }
     .track-title {
-      margin-top: 5px;
-      color: #fff;
-      font: 800 32px/1.15 var(--logo);
+      font-size: 26px;
+      color: #FFFFFF;
+      line-height: 1.25;
     }
     .track-artist {
+      font-size: 16px;
+      color: #BFE0C8;
+      font-weight: 700;
       margin-top: 4px;
-      color: #a8c4b0;
     }
-    .controls {
+    .track-issue-box {
+      margin-top: 12px;
+      font-size: 13.5px;
       display: flex;
       align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .issue-label {
+      color: #8FCBA3;
+      font-weight: 700;
+    }
+    .issue-val {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .track-quote {
+      margin-top: 10px;
+      font-style: italic;
+      color: #E2ECE3;
+      font-size: 13.5px;
+      line-height: 1.45;
+      border-left: 3px solid var(--pink);
+      padding-left: 10px;
+    }
+
+    /* Player controls */
+    .player-controls-wrap {
+      display: flex;
+      flex-direction: column;
       gap: 16px;
-      margin-top: 22px;
+      background: rgba(0, 0, 0, 0.18);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .play {
-      width: 48px;
-      height: 48px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--pink);
-      color: #fff;
-      font-size: 21px;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: background 0.15s;
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .play:hover {
-      background: #f078a7;
+    .time-label {
+      font-size: 12px;
+      font-family: monospace;
+      color: #BFE0C8;
+      flex: none;
+      width: 44px;
     }
-    .timeline {
+    .timeline-slider {
       flex: 1;
+      height: 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
       accent-color: var(--pink);
       cursor: pointer;
     }
-    .time {
-      min-width: 92px;
-      color: #a8c4b0;
-      font-size: 12px;
-      text-align: right;
+    .control-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
     }
-    .volume {
-      width: 100px;
-      accent-color: #8fcba3;
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #FFFFFF;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       cursor: pointer;
-    }
-    .playlist {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 22px;
-    }
-    .song {
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .song:hover,
-    .song.active {
-      border-color: var(--pink);
-      box-shadow: 0 8px 24px rgba(18, 60, 34, 0.1);
-    }
-    .song-number {
-      color: var(--pink);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .song h2 {
-      margin-top: 10px;
-      color: var(--green);
-      font-size: 18px;
-    }
-    .song p {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .listen {
-      margin-top: 15px;
-      padding: 9px 14px;
-      border: 0;
-      border-radius: 999px;
-      background: var(--green);
-      color: #fff;
-      font: 700 13px var(--sans);
-      cursor: pointer;
+      place-items: center;
+      font-size: 14px;
       transition: background 0.15s;
     }
-    .listen:hover,
-    .song.active .listen {
+    .btn-ctrl:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .btn-ctrl-play {
+      background: var(--pink);
+      border: none;
+      color: #FFFFFF;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 6px 18px rgba(229, 88, 142, 0.4);
+      transition: transform 0.15s, background-color 0.15s;
+    }
+    .btn-ctrl-play:hover {
+      background: var(--pink700);
+      transform: scale(1.05);
+    }
+    .volume-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .vol-icon {
+      font-size: 14px;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 5px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      accent-color: #8FCBA3;
+      cursor: pointer;
+    }
+
+    /* Tracks Grid */
+    .playlist-section {
+      margin-top: 40px;
+    }
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .song-card {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      cursor: pointer;
+    }
+    .song-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: var(--g300);
+    }
+    .song-card.active {
+      border: 2px solid var(--g700);
+      background: #F8FAF7;
+    }
+    .song-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .song-number {
+      font-family: var(--logo);
+      font-weight: 800;
+      color: var(--g700);
+      font-size: 16px;
+    }
+    .song-duration {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-family: monospace;
+      background: var(--g50);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .song-title {
+      font-size: 18px;
+      color: var(--g900);
+      line-height: 1.3;
+    }
+    .song-artist {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .song-issue-pill {
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--g700);
+      background: var(--g100);
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+    }
+    .song-quote {
+      margin-top: 12px;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.45;
+      background: #FAFAFA;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--pink);
+    }
+    .song-card-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .song-msg-preview {
+      font-size: 12px;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .btn-play-song {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--g700);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: none;
+      transition: background 0.15s;
+    }
+    .song-card.active .btn-play-song {
       background: var(--pink);
     }
-    .artists {
-      margin-top: 44px;
+    .btn-play-song:hover {
+      background: var(--g900);
     }
-    .artist-grid {
+
+    /* Artists Section */
+    .artists-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
     }
-    .artist {
-      padding: 18px;
-      border-left: 4px solid var(--pink);
-      background: #fff;
-      border-top: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      border-radius: 0 12px 12px 0;
+    .artist-card {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      padding: 24px;
     }
-    .artist h3 {
-      color: var(--green);
-      font-size: 17px;
+    .artist-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
     }
-    .artist p {
-      margin-top: 5px;
+    .artist-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--g700);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      font-family: var(--logo);
+      font-size: 22px;
+      font-weight: 800;
+      flex: none;
+    }
+    .artist-name {
+      font-size: 18px;
+      color: var(--g900);
+    }
+    .artist-meta {
+      font-size: 12.5px;
       color: var(--muted);
-      font-size: 13px;
+      font-weight: 600;
     }
-    @media (max-width: 760px) {
-      .playlist, .artist-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .controls {
-        flex-wrap: wrap;
-      }
-      .timeline {
-        order: 3;
-        flex-basis: 100%;
-      }
+    .artist-badge {
+      display: inline-block;
+      background: var(--pink100);
+      color: var(--pink700);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
     }
-    @media (max-width: 520px) {
-      .playlist, .artist-grid {
+    .artist-desc {
+      font-size: 13.5px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 800px) {
+      .player-main {
         grid-template-columns: 1fr;
       }
-      .player {
-        padding: 22px;
-      }
-      .volume {
-        width: 80px;
+      .tracks-grid, .artists-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 
   <script>
-    const audio = document.getElementById('audio') as HTMLAudioElement | null;
-    const play = document.getElementById('play') as HTMLButtonElement | null;
+    const audio = document.getElementById('audioElement') as HTMLAudioElement | null;
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
     const timeline = document.getElementById('timeline') as HTMLInputElement | null;
     const volume = document.getElementById('volume') as HTMLInputElement | null;
-    const time = document.getElementById('time');
-    const trackTitle = document.getElementById('trackTitle');
-    const trackArtist = document.getElementById('trackArtist');
-    const songs = document.querySelectorAll<HTMLElement>('.song');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalDurationEl = document.getElementById('totalDuration');
+    const prevTrackBtn = document.getElementById('prevTrackBtn');
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
 
-    if (audio && volume) {
-      audio.volume = parseFloat(volume.value);
+    const trackTitleEl = document.getElementById('trackTitle');
+    const trackArtistEl = document.getElementById('trackArtist');
+    const trackIssueEl = document.getElementById('trackIssue');
+    const trackQuoteEl = document.getElementById('trackQuote');
+    const trackGenreEl = document.getElementById('trackGenre');
+
+    const songCards = Array.from(document.querySelectorAll<HTMLElement>('.song-card'));
+    let currentIdx = 0;
+    let isPlaying = false;
+
+    function formatTime(seconds: number): string {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    function formatTime(value: number): string {
-      if (!isFinite(value)) return '00:00';
-      const minutes = Math.floor(value / 60)
-        .toString()
-        .padStart(2, '0');
-      const seconds = Math.floor(value % 60)
-        .toString()
-        .padStart(2, '0');
-      return minutes + ':' + seconds;
-    }
+    function loadTrack(index: number, autoPlay = true) {
+      if (index < 0) index = songCards.length - 1;
+      if (index >= songCards.length) index = 0;
+      currentIdx = index;
 
-    function updateTime() {
-      if (!audio || !timeline || !time) return;
-      timeline.value = audio.duration ? ((audio.currentTime / audio.duration) * 100).toString() : '0';
-      time.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-    }
+      const card = songCards[currentIdx];
+      if (!card || !audio) return;
 
-    function selectSong(song: HTMLElement) {
-      if (!audio || !play || !trackTitle || !trackArtist) return;
-      songs.forEach((item) => item.classList.remove('active'));
-      song.classList.add('active');
-      trackTitle.textContent = song.dataset.title || '';
-      trackArtist.textContent = song.dataset.artist || '';
-      audio.src = song.dataset.audio || '';
+      const title = card.dataset.title || '';
+      const artist = card.dataset.artist || '';
+      const issue = card.dataset.issue || '';
+      const quote = card.dataset.quote || '';
+      const genre = card.dataset.genre || '';
+      const duration = card.dataset.duration || '03:30';
+      const audioUrl = card.dataset.audio || '';
+
+      if (trackTitleEl) trackTitleEl.textContent = title;
+      if (trackArtistEl) trackArtistEl.textContent = artist;
+      if (trackIssueEl) trackIssueEl.textContent = issue;
+      if (trackQuoteEl) trackQuoteEl.textContent = quote;
+      if (trackGenreEl) trackGenreEl.textContent = genre;
+      if (totalDurationEl) totalDurationEl.textContent = duration;
+
+      songCards.forEach((c, idx) => {
+        c.classList.toggle('active', idx === currentIdx);
+      });
+
+      audio.src = audioUrl;
       audio.load();
-      audio
-        .play()
-        .then(() => {
-          play.textContent = '❚❚';
-        })
-        .catch(() => {
-          play.textContent = '▶';
+
+      if (autoPlay) {
+        audio.play().then(() => {
+          isPlaying = true;
+          if (playIcon) playIcon.textContent = '⏸';
+        }).catch(() => {
+          isPlaying = false;
+          if (playIcon) playIcon.textContent = '▶';
         });
+      }
     }
 
-    songs.forEach((song) => {
-      song.addEventListener('click', () => {
-        selectSong(song);
+    playBtn?.addEventListener('click', () => {
+      if (!audio) return;
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        if (playIcon) playIcon.textContent = '▶';
+      } else {
+        audio.play().then(() => {
+          isPlaying = true;
+          if (playIcon) playIcon.textContent = '⏸';
+        }).catch(() => {});
+      }
+    });
+
+    prevTrackBtn?.addEventListener('click', () => {
+      loadTrack(currentIdx - 1, true);
+    });
+
+    nextTrackBtn?.addEventListener('click', () => {
+      loadTrack(currentIdx + 1, true);
+    });
+
+    songCards.forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        loadTrack(idx, true);
+        window.scrollTo({ top: 120, behavior: 'smooth' });
       });
     });
 
-    if (play && audio) {
-      play.addEventListener('click', () => {
-        if (audio.paused) {
-          audio
-            .play()
-            .then(() => {
-              play.textContent = '❚❚';
-            })
-            .catch(() => {
-              play.textContent = '▶';
-            });
-        } else {
-          audio.pause();
-          play.textContent = '▶';
-        }
-      });
-    }
-
     if (audio) {
-      audio.addEventListener('timeupdate', updateTime);
-      audio.addEventListener('loadedmetadata', updateTime);
-      audio.addEventListener('ended', () => {
-        if (play) play.textContent = '▶';
+      audio.addEventListener('timeupdate', () => {
+        if (!timeline || isNaN(audio.duration) || audio.duration === 0) return;
+        const progress = (audio.currentTime / audio.duration) * 100;
+        timeline.value = String(progress);
+        if (currentTimeEl) currentTimeEl.textContent = formatTime(audio.currentTime);
       });
-    }
 
-    if (timeline && audio) {
-      timeline.addEventListener('input', () => {
-        if (audio.duration) {
-          audio.currentTime = (parseFloat(timeline.value) / 100) * audio.duration;
+      audio.addEventListener('loadedmetadata', () => {
+        if (totalDurationEl && !isNaN(audio.duration)) {
+          totalDurationEl.textContent = formatTime(audio.duration);
         }
       });
-    }
 
-    if (volume && audio) {
-      volume.addEventListener('input', () => {
-        audio.volume = parseFloat(volume.value);
+      audio.addEventListener('ended', () => {
+        loadTrack(currentIdx + 1, true);
       });
     }
 
-    const activeSong = document.querySelector<HTMLElement>('.song.active');
-    if (activeSong && audio) {
-      audio.src = activeSong.dataset.audio || '';
-    }
+    timeline?.addEventListener('input', () => {
+      if (!audio || isNaN(audio.duration)) return;
+      const seekTime = (Number(timeline.value) / 100) * audio.duration;
+      audio.currentTime = seekTime;
+    });
+
+    volume?.addEventListener('input', () => {
+      if (audio) {
+        audio.volume = Number(volume.value);
+      }
+    });
   </script>
 </Layout>

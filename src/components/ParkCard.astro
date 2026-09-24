@@ -25,7 +25,7 @@ const {
 <article class="card park-card" data-area={area}>
   {image && (
     <div class="park-cover-wrap">
-      <img src={image} alt={name} loading="lazy" class="park-cover-img" onerror="this.style.display='none'" />
+      <img src={image} alt={name} loading="lazy" class="park-cover-img" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
     </div>
   )}
   <div class="park-body">

@@ -1,56 +1,172 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import EducationCard from '../../components/EducationCard.astro';
+import CommunityCard from '../../components/CommunityCard.astro';
 import ReportBanner from '../../components/ReportBanner.astro';
+import { newsArticles } from '../../data/berita.js';
+import { educationMaterials } from '../../data/edukasi.js';
+import { communities } from '../../data/komunitas.js';
+import { parksData } from '../peta-hijau.astro';
 
-const exploreCards = [
+// 4 Latest News
+const newsItems = newsArticles.slice(0, 4);
+
+// 4 Open Education Modules
+const homeEducationItems = educationMaterials.slice(0, 4);
+
+// Most Read & Popular Highlights
+const popularNews = [
+  { ...newsArticles[0], views: '15.2k readers' },
+  { ...newsArticles[9], views: '12.8k readers' },
+  { ...newsArticles[10], views: '11.4k readers' },
+];
+
+const popularCommunities = communities.slice(0, 3);
+
+const popularEducation = [
+  { ...educationMaterials[0], downloads: '3.4k downloads' },
+  { ...educationMaterials[1], downloads: '2.9k downloads' },
+];
+
+// Community Field Action Documentation
+const communityActions = [
   {
-    title: 'News & Updates',
-    meta: 'Latest citizen actions in Surabaya, Sidoarjo, and Gresik.',
-    badge: 'News',
-    badgeColor: 'green',
-    href: '/berita',
-    linkText: 'Read stories →',
+    title: 'Planting 1,000 Mangrove Seedlings in Pamurbaya',
+    date: '18 April 2026',
+    organizer: 'Sahabat Mangrove Surabaya',
+    location: 'Wonorejo Coastal Zone',
+    image: '/images/berita/mangrove-wonorejo.webp',
   },
   {
-    title: 'Environmental Education',
-    meta: 'Practical guides on waste sorting, circular economy, and air quality.',
-    badge: 'Education',
-    badgeColor: 'purple',
-    href: '/edukasi',
-    linkText: 'Explore materials →',
+    title: 'River Cleanup & Microplastic Particle Audit',
+    date: '02 May 2026',
+    organizer: 'Ecoton Foundation & Volunteers',
+    location: 'Surabaya River',
+    image: '/images/berita/kali-surabaya-bersih.webp',
   },
   {
-    title: 'Urban Green Space',
-    meta: 'Find public parks, botanical gardens, and mangrove forests in Surabaya.',
-    badge: 'Map',
-    badgeColor: 'pink',
-    href: '/peta-hijau',
-    linkText: 'Open map →',
+    title: 'Takakura Composting Workshop & Waste Bank',
+    date: '10 May 2026',
+    organizer: 'Nol Sampah Surabaya',
+    location: 'Jambangan District',
+    image: '/images/berita/urban-farming-jambangan.webp',
   },
   {
-    title: 'Community Network',
-    meta: 'Connect with local organizations, youth groups, and green activists.',
-    badge: 'Community',
-    badgeColor: 'green',
-    href: '/komunitas',
-    linkText: 'Join a group →',
+    title: 'Young Green Ambassadors in Eco-Schools',
+    date: '15 May 2026',
+    organizer: 'Tunas Hijau Indonesia',
+    location: 'Sawahan, Surabaya',
+    image: '/images/berita/edukasi-sekolah-hijau.webp',
+  },
+];
+
+const marqueeActions = [
+  {
+    title: 'Mangrove Ecosystem Restoration',
+    org: 'Sahabat Mangrove',
+    date: '18 Apr 2026',
+    loc: 'Pamurbaya',
+    image: '/images/berita/mangrove-wonorejo.webp',
   },
   {
-    title: 'Echoes for Nature (Music)',
-    meta: 'Discover Indonesian bands and musicians advocating for climate justice.',
-    badge: 'Music',
-    badgeColor: 'purple',
-    href: '/musik',
-    linkText: 'Listen & explore →',
+    title: 'Kali Surabaya River Patrol & Water Audit',
+    org: 'ECOTON & Volunteers',
+    date: '02 May 2026',
+    loc: 'Kali Surabaya',
+    image: '/images/berita/kali-surabaya-bersih.webp',
   },
   {
-    title: 'Environmental Reporting',
-    meta: 'Report environmental violations and illegal dumping directly.',
-    badge: 'Hotline',
-    badgeColor: 'pink',
-    href: '/laporan',
-    linkText: 'File a report →',
+    title: 'Zero Waste Village & BSF Maggot Farming',
+    org: 'Nol Sampah SBY',
+    date: '10 May 2026',
+    loc: 'Jambangan',
+    image: '/images/berita/urban-farming-jambangan.webp',
   },
+  {
+    title: 'Waste Sorting Education in 40 Schools',
+    org: 'Tunas Hijau ID',
+    date: '15 May 2026',
+    loc: 'Surabaya & Sidoarjo',
+    image: '/images/berita/edukasi-sekolah-hijau.webp',
+  },
+  {
+    title: 'Kenjeran Beach Cleanup & Coastal Patrol',
+    org: 'Eco Pesisir Bahari',
+    date: '10 May 2026',
+    loc: 'Kenjeran Coast',
+    image: '/images/berita/pesisir-kenjeran.webp',
+  },
+  {
+    title: 'Tabebuya Shade Tree Planting Campaign',
+    org: 'Relawan Pohon SBY',
+    date: '19 May 2026',
+    loc: 'Harmoni Park Keputih',
+    image: '/images/berita/taman-harmoni-keputih.webp',
+  },
+  {
+    title: 'Used Cooking Oil to Biodiesel Conversion',
+    org: 'Bank Jelantah Sby',
+    date: '17 May 2026',
+    loc: 'Rungkut District',
+    image: '/images/berita/bank-sampah-rungkut.webp',
+  },
+  {
+    title: 'Vehicle Emission Test & Electric Feeders',
+    org: 'Bike to Work & Volunteers',
+    date: '13 May 2026',
+    loc: 'Jl. Ahmad Yani',
+    image: '/images/berita/uji-emisi-kendaraan.webp',
+  },
+];
+
+const trackList = [
+  { no: '01', artist: 'Iwan Fals', lagu: 'Isi Rimba Tak Ada Tempat Berpijak Lagi', isu: 'Deforestation & Habitat Conservation', asal: 'Indonesia' },
+  { no: '02', artist: 'Navicula', lagu: 'Metapolutan · Orangutan', isu: 'Microplastic Pollution & Toxic Waste', asal: 'Denpasar, Bali' },
+  { no: '03', artist: 'Efek Rumah Kaca', lagu: 'Di Udara · Kuning', isu: 'Clean Air Rights & Urban Space', asal: 'Jakarta' },
+  { no: '04', artist: 'Silampukau', lagu: 'Si Pelanggan · Balada Pesisir', isu: 'Chronicles of Surabaya Coastal Life', asal: 'Surabaya' },
+  { no: '05', artist: 'Dialog Dini Hari', lagu: 'Pohon Tua Roboh · Tanam Saja', isu: 'Shade Tree Protection & Self-grown Food', asal: 'Bali' },
+  { no: '06', artist: 'Sisir Tanah', lagu: 'Lagu Pejalan', isu: 'Human Harmony with Ancestral Land & Water', asal: 'Yogyakarta' },
+];
+
+// Indeks Pencarian Lengkap untuk Live Omnisearch
+const searchDataset = [
+  ...newsArticles.map((n) => ({
+    type: 'berita',
+    group: '🏷️ Environmental News',
+    title: n.title,
+    snippet: n.summary,
+    url: `/berita/${n.slug}`,
+    image: n.coverImage,
+    meta: `${n.category} · ${n.date}`,
+  })),
+  ...educationMaterials.map((e) => ({
+    type: 'edukasi',
+    group: '📚 Learning Modules & Research',
+    title: e.title,
+    snippet: e.description,
+    url: `/edukasi`,
+    image: e.coverImage,
+    meta: `${e.topic} · ${e.pages} Pages (${e.level})`,
+  })),
+  ...parksData.map((p) => ({
+    type: 'rth',
+    group: '🌳 Urban Parks & Green Spaces',
+    title: p.name,
+    snippet: `${p.address}. Facilities: ${p.facilities.slice(0, 3).join(', ')}`,
+    url: `/peta-hijau`,
+    image: p.image,
+    meta: `${p.area} · ${p.type}`,
+  })),
+  ...communities.map((c) => ({
+    type: 'komunitas',
+    group: '👥 Action Communities',
+    title: c.name,
+    snippet: c.description,
+    url: `/komunitas`,
+    image: c.logo || '/images/brand/logo.svg',
+    meta: `${c.focus} · ${c.area} (${c.members})`,
+  })),
 ];
 ---
 
@@ -58,67 +174,944 @@ const exploreCards = [
   title="Cangkruk Hijau — Talk, Act, Protect Our Earth"
   description="Cangkruk Hijau is a collaborative community platform for Surabaya citizens to build a greener, cleaner, and sustainable city."
   activeNav="beranda"
+  showSearch={false}
   lang="en"
 >
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="beranda">
+  <!-- Leaflet Stylesheet for interactive map -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <!-- ============ HERO WITH REAL NATURE VIDEO BACKGROUND ============ -->
+  <section class="hero hero-video-wrap" id="beranda">
+    <video
+      class="hero-video-bg"
+      autoplay
+      loop
+      muted
+      playsinline
+      poster="/images/about/foto-kelompok.webp"
+    >
+      <source src="/videos/hero-nature.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Gradient Overlay -->
+    <div class="hero-video-overlay"></div>
+
     <div class="wrap">
-      <div>
-        <h1>Talk together,<br />Act for real,<br /><span class="pink">Protect our Earth.</span></h1>
-        <p>
-          Cangkruk Hijau is a collaborative community platform for Surabaya citizens to build a greener, cleaner, and sustainable city.
+      <div style="max-width: 680px;">
+        <div class="eyebrow" style="background: rgba(255, 255, 255, 0.15); color: #8FCBA3; padding: 6px 14px; border-radius: 100px; display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(4px);">
+          <span style="width: 8px; height: 8px; background: #8FCBA3; border-radius: 50%; box-shadow: 0 0 8px #8FCBA3;"></span>
+          Surabaya Citizen Green Movement
+        </div>
+        <h1 style="font-size: clamp(38px, 5.2vw, 56px); margin-top: 14px; line-height: 1.15; color: #FFFFFF;">
+          Talk together,<br>Act for real,<br><span style="color: #FF85B3;">Protect our Earth.</span>
+        </h1>
+        <p style="color: #EDF6EE; font-size: 17px; margin-top: 16px; line-height: 1.6; max-width: 52ch;">
+          A collaborative community hub for Surabaya citizens to build a healthy, vibrant, climate-resilient, and sustainable urban living.
         </p>
-        <a class="cta" href="/komunitas">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M21 4c-9 0-14 4-14 11v5h3v-4c0-6 4-9 11-9V4Z"></path>
-          </svg>
-          Join Cangkruk Hijau!
-        </a>
-      </div>
-      <div class="hero-art-box" style="padding: 24px; text-align: center;">
-        <svg class="hero-art" viewBox="0 0 640 400" role="img" aria-label="Surabaya city park illustration">
-          <circle cx="500" cy="70" r="46" fill="#FBE9F1"></circle>
-          <path d="M60 96c14-16 40-14 48 4 16-8 32 2 32 16H50c-3-9 2-17 10-20Z" fill="#EAF4EC"></path>
-          <path d="M400 66c12-14 34-12 41 3 14-7 27 2 27 14h-78c-3-8 2-14 10-17Z" fill="#EAF4EC"></path>
-          <g fill="#CFE3D5">
-            <rect x="150" y="150" width="42" height="130" rx="4"></rect>
-            <rect x="200" y="112" width="34" height="168" rx="4"></rect>
-            <rect x="404" y="128" width="46" height="152" rx="4"></rect>
-            <rect x="458" y="164" width="34" height="116" rx="4"></rect>
-            <rect x="500" y="140" width="40" height="140" rx="4"></rect>
-          </g>
-          <path d="M0 288c110-14 200 10 330 8s210-20 310-6v110H0Z" fill="#CFE8D4"></path>
-          <path d="M0 322c120-10 210 12 340 10s190-16 300-8v76H0Z" fill="#B4DCBE"></path>
-        </svg>
+
+        <!-- ============ SEARCH BAR HERO (LIVE OMNISEARCH) ============ -->
+        <div class="hero-search-wrapper" id="heroSearchWrapper">
+          <form class="hero-search-box" id="heroSearchForm" role="search" onsubmit="return false;">
+            <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
+            <input
+              type="search"
+              id="heroSearchInput"
+              class="hero-search-input"
+              placeholder="Search news, learning modules, city parks, or communities..."
+              autocomplete="off"
+              aria-label="Search across Cangkruk Hijau"
+            />
+            <button type="button" class="hero-search-btn" id="heroSearchBtn">
+              <span>Search</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Dropdown Results -->
+          <div class="hero-search-dropdown" id="heroSearchDropdown" hidden>
+            <div id="heroSearchResults"></div>
+          </div>
+
+          <!-- Quick Search Tags -->
+          <div class="quick-tags-container">
+            <span class="quick-tags-label">Popular Searches:</span>
+            <button type="button" class="quick-tag-chip" data-query="Mangrove Wonorejo">🌿 Wonorejo Mangrove</button>
+            <button type="button" class="quick-tag-chip" data-query="Taman Bungkul">🌳 Bungkul Park</button>
+            <button type="button" class="quick-tag-chip" data-query="Kompos Takakura">🌱 Takakura Composting</button>
+            <button type="button" class="quick-tag-chip" data-query="Bus Listrik">⚡ Electric Bus</button>
+            <button type="button" class="quick-tag-chip" data-query="Bank Sampah">♻️ Waste Bank</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px;">
+          <a class="cta-hero glow" href="/komunitas">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 4c-9 0-14 4-14 11v5h3v-4c0-6 4-9 11-9V4Z"/></svg>
+            Join Community
+          </a>
+          <a class="cta-hero" href="/fgd" style="background: rgba(255,255,255,0.18); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); color: #FFFFFF;">
+            🗣️ Join FGD Forum
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ EXPLORE SECTION ============ -->
-  <section class="section">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="section-title">Explore Initiatives</h2>
-        <div class="grid">
-          {exploreCards.map((card) => (
-            <div class="card">
-              <div class="art" style="height: 140px; background: #edf7ee; position: relative;">
-                <span class={`badge ${card.badgeColor}`}>{card.badge}</span>
-              </div>
-              <div class="body">
-                <h3>{card.title}</h3>
-                <div class="meta">{card.meta}</div>
-                <a class="cta-mini" href={card.href} style="margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--g700);">
-                  {card.linkText}
-                </a>
+  <!-- ============ CONTINUOUS MARQUEE ACTION TICKER ============ -->
+  <section class="action-ticker-section" style="padding: 24px 0 10px; background: var(--card-alt); border-bottom: 1px solid var(--line);">
+    <div class="wrap" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: var(--g900);">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--pink);"></span>
+        Community Real-World Action Highlights
+      </div>
+      <span style="font-size: 12.5px; color: var(--muted);">Hover cursor to pause ⏸</span>
+    </div>
+
+    <div class="marquee-container" aria-label="Continuous community action gallery">
+      <div class="marquee-track">
+        {/* Set 1 */}
+        {marqueeActions.map((item) => (
+          <article class="marquee-item">
+            <div class="marquee-img-wrap">
+              <img src={item.image} alt={item.title} loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+              <span class="marquee-badge">{item.loc}</span>
+            </div>
+            <div class="marquee-body">
+              <h4 class="marquee-title">{item.title}</h4>
+              <div class="marquee-meta">
+                <span>👥 {item.org}</span>
+                <span>🗓️ {item.date}</span>
               </div>
             </div>
+          </article>
+        ))}
+        {/* Duplicate Set 2 for seamless infinite marquee loop */}
+        {marqueeActions.map((item) => (
+          <article class="marquee-item" aria-hidden="true">
+            <div class="marquee-img-wrap">
+              <img src={item.image} alt={item.title} loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+              <span class="marquee-badge">{item.loc}</span>
+            </div>
+            <div class="marquee-body">
+              <h4 class="marquee-title">{item.title}</h4>
+              <div class="marquee-meta">
+                <span>👥 {item.org}</span>
+                <span>🗓️ {item.date}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOST VISITED / CURATED HIGHLIGHTS ============ -->
+  <section id="populer" style="margin-top: 10px;">
+    <div class="wrap">
+      <div class="panel popular-highlight-panel">
+        <div class="shead" style="margin-top: 0; margin-bottom: 24px;">
+          <div class="stitle">
+            <span style="font-size: 24px;">🔥</span>
+            Most Visited & Popular Highlights
+          </div>
+          <span class="count">Citizen Top Picks</span>
+        </div>
+
+        <div class="popular-columns-grid">
+          <!-- Kolom 1: Berita Populer -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">📰</span>
+              <h3>Top News Stories</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularNews.map((item, idx) => (
+                <a href={`/berita/${item.slug}`} class="pop-item-card">
+                  <span class="pop-rank">#{idx + 1}</span>
+                  <div class="pop-item-info">
+                    <span class="pop-category-tag">{item.category} · {item.views}</span>
+                    <h4 class="pop-item-title">{item.title}</h4>
+                    <span class="pop-item-date">{item.date}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Kolom 2: Komunitas Paling Aktif -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">👥</span>
+              <h3>Most Active Communities</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularCommunities.map((item) => (
+                <a href="/komunitas" class="pop-item-card">
+                  <div class="pop-comm-logo">
+                    <img src={item.logo} alt={item.name} loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+                  </div>
+                  <div class="pop-item-info">
+                    <span class="pop-badge-pill">{item.badge}</span>
+                    <h4 class="pop-item-title">{item.name}</h4>
+                    <p class="pop-item-desc">{item.scope}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Kolom 3: Dokumen Edukasi Favorit -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">📚</span>
+              <h3>Favorite Guides & Modules</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularEducation.map((item) => (
+                <div class="pop-item-card pop-edu-card">
+                  <div class="pop-edu-icon">{item.icon}</div>
+                  <div class="pop-item-info">
+                    <span class="pop-badge-pill" style="background: #DEF7EC; color: #03543F;">
+                      {item.type} · {item.downloads}
+                    </span>
+                    <h4 class="pop-item-title">{item.title}</h4>
+                    <a href={item.pdfUrl} download class="btn-pop-download">
+                      ⬇ Download PDF
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT US + COMMUNITY ACTION GALLERY ============ -->
+  <section id="tentang">
+    <div class="wrap">
+      <div class="about-grid">
+        <!-- Visi Misi -->
+        <div class="panel">
+          <div class="stitle" style="margin-bottom:18px">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-1-8 3-13 9-14 0 8-4 13-9 14Z" fill="#3E9B5F"/><path d="M12 21c1-6-2-10-7-11 0 6 3 10 7 11Z" fill="#8FCBA3"/></svg>
+            About Cangkruk Hijau
+          </div>
+          <div class="vm">
+            <span class="badge visi">VISION</span>
+            <p>To be the leading collaborative hub for citizens, grassroots communities, and city government in driving real action for a green, climate-resilient, and sustainable Surabaya.</p>
+          </div>
+          <div class="vm">
+            <span class="badge misi">MISSION</span>
+            <ul>
+              <li>Elevate urban environmental literacy and citizen climate awareness.</li>
+              <li>Foster cross-community collaboration in habitat restoration projects.</li>
+              <li>Provide open research data, official reporting hotline, and interactive green maps.</li>
+              <li>Advocate public policies prioritizing urban sustainability.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Galeri Dokumentasi Aksi Nyata Komunitas -->
+        <div class="panel">
+          <div class="stitle" style="margin-bottom: 14px; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 8h4l1.5-2h5L16 8h4v11H4z" fill="#3E9B5F"/>
+                <circle cx="12" cy="13.5" r="3.6" fill="#DDEFE1"/>
+              </svg>
+              Field Action Documentation
+            </div>
+            <span class="badge-action-count">4 Selected Projects</span>
+          </div>
+
+          <div class="community-actions-showcase">
+            {communityActions.map((act) => (
+              <div class="action-card">
+                <div class="action-img-box">
+                  <img src={act.image} alt={act.title} loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+                  <span class="action-tag">{act.location}</span>
+                </div>
+                <div class="action-body">
+                  <h4 class="action-title">{act.title}</h4>
+                  <div class="action-meta">
+                    <span class="action-org">👥 {act.organizer}</span>
+                    <span class="action-date">🗓️ {act.date}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div class="fotocap" style="margin-top: 14px;">
+            Collaborative community projects across Surabaya · Nurturing our living spaces together ♥
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWS SECTION ============ -->
+  <section id="berita">
+    <div class="wrap">
+      <div class="panel">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="#3E9B5F"/><rect x="6" y="8" width="7" height="5" rx="1" fill="#DDEFE1"/><rect x="15" y="8" width="4" height="1.6" rx=".8" fill="#DDEFE1"/><rect x="15" y="11.4" width="4" height="1.6" rx=".8" fill="#DDEFE1"/><rect x="6" y="15" width="13" height="1.6" rx=".8" fill="#DDEFE1"/></svg>
+            Latest News
+          </div>
+          <a class="slink" href="/berita">View All ({newsArticles.length}) News
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="grid4" id="daftarBerita">
+          {newsItems.map((item) => (
+            <NewsCard
+              title={item.title}
+              category={item.category}
+              categoryColor={item.categoryColor}
+              date={item.date}
+              coverImage={item.coverImage}
+              href={`/berita/${item.slug}`}
+              asLink={true}
+            />
           ))}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ REPORT HOTLINE ============ -->
+  <!-- ============ EDUKASI ============ -->
+  <section id="edukasi">
+    <div class="wrap">
+      <div class="panel">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5h7.5v14H3z" fill="#3E9B5F"/><path d="M13.5 5.5H21v14h-7.5z" fill="#8FCBA3"/><rect x="11" y="4" width="2" height="16" rx="1" fill="#1B6B3A"/></svg>
+            Open Learning & Modules
+          </div>
+          <a class="slink" href="/edukasi">View All ({educationMaterials.length}) Documents
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="grid4">
+          {homeEducationItems.map((item) => (
+            <EducationCard
+              title={item.title}
+              description={item.description}
+              source={item.topic}
+              badge={item.type}
+              coverImage={item.coverImage}
+              variant="journal"
+              href="/edukasi"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PETA RUANG HIJAU DENGAN LEAFLET.JS ============ -->
+  <section id="ruang-hijau">
+    <div class="wrap">
+      <div class="panel">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7.6 5.6 5 9.4 5 13a7 7 0 0 0 14 0c0-3.6-2.6-7.4-7-11Z" fill="#3E9B5F"/><path d="M12 22v-9" stroke="#DDEFE1" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Interactive Surabaya Green Space Map
+          </div>
+          <a class="slink" href="/peta-hijau">Open Full Map
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="rth-grid" style="align-items: start;">
+          <div>
+            <div class="home-map-container">
+              <div id="homeLeafletMap" class="home-leaflet-map"></div>
+            </div>
+            <a class="mapbtn" href="/peta-hijau" style="margin-top: 14px; text-align: center;">
+              📍 Explore Full Route on Green Map Page
+            </a>
+          </div>
+
+          <div>
+            <ul class="tamanlist" id="daftarTaman">
+              {parksData.slice(0, 6).map((park) => (
+                <li class="taman-home-item" data-id={park.id} data-lat={park.lat} data-lng={park.lng}>
+                  <img src={park.image} alt={park.name} class="taman-thumb" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+                  <div class="info">
+                    <div class="nm">{park.name}</div>
+                    <div class="kc">{park.area}</div>
+                  </div>
+                  <div class="fasil">
+                    <span title="View on Map" style="font-size: 11px; font-weight: 700; color: var(--g700); background: var(--g100); padding: 4px 8px; border-radius: 6px;">
+                      📍 View
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KOMUNITAS ============ -->
+  <section id="komunitas">
+    <div class="wrap">
+      <div class="panel">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3.4" fill="#3E9B5F"/><circle cx="16.5" cy="9.5" r="2.8" fill="#8FCBA3"/><path d="M2 20c0-3.4 2.7-5.6 6-5.6s6 2.2 6 5.6Z" fill="#3E9B5F"/><path d="M14.6 20c0-2.6 1.6-4.4 4-4.4 2.2 0 3.4 1.6 3.4 4.4Z" fill="#8FCBA3"/></svg>
+            Communities You Can Join
+          </div>
+          <a class="slink" href="/komunitas">View All ({communities.length}) Communities
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <ul class="komlist">
+          {communities.slice(0, 6).map((item) => (
+            <CommunityCard
+              id={item.id}
+              name={item.name}
+              badge={item.badge}
+              scope={item.scope}
+              logo={item.logo}
+              description={item.description}
+              joinHref="/komunitas"
+              variant="simple"
+            />
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MUSIK & ISU ============ -->
+  <section id="musik">
+    <div class="wrap">
+      <div class="panel">
+        <div class="shead">
+          <div class="stitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" stroke="#3E9B5F" stroke-width="2.2" fill="none"/><circle cx="6" cy="18" r="3" fill="#3E9B5F"/><circle cx="18" cy="16" r="3" fill="#8FCBA3"/></svg>
+            Environmental Music & Anthems
+          </div>
+          <a class="slink" href="/musik">Full Catalog & Audio Player
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <ul class="musiclist">
+          {trackList.map((item) => (
+            <li>
+              <div class="track-num">{item.no}</div>
+              <div class="track-info">
+                <div class="art-name">{item.artist}</div>
+                <div class="song-title">{item.lagu}</div>
+                <div class="issue-desc">{item.isu}</div>
+              </div>
+              <div class="origin-tag">{item.asal}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOTLINE RESMI DLH ============ -->
   <ReportBanner isEn={true} />
+
+  <style>
+    /* Styling Poin 3: Konten Terpopuler */
+    .popular-highlight-panel {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFCF9 100%);
+      border: 1px solid var(--line-strong);
+    }
+    .popular-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .pop-column {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pop-col-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .pop-col-header h3 {
+      font-size: 16px;
+      color: var(--g900);
+    }
+    .pop-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pop-item-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #F9FAF8;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .pop-item-card:hover {
+      background: #F0F7F2;
+      border-color: var(--g300);
+      transform: translateY(-2px);
+    }
+    .pop-rank {
+      font-family: var(--logo);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--pink);
+      flex: none;
+    }
+    .pop-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .pop-category-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--g700);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .pop-item-title {
+      font-size: 13.5px;
+      color: var(--g900);
+      line-height: 1.35;
+      font-weight: 700;
+    }
+    .pop-item-date {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+    .pop-comm-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex: none;
+      background: #E5E7EB;
+    }
+    .pop-comm-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pop-badge-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--g700);
+      background: var(--g100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 3px;
+    }
+    .pop-item-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .pop-edu-icon {
+      font-size: 24px;
+      flex: none;
+    }
+    .btn-pop-download {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #FFFFFF !important;
+      background: var(--g700);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-top: 6px;
+      text-decoration: none;
+    }
+    .btn-pop-download:hover {
+      background: var(--g900);
+    }
+
+    /* Styling Poin 4: Dokumentasi Aksi Komunitas */
+    .badge-action-count {
+      background: var(--g100);
+      color: var(--g700);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .community-actions-showcase {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .action-card {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .action-img-box {
+      height: 96px;
+      position: relative;
+      background: #E5E7EB;
+    }
+    .action-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .action-tag {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(14, 58, 33, 0.85);
+      backdrop-filter: blur(4px);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .action-body {
+      padding: 10px 12px;
+    }
+    .action-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--g900);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .action-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .home-map-container {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .home-leaflet-map {
+      width: 100%;
+      height: 330px;
+      z-index: 1;
+    }
+    .taman-home-item {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .taman-home-item:hover {
+      background: #F0F7F2;
+    }
+
+    @media (max-width: 900px) {
+      .popular-columns-grid {
+        grid-template-columns: 1fr;
+      }
+      .community-actions-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- Leaflet CDN JS -->
+  <script
+    is:inline
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script define:vars={{ parks: parksData.slice(0, 8) }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof L === 'undefined') return;
+
+      const mapContainer = document.getElementById('homeLeafletMap');
+      if (!mapContainer) return;
+
+      const map = L.map('homeLeafletMap', {
+        center: [-7.285, 112.755],
+        zoom: 12,
+        scrollWheelZoom: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const greenIcon = L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: `<div style="
+          background: #1B6B3A;
+          color: white;
+          width: 28px;
+          height: 28px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          display: grid;
+          place-items: center;
+          border: 2px solid white;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        ">
+          <span style="transform: rotate(45deg); font-size: 12px;">🌳</span>
+        </div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 28],
+        popupAnchor: [0, -28],
+      });
+
+      const markersMap = {};
+
+      parks.forEach((park) => {
+        const popupContent = `
+          <div style="font-family: sans-serif; max-width: 220px;">
+            <img src="${park.image}" alt="${park.name}" style="width:100%; height:90px; object-fit:cover; border-radius:8px; margin-bottom:6px;" onerror="this.src='/images/brand/logo.svg'" />
+            <strong style="font-size:13.5px; color:#0E3A21; display:block;">${park.name}</strong>
+            <span style="font-size:11.5px; color:#6B7280;">${park.area} · ${park.hours}</span>
+            <div style="margin-top:6px;">
+              <a href="${park.mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#1B6B3A; font-size:11.5px; font-weight:bold; text-decoration:underline;">
+                Open in Google Maps →
+              </a>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker([park.lat, park.lng], { icon: greenIcon })
+          .addTo(map)
+          .bindPopup(popupContent);
+
+        markersMap[park.id] = marker;
+      });
+
+      // Bind click on park list
+      document.querySelectorAll('.taman-home-item').forEach((item) => {
+        item.addEventListener('click', () => {
+          const parkId = item.getAttribute('data-id');
+          const lat = parseFloat(item.getAttribute('data-lat'));
+          const lng = parseFloat(item.getAttribute('data-lng'));
+
+          map.flyTo([lat, lng], 14, { duration: 1 });
+          const marker = markersMap[parkId];
+          if (marker) {
+            setTimeout(() => {
+              marker.openPopup();
+            }, 500);
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- ============ LIVE OMNISEARCH SCRIPT ============ -->
+  <script define:vars={{ searchDataset }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('heroSearchInput');
+      const form = document.getElementById('heroSearchForm');
+      const btn = document.getElementById('heroSearchBtn');
+      const dropdown = document.getElementById('heroSearchDropdown');
+      const resultsContainer = document.getElementById('heroSearchResults');
+      const tagChips = document.querySelectorAll('.quick-tag-chip');
+
+      if (!input || !dropdown || !resultsContainer) return;
+
+      function escapeHtml(str) {
+        return (str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function highlightText(text, q) {
+        if (!q) return escapeHtml(text);
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedQ})`, 'gi');
+        return escapeHtml(text).replace(regex, '<mark style="background:#C6F6D5; color:#1B6B3A; font-weight:bold; border-radius:2px; padding:0 2px;">$1</mark>');
+      }
+
+      function renderResults(q) {
+        const cleanQ = (q || '').trim().toLowerCase();
+        if (cleanQ.length < 2) {
+          dropdown.hidden = true;
+          return;
+        }
+
+        const matches = searchDataset.filter((item) => {
+          const t = (item.title || '').toLowerCase();
+          const s = (item.snippet || '').toLowerCase();
+          const m = (item.meta || '').toLowerCase();
+          return t.includes(cleanQ) || s.includes(cleanQ) || m.includes(cleanQ);
+        });
+
+        if (matches.length === 0) {
+          resultsContainer.innerHTML = `
+            <div class="search-empty-state">
+              <div class="search-empty-icon">🔍</div>
+              <div style="font-weight:700; color:#111827; font-size:14px;">No results found for "${escapeHtml(q)}"</div>
+              <p style="font-size:12.5px; margin-top:6px; color:#6B7280;">Try generic keywords like <em>mangrove</em>, <em>compost</em>, <em>park</em>, or <em>waste</em>.</p>
+            </div>
+          `;
+          dropdown.hidden = false;
+          return;
+        }
+
+        // Group by category
+        const groups = {};
+        matches.forEach((item) => {
+          if (!groups[item.group]) {
+            groups[item.group] = [];
+          }
+          groups[item.group].push(item);
+        });
+
+        let html = `
+          <div class="search-dropdown-header">
+            <span>Found ${matches.length} results for "${escapeHtml(q)}"</span>
+            <span style="font-size:11px; font-weight:normal; text-transform:none;">Press ESC to close</span>
+          </div>
+        `;
+
+        Object.keys(groups).forEach((groupName) => {
+          const items = groups[groupName];
+          html += `<div class="search-group"><div class="search-group-title">${groupName} (${items.length})</div>`;
+          items.slice(0, 4).forEach((item) => {
+            const imgTag = item.image
+              ? `<img class="search-result-thumb" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.src='/images/brand/logo.svg'" />`
+              : `<div class="search-result-icon">🌿</div>`;
+
+            html += `
+              <a class="search-result-item" href="${item.url}">
+                ${imgTag}
+                <div class="search-result-info">
+                  <div class="search-result-title">${highlightText(item.title, q)}</div>
+                  <div class="search-result-sub">${item.meta ? `<strong>${escapeHtml(item.meta)}</strong> — ` : ''}${highlightText(item.snippet, q)}</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--g600); flex-shrink:0;">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            `;
+          });
+          html += `</div>`;
+        });
+
+        html += `
+          <div class="search-dropdown-footer">
+            Explore catalogs: <a href="/berita">News</a> · <a href="/edukasi">Education</a> · <a href="/peta-hijau">Parks Map</a> · <a href="/komunitas">Communities</a>
+          </div>
+        `;
+
+        resultsContainer.innerHTML = html;
+        dropdown.hidden = false;
+      }
+
+      input.addEventListener('input', function (e) {
+        renderResults(e.target.value);
+      });
+
+      input.addEventListener('focus', function (e) {
+        if (e.target.value.trim().length >= 2) {
+          renderResults(e.target.value);
+        }
+      });
+
+      // Quick tags click
+      tagChips.forEach((chip) => {
+        chip.addEventListener('click', function () {
+          const query = this.getAttribute('data-query') || '';
+          input.value = query;
+          input.focus();
+          renderResults(query);
+        });
+      });
+
+      // Navigation handler on submit
+      function handleSearchSubmit() {
+        const q = input.value.trim();
+        if (!q) return;
+        const firstItem = resultsContainer.querySelector('.search-result-item');
+        if (firstItem && !dropdown.hidden) {
+          const href = firstItem.getAttribute('href');
+          if (href) {
+            window.location.href = href;
+            return;
+          }
+        }
+        window.location.href = `/berita?q=${encodeURIComponent(q)}`;
+      }
+
+      if (btn) {
+        btn.addEventListener('click', handleSearchSubmit);
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          handleSearchSubmit();
+        });
+      }
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function (e) {
+        const isInside = e.target.closest('#heroSearchWrapper');
+        if (!isInside && dropdown) {
+          dropdown.hidden = true;
+        }
+      });
+
+      // Close dropdown on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && dropdown) {
+          dropdown.hidden = true;
+        }
+      });
+    });
+  </script>
 </Layout>

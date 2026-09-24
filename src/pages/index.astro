@@ -6,68 +6,168 @@ import CommunityCard from '../components/CommunityCard.astro';
 import ReportBanner from '../components/ReportBanner.astro';
 import { newsArticles } from '../data/berita.js';
 import { educationMaterials } from '../data/edukasi.js';
+import { communities } from '../data/komunitas.js';
+import { parksData } from './peta-hijau.astro';
 
+// 4 Berita Terkini untuk Grid Berita
 const newsItems = newsArticles.slice(0, 4);
+
+// 4 Modul Edukasi untuk Grid Edukasi
 const homeEducationItems = educationMaterials.slice(0, 4);
 
-const communityList = [
+// Poin 3: Konten Terpopuler / Paling Banyak Dikunjungi
+const popularNews = [
+  { ...newsArticles[0], views: '15.2k pembaca' },
+  { ...newsArticles[9], views: '12.8k pembaca' },
+  { ...newsArticles[10], views: '11.4k pembaca' },
+];
+
+const popularCommunities = communities.slice(0, 3);
+
+const popularEducation = [
+  { ...educationMaterials[0], downloads: '3.4k unduhan' },
+  { ...educationMaterials[1], downloads: '2.9k unduhan' },
+];
+
+// Poin 4: Dokumentasi Aksi Nyata Komunitas
+const communityActions = [
   {
-    name: 'WALHI Jawa Timur',
-    badge: 'NASIONAL · CABANG JAWA TIMUR',
-    scope: 'nasional',
-    logo: '/images/komunitas/sahabat-mangrove-sby.webp',
-    description: 'Wahana Lingkungan Hidup Indonesia. Bergerak di advokasi kebijakan, pendampingan warga terdampak, dan kampanye keadilan ekologis.',
-    joinHref: '/komunitas',
+    title: 'Aksi Tanam 1.000 Bibit Mangrove Pamurbaya',
+    date: '18 April 2026',
+    organizer: 'Sahabat Mangrove Surabaya',
+    location: 'Wonorejo Pesisir',
+    image: '/images/berita/mangrove-wonorejo.webp',
   },
   {
-    name: 'ECOTON Foundation',
-    badge: 'JAWA TIMUR · GRESIK & SURABAYA',
-    scope: 'jatim',
-    logo: '/images/komunitas/ecoton-foundation.webp',
-    description: 'Meneliti pencemaran Kali Brantas dan mikroplastik. Kerap membuka ekspedisi sungai dan riset bersama untuk mahasiswa.',
-    joinHref: '/komunitas',
+    title: 'Susur Sungai & Audit Partikel Mikroplastik',
+    date: '02 Mei 2026',
+    organizer: 'Ecoton Foundation & Relawan',
+    location: 'Kali Surabaya',
+    image: '/images/berita/kali-surabaya-bersih.webp',
   },
   {
-    name: 'Nol Sampah Surabaya',
-    badge: 'SURABAYA',
-    scope: 'surabaya',
-    logo: '/images/komunitas/nol-sampah-sby.webp',
-    description: 'Kampanye pengurangan plastik sekali pakai lewat aksi bersih, edukasi pasar, dan pemantauan sampah di sungai dan pantai.',
-    joinHref: '/komunitas',
+    title: 'Workshop Komposting Takakura & Bank Sampah RW',
+    date: '10 Mei 2026',
+    organizer: 'Nol Sampah Surabaya',
+    location: 'Kelurahan Jambangan',
+    image: '/images/berita/urban-farming-jambangan.webp',
   },
   {
-    name: 'Tunas Hijau Indonesia',
-    badge: 'SURABAYA',
-    scope: 'surabaya',
-    logo: '/images/komunitas/tunas-hijau-indonesia.webp',
-    description: 'Pendidikan lingkungan untuk anak dan remaja. Penggerak program sekolah adiwiyata dan kader lingkungan di banyak sekolah kota.',
-    joinHref: '/komunitas',
+    title: 'Pembinaan Duta Hijau Cilik Sekolah Adiwiyata',
+    date: '15 Mei 2026',
+    organizer: 'Tunas Hijau Indonesia',
+    location: 'Sawahan, Surabaya',
+    image: '/images/berita/edukasi-sekolah-hijau.webp',
+  },
+];
+
+// Marquee Continuous Ticker Items (8 aksi nyata)
+const marqueeActions = [
+  {
+    title: 'Restorasi Hutan Mangrove Wonorejo',
+    org: 'Sahabat Mangrove',
+    date: '18 Apr 2026',
+    loc: 'Pamurbaya',
+    image: '/images/berita/mangrove-wonorejo.webp',
   },
   {
-    name: 'KOPHI Jawa Timur',
-    badge: 'JAWA TIMUR',
-    scope: 'jatim',
-    logo: '/images/komunitas/kophi-jatim.webp',
-    description: 'Koalisi Pemuda Hijau Indonesia. Wadah anak muda untuk kampanye iklim, pelatihan, dan proyek lingkungan bersama.',
-    joinHref: '/komunitas',
+    title: 'Pembersihan 4.8 Ton Sampah Kali Brantas',
+    org: 'Ecoton Foundation',
+    date: '02 Mei 2026',
+    loc: 'Kali Surabaya',
+    image: '/images/berita/kali-surabaya-bersih.webp',
   },
   {
-    name: 'Greenpeace Indonesia (Simpul Surabaya)',
-    badge: 'NASIONAL',
-    scope: 'nasional',
-    logo: '/images/komunitas/greenpeace-id.webp',
-    description: 'Kampanye hutan, laut, energi, dan udara bersih. Membuka jalur relawan kota untuk aksi dan penggalangan dukungan publik.',
-    joinHref: '/komunitas',
+    title: 'Kampung Nol Sampah & Maggot BSF',
+    org: 'Nol Sampah SBY',
+    date: '10 Mei 2026',
+    loc: 'Jambangan',
+    image: '/images/berita/urban-farming-jambangan.webp',
+  },
+  {
+    title: 'Edukasi Pemilahan Sampah 40 Sekolah',
+    org: 'Tunas Hijau ID',
+    date: '15 Mei 2026',
+    loc: 'Surabaya & Sidoarjo',
+    image: '/images/berita/edukasi-sekolah-hijau.webp',
+  },
+  {
+    title: 'Sapu Bersih Pesisir & Garis Pantai',
+    org: 'Eco Pesisir Bahari',
+    date: '10 Mei 2026',
+    loc: 'Pantai Kenjeran',
+    image: '/images/berita/pesisir-kenjeran.webp',
+  },
+  {
+    title: 'Penanaman Pohon Peneduh Tabebuya',
+    org: 'Relawan Pohon SBY',
+    date: '19 Mei 2026',
+    loc: 'Taman Harmoni Keputih',
+    image: '/images/berita/taman-harmoni-keputih.webp',
+  },
+  {
+    title: 'Konversi Minyak Jelantah Jadi Biodiesel',
+    org: 'Bank Jelantah Sby',
+    date: '17 Mei 2026',
+    loc: 'Kec. Rungkut',
+    image: '/images/berita/bank-sampah-rungkut.webp',
+  },
+  {
+    title: 'Uji Emisi Berkala & Feeder Listrik',
+    org: 'Bike to Work & Relawan',
+    date: '13 Mei 2026',
+    loc: 'Jl. Ahmad Yani',
+    image: '/images/berita/uji-emisi-kendaraan.webp',
   },
 ];
 
 const trackList = [
-  { no: '01', artist: 'Navicula', lagu: 'Metropolutan · Orangutan', isu: 'Deforestasi, tambang, dan hilangnya habitat. Menyebut dirinya green grunge dan aktif di kampanye hutan.', asal: 'Denpasar, Bali' },
-  { no: '02', artist: 'Sisir Tanah', lagu: 'Lagu Bahagia · Konservasi Konflik', isu: 'Folk yang berangkat dari isu agraria dan ekologi, sering hadir di panggung solidaritas warga.', asal: 'Yogyakarta' },
-  { no: '03', artist: 'Superman Is Dead', lagu: 'Sunset di Tanah Anarki', isu: 'Salah satu motor gerakan Bali Tolak Reklamasi Teluk Benoa selama bertahun-tahun.', asal: 'Kuta, Bali' },
-  { no: '04', artist: 'Efek Rumah Kaca', lagu: 'Hijau', isu: 'Namanya saja sudah isu iklim. Liriknya kerap menyentil hubungan manusia dengan alam dan kota.', asal: 'Jakarta' },
-  { no: '05', artist: 'Sukatani', lagu: 'Bayar Bayar Bayar', isu: 'Punk swakelola dengan kritik sosial yang tajam, tumbuh dari skena akar rumput yang dekat dengan gerakan warga.', asal: 'Purbalingga' },
-  { no: '06', artist: 'Silampukau', lagu: 'Puan Kelana', isu: 'Merekam wajah Surabaya yang terus berubah, termasuk sisi kota yang jarang masuk brosur wisata.', asal: 'Surabaya' },
+  { no: '01', artist: 'Iwan Fals', lagu: 'Isi Rimba Tak Ada Tempat Berpijak Lagi', isu: 'Deforestasi Hutan & Perlindungan Habitat Satwa', asal: 'Indonesia' },
+  { no: '02', artist: 'Navicula', lagu: 'Metapolutan · Orangutan', isu: 'Pencemaran Mikroplastik & Limbah Beracun', asal: 'Denpasar, Bali' },
+  { no: '03', artist: 'Efek Rumah Kaca', lagu: 'Di Udara · Kuning', isu: 'Hak Atas Udara Bersih & Tata Ruang Kota', asal: 'Jakarta' },
+  { no: '04', artist: 'Silampukau', lagu: 'Si Pelanggan · Balada Pesisir', isu: 'Merekam dinamika urban dan pesisir Surabaya', asal: 'Surabaya' },
+  { no: '05', artist: 'Dialog Dini Hari', lagu: 'Pohon Tua Roboh · Tanam Saja', isu: 'Penebangan Pohon Pelindung & Pangan Mandiri', asal: 'Bali' },
+  { no: '06', artist: 'Sisir Tanah', lagu: 'Lagu Pejalan', isu: 'Hubungan Manusia, Tanah Leluhur, dan Air', asal: 'Yogyakarta' },
+];
+
+// Indeks Pencarian Lengkap untuk Live Omnisearch di Beranda
+const searchDataset = [
+  ...newsArticles.map((n) => ({
+    type: 'berita',
+    group: '🏷️ Berita Lingkungan',
+    title: n.title,
+    snippet: n.summary,
+    url: `/berita#news-${n.id}`,
+    image: n.coverImage,
+    meta: `${n.category} · ${n.date}`,
+  })),
+  ...educationMaterials.map((e) => ({
+    type: 'edukasi',
+    group: '📚 Modul & Riset Edukasi',
+    title: e.title,
+    snippet: e.description,
+    url: `/edukasi`,
+    image: e.coverImage,
+    meta: `${e.topic} · ${e.pages} Hal (${e.level})`,
+  })),
+  ...parksData.map((p) => ({
+    type: 'rth',
+    group: '🌳 Taman & RTH Surabaya',
+    title: p.name,
+    snippet: `${p.address}. Fasilitas: ${p.facilities.slice(0, 3).join(', ')}`,
+    url: `/peta-hijau`,
+    image: p.image,
+    meta: `${p.area} · ${p.type}`,
+  })),
+  ...communities.map((c) => ({
+    type: 'komunitas',
+    group: '👥 Komunitas Aksi',
+    title: c.name,
+    snippet: c.description,
+    url: `/komunitas`,
+    image: c.logo || '/images/brand/logo.svg',
+    meta: `${c.focus} · ${c.area} (${c.members})`,
+  })),
 ];
 ---
 
@@ -75,87 +175,235 @@ const trackList = [
   title="Cangkruk Hijau — Ngobrol, Aksi, Jaga Bumi"
   description="Cangkruk Hijau adalah ruang kolaborasi warga Surabaya untuk mewujudkan lingkungan yang sehat, hijau, dan berkelanjutan."
   activeNav="beranda"
+  showSearch={false}
   lang="id"
 >
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="beranda">
+  <!-- Leaflet Stylesheet for interactive map -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <!-- ============ HERO DENGAN VIDEO BACKGROUND REAL ============ -->
+  <section class="hero hero-video-wrap" id="beranda">
+    <!-- Video background nature loop -->
+    <video
+      class="hero-video-bg"
+      autoplay
+      loop
+      muted
+      playsinline
+      poster="/images/about/foto-kelompok.webp"
+    >
+      <source src="/videos/hero-nature.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Gradient Overlay -->
+    <div class="hero-video-overlay"></div>
+
     <div class="wrap">
-      <div>
-        <h1>Ngobrol bareng,<br>Aksi nyata,<br><span class="pink">Jaga bumi kita.</span></h1>
-        <p>Cangkruk Hijau adalah ruang kolaborasi warga Surabaya untuk mewujudkan lingkungan yang sehat, hijau, dan berkelanjutan.</p>
-        <a class="cta-hero" href="/komunitas">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 4c-9 0-14 4-14 11v5h3v-4c0-6 4-9 11-9V4Z"/></svg>
-          Yuk Cangkruk Hijau!
-        </a>
+      <div style="max-width: 680px;">
+        <div class="eyebrow" style="background: rgba(255, 255, 255, 0.15); color: #8FCBA3; padding: 6px 14px; border-radius: 100px; display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(4px);">
+          <span style="width: 8px; height: 8px; background: #8FCBA3; border-radius: 50%; box-shadow: 0 0 8px #8FCBA3;"></span>
+          Gerakan Warga Surabaya Peduli Bumi
+        </div>
+        <h1 style="font-size: clamp(38px, 5.2vw, 56px); margin-top: 14px; line-height: 1.15; color: #FFFFFF;">
+          Ngobrol bareng,<br>Aksi nyata,<br><span style="color: #FF85B3;">Jaga bumi kita.</span>
+        </h1>
+        <p style="color: #EDF6EE; font-size: 17px; margin-top: 16px; line-height: 1.6; max-width: 52ch;">
+          Ruang aksi dan kolaborasi warga Surabaya untuk mewujudkan lingkungan perkotaan yang sehat, hijau, tangguh iklim, dan berkelanjutan.
+        </p>
+
+        <!-- ============ SEARCH BAR HERO (LIVE OMNISEARCH) ============ -->
+        <div class="hero-search-wrapper" id="heroSearchWrapper">
+          <form class="hero-search-box" id="heroSearchForm" role="search" onsubmit="return false;">
+            <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
+            <input
+              type="search"
+              id="heroSearchInput"
+              class="hero-search-input"
+              placeholder="Cari berita, modul edukasi, taman RTH, atau komunitas..."
+              autocomplete="off"
+              aria-label="Cari di seluruh portal Cangkruk Hijau"
+            />
+            <button type="button" class="hero-search-btn" id="heroSearchBtn">
+              <span>Cari</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Dropdown Hasil Pencarian Langsung -->
+          <div class="hero-search-dropdown" id="heroSearchDropdown" hidden>
+            <div id="heroSearchResults"></div>
+          </div>
+
+          <!-- Quick Search Tags -->
+          <div class="quick-tags-container">
+            <span class="quick-tags-label">Pencarian Populer:</span>
+            <button type="button" class="quick-tag-chip" data-query="Mangrove Wonorejo">🌿 Mangrove Wonorejo</button>
+            <button type="button" class="quick-tag-chip" data-query="Taman Bungkul">🌳 Taman Bungkul</button>
+            <button type="button" class="quick-tag-chip" data-query="Kompos Takakura">🌱 Kompos Takakura</button>
+            <button type="button" class="quick-tag-chip" data-query="Bus Listrik">⚡ Bus Listrik</button>
+            <button type="button" class="quick-tag-chip" data-query="Bank Sampah">♻️ Bank Sampah</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px;">
+          <a class="cta-hero glow" href="/komunitas">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 4c-9 0-14 4-14 11v5h3v-4c0-6 4-9 11-9V4Z"/></svg>
+            Gabung Komunitas
+          </a>
+          <a class="cta-hero" href="/fgd" style="background: rgba(255,255,255,0.18); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); color: #FFFFFF;">
+            🗣️ Ikuti Agenda FGD
+          </a>
+        </div>
       </div>
-      <svg class="hero-art" viewBox="0 0 640 400" role="img" aria-label="Ilustrasi taman kota Surabaya dengan patung Suro dan Boyo">
-        <circle cx="500" cy="70" r="46" fill="#FBE9F1"/>
-        <path d="M60 96c14-16 40-14 48 4 16-8 32 2 32 16H50c-3-9 2-17 10-20Z" fill="#EAF4EC"/>
-        <path d="M400 66c12-14 34-12 41 3 14-7 27 2 27 14h-78c-3-8 2-14 10-17Z" fill="#EAF4EC"/>
-        <g fill="#CFE3D5">
-          <rect x="150" y="150" width="42" height="130" rx="4"/>
-          <rect x="200" y="112" width="34" height="168" rx="4"/>
-          <rect x="404" y="128" width="46" height="152" rx="4"/>
-          <rect x="458" y="164" width="34" height="116" rx="4"/>
-          <rect x="500" y="140" width="40" height="140" rx="4"/>
-        </g>
-        <g fill="#B4D3BE">
-          <rect x="158" y="164" width="8" height="10"/><rect x="174" y="164" width="8" height="10"/>
-          <rect x="158" y="188" width="8" height="10"/><rect x="174" y="188" width="8" height="10"/>
-          <rect x="208" y="132" width="8" height="10"/><rect x="220" y="132" width="8" height="10"/>
-          <rect x="412" y="150" width="9" height="11"/><rect x="430" y="150" width="9" height="11"/>
-          <rect x="508" y="162" width="9" height="11"/><rect x="524" y="162" width="9" height="11"/>
-        </g>
-        <path d="M258 280V196c0-30 20-48 44-48 20 0 32 12 36 26 4-16 18-28 38-28 26 0 44 20 44 50v84Z" fill="#EDF4EE"/>
-        <path d="M300 282c-4-38 2-70 22-96 8-10 6-22-4-30 20 2 32 16 30 34-3 24-18 46-24 92Z" fill="#4C6B5B"/>
-        <path d="M304 158c-8-6-8-16 0-22 3 6 8 8 14 6-2 8-7 14-14 16Z" fill="#4C6B5B"/>
-        <path d="M356 282c8-40 4-74-16-100-8-10-6-20 4-26-18 0-30 14-28 32 3 26 22 48 26 94Z" fill="#6B8A79"/>
-        <ellipse cx="330" cy="286" rx="66" ry="10" fill="#DCE9DE"/>
-        <path d="M0 288c110-14 200 10 330 8s210-20 310-6v110H0Z" fill="#CFE8D4"/>
-        <path d="M0 322c120-10 210 12 340 10s190-16 300-8v76H0Z" fill="#B4DCBE"/>
-        <path d="M150 356c60-10 130 6 210 4s150-10 230-4v44H150Z" fill="#A6D2AF" opacity=".7"/>
-        <g>
-          <rect x="66" y="252" width="9" height="46" rx="4" fill="#7A6248"/>
-          <circle cx="70" cy="236" r="34" fill="#3E9B5F"/><circle cx="46" cy="252" r="24" fill="#4FAE6F"/><circle cx="94" cy="250" r="26" fill="#2F8A50"/>
-        </g>
-        <g>
-          <rect x="576" y="248" width="10" height="52" rx="4" fill="#7A6248"/>
-          <circle cx="581" cy="228" r="38" fill="#3E9B5F"/><circle cx="551" cy="248" r="26" fill="#2F8A50"/><circle cx="612" cy="246" r="24" fill="#4FAE6F"/>
-        </g>
-        <g>
-          <rect x="126" y="278" width="7" height="30" rx="3" fill="#7A6248"/>
-          <circle cx="129" cy="266" r="22" fill="#4FAE6F"/>
-        </g>
-        <g>
-          <rect x="520" y="284" width="7" height="26" rx="3" fill="#7A6248"/>
-          <circle cx="523" cy="272" r="19" fill="#2F8A50"/>
-        </g>
-        <g transform="translate(196,296)">
-          <circle cx="0" cy="-30" r="12" fill="#F2C6A0"/><path d="M-14 -20h28v30h-28z" rx="6" fill="#8256C4"/><path d="M-14 10h28l4 20h-36z" fill="#3B4A3F"/>
-        </g>
-        <g transform="translate(242,300)">
-          <circle cx="0" cy="-30" r="12" fill="#E8B08C"/><path d="M-13 -20h26v28h-26z" fill="#E5588E"/><path d="M-13 8h26l4 20h-34z" fill="#3B4A3F"/>
-        </g>
-        <g transform="translate(410,300)">
-          <circle cx="0" cy="-30" r="12" fill="#F2C6A0"/><path d="M-13 -20h26v28h-26z" fill="#3E9B5F"/><path d="M-13 8h26l4 20h-34z" fill="#3B4A3F"/>
-        </g>
-        <g transform="translate(456,296)">
-          <circle cx="0" cy="-30" r="12" fill="#E8B08C"/><path d="M-13 -20h26v30h-26z" fill="#FFFFFF"/><path d="M-13 10h26l4 20h-34z" fill="#4C6B5B"/>
-        </g>
-        <g stroke="#7FA48C" stroke-width="2" fill="none" stroke-linecap="round">
-          <path d="M112 74c5-5 10-5 14 0 4-5 9-5 14 0"/>
-          <path d="M540 108c5-5 10-5 14 0 4-5 9-5 14 0"/>
-        </g>
-        <circle cx="36" cy="330" r="9" fill="#E5588E" opacity=".55"/>
-        <circle cx="608" cy="342" r="8" fill="#8256C4" opacity=".5"/>
-      </svg>
     </div>
   </section>
 
-  <!-- ============ TENTANG + FOTO ============ -->
+  <!-- ============ CONTINUOUS MARQUEE CAROUSEL AKSI LAPANGAN ============ -->
+  <section class="action-ticker-section" style="padding: 24px 0 10px; background: var(--card-alt); border-bottom: 1px solid var(--line);">
+    <div class="wrap" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: var(--g900);">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--pink);"></span>
+        Galeri Aksi Nyata Komunitas di Lapangan
+      </div>
+      <span style="font-size: 12.5px; color: var(--muted);">Sorot mouse untuk berhenti sebentar ⏸</span>
+    </div>
+
+    <div class="marquee-container" aria-label="Galeri kegiatan lingkungan bergerak">
+      <div class="marquee-track">
+        {/* Set 1 */}
+        {marqueeActions.map((item) => (
+          <article class="marquee-item">
+            <div class="marquee-img-wrap">
+              <img src={item.image} alt={item.title} loading="lazy" />
+              <span class="marquee-badge">{item.loc}</span>
+            </div>
+            <div class="marquee-body">
+              <h4 class="marquee-title">{item.title}</h4>
+              <div class="marquee-meta">
+                <span>👥 {item.org}</span>
+                <span>🗓️ {item.date}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+        {/* Duplicate Set 2 for seamless infinite marquee loop */}
+        {marqueeActions.map((item) => (
+          <article class="marquee-item" aria-hidden="true">
+            <div class="marquee-img-wrap">
+              <img src={item.image} alt={item.title} loading="lazy" />
+              <span class="marquee-badge">{item.loc}</span>
+            </div>
+            <div class="marquee-body">
+              <h4 class="marquee-title">{item.title}</h4>
+              <div class="marquee-meta">
+                <span>👥 {item.org}</span>
+                <span>🗓️ {item.date}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POIN 3: PALING BANYAK DIKUNJUNGI / POPULER ============ -->
+  <section id="populer" style="margin-top: 10px;">
+    <div class="wrap">
+      <div class="panel popular-highlight-panel">
+        <div class="shead" style="margin-top: 0; margin-bottom: 24px;">
+          <div class="stitle">
+            <span style="font-size: 24px;">🔥</span>
+            Paling Banyak Dikunjungi & Populer
+          </div>
+          <span class="count">Sorotan Pilihan Warga</span>
+        </div>
+
+        <div class="popular-columns-grid">
+          <!-- Kolom 1: Berita Populer -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">📰</span>
+              <h3>Berita Terpopuler</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularNews.map((item, idx) => (
+                <a href={`/berita/${item.slug}`} class="pop-item-card">
+                  <span class="pop-rank">#{idx + 1}</span>
+                  <div class="pop-item-info">
+                    <span class="pop-category-tag">{item.category} · {item.views}</span>
+                    <h4 class="pop-item-title">{item.title}</h4>
+                    <span class="pop-item-date">{item.date}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Kolom 2: Komunitas Paling Aktif -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">👥</span>
+              <h3>Komunitas Teraktif</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularCommunities.map((item) => (
+                <a href="/komunitas" class="pop-item-card">
+                  <div class="pop-comm-logo">
+                    <img src={item.logo} alt={item.name} loading="lazy" />
+                  </div>
+                  <div class="pop-item-info">
+                    <span class="pop-badge-pill">{item.badge}</span>
+                    <h4 class="pop-item-title">{item.name}</h4>
+                    <p class="pop-item-desc">{item.scope}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Kolom 3: Dokumen Edukasi Favorit -->
+          <div class="pop-column">
+            <div class="pop-col-header">
+              <span class="pop-icon">📚</span>
+              <h3>Jurnal & Modul Favorit</h3>
+            </div>
+            <div class="pop-items-list">
+              {popularEducation.map((item) => (
+                <div class="pop-item-card pop-edu-card">
+                  <div class="pop-edu-icon">{item.icon}</div>
+                  <div class="pop-item-info">
+                    <span class="pop-badge-pill" style="background: #DEF7EC; color: #03543F;">
+                      {item.type} · {item.downloads}
+                    </span>
+                    <h4 class="pop-item-title">{item.title}</h4>
+                    <a href={item.pdfUrl} download class="btn-pop-download">
+                      ⬇ Download PDF
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POIN 4: TENTANG + DOKUMENTASI AKSI KOMUNITAS ============ -->
   <section id="tentang">
     <div class="wrap">
       <div class="about-grid">
+        <!-- Visi Misi -->
         <div class="panel">
           <div class="stitle" style="margin-bottom:18px">
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-1-8 3-13 9-14 0 8-4 13-9 14Z" fill="#3E9B5F"/><path d="M12 21c1-6-2-10-7-11 0 6 3 10 7 11Z" fill="#8FCBA3"/></svg>
@@ -163,33 +411,52 @@ const trackList = [
           </div>
           <div class="vm">
             <span class="badge visi">VISI</span>
-            <p>Menjadi komunitas terdepan yang menginspirasi dan menggerakkan aksi nyata untuk lingkungan yang lebih hijau dan berkelanjutan.</p>
+            <p>Menjadi wadah kolaborasi masyarakat sipil, komunitas, dan pemerintah terdepan yang menggerakkan aksi nyata mewujudkan Surabaya hijau, tangguh iklim, dan berkeadilan ekologis.</p>
           </div>
           <div class="vm">
             <span class="badge misi">MISI</span>
             <ul>
-              <li>Meningkatkan kesadaran dan literasi lingkungan masyarakat.</li>
-              <li>Mendukung aksi kolaboratif untuk pelestarian lingkungan.</li>
-              <li>Menyediakan informasi valid dan edukatif seputar lingkungan.</li>
-              <li>Mendorong pemanfaatan ruang terbuka hijau secara bijak.</li>
+              <li>Meningkatkan literasi dan kesadaran lingkungan warga kota.</li>
+              <li>Mendukung kolaborasi lintas komunitas dalam aksi restorasi ekosistem.</li>
+              <li>Menyediakan data riset, hotline pengaduan, dan peta RTH yang terbuka.</li>
+              <li>Mendorong kebijakan publik yang berpihak pada keberlanjutan bumi.</li>
             </ul>
           </div>
         </div>
+
+        <!-- Galeri Dokumentasi Aksi Nyata Komunitas -->
         <div class="panel">
-          <div class="stitle" style="margin-bottom:18px">
-            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h4l1.5-2h5L16 8h4v11H4z" fill="#3E9B5F"/><circle cx="12" cy="13.5" r="3.6" fill="#DDEFE1"/></svg>
-            Foto Kelompok & Relawan
+          <div class="stitle" style="margin-bottom: 14px; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 8h4l1.5-2h5L16 8h4v11H4z" fill="#3E9B5F"/>
+                <circle cx="12" cy="13.5" r="3.6" fill="#DDEFE1"/>
+              </svg>
+              Dokumentasi Aksi Lapangan
+            </div>
+            <span class="badge-action-count">4 Aksi Terpilih</span>
           </div>
-          <div class="fotobox">
-            <img
-              src="/images/about/foto-kelompok.webp"
-              alt="Foto Tim dan Relawan Cangkruk Hijau Surabaya"
-              loading="lazy"
-              class="about-group-img"
-              onerror="this.style.display='none'"
-            />
+
+          <div class="community-actions-showcase">
+            {communityActions.map((act) => (
+              <div class="action-card">
+                <div class="action-img-box">
+                  <img src={act.image} alt={act.title} loading="lazy" />
+                  <span class="action-tag">{act.location}</span>
+                </div>
+                <div class="action-body">
+                  <h4 class="action-title">{act.title}</h4>
+                  <div class="action-meta">
+                    <span class="action-org">👥 {act.organizer}</span>
+                    <span class="action-date">🗓️ {act.date}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div class="fotocap">Relawan Cangkruk Hijau Surabaya · Bersama untuk bumi yang lebih baik ♥</div>
+          <div class="fotocap" style="margin-top: 14px;">
+            Aksi kolaborasi komunitas hijau Surabaya · Bersama merawat ruang hidup ♥
+          </div>
         </div>
       </div>
     </div>
@@ -204,7 +471,7 @@ const trackList = [
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="#3E9B5F"/><rect x="6" y="8" width="7" height="5" rx="1" fill="#DDEFE1"/><rect x="15" y="8" width="4" height="1.6" rx=".8" fill="#DDEFE1"/><rect x="15" y="11.4" width="4" height="1.6" rx=".8" fill="#DDEFE1"/><rect x="6" y="15" width="13" height="1.6" rx=".8" fill="#DDEFE1"/></svg>
             Berita Terkini
           </div>
-          <a class="slink" href="/berita">Lihat Semua Berita
+          <a class="slink" href="/berita">Lihat Semua ({newsArticles.length}) Berita
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -221,7 +488,6 @@ const trackList = [
             />
           ))}
         </div>
-        <p class="kosong hide" id="kosongBerita">Tidak ada berita yang cocok dengan pencarianmu.</p>
       </div>
     </div>
   </section>
@@ -233,9 +499,9 @@ const trackList = [
         <div class="shead">
           <div class="stitle">
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5h7.5v14H3z" fill="#3E9B5F"/><path d="M13.5 5.5H21v14h-7.5z" fill="#8FCBA3"/><rect x="11" y="4" width="2" height="16" rx="1" fill="#1B6B3A"/></svg>
-            Edukasi Lingkungan
+            Edukasi & Modul Terbuka
           </div>
-          <a class="slink" href="/edukasi">Lihat Semua Modul & Kajian
+          <a class="slink" href="/edukasi">Lihat Semua ({educationMaterials.length}) Dokumen
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -256,117 +522,47 @@ const trackList = [
     </div>
   </section>
 
-  <!-- ============ RUANG HIJAU ============ -->
+  <!-- ============ POIN 7: PETA RUANG HIJAU DENGAN LEAFLET.JS ============ -->
   <section id="ruang-hijau">
     <div class="wrap">
       <div class="panel">
         <div class="shead">
           <div class="stitle">
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7.6 5.6 5 9.4 5 13a7 7 0 0 0 14 0c0-3.6-2.6-7.4-7-11Z" fill="#3E9B5F"/><path d="M12 22v-9" stroke="#DDEFE1" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Peta Ruang Terbuka Hijau Surabaya
+            Peta Interaktif Ruang Terbuka Hijau Surabaya
           </div>
-          <a class="slink" href="/peta-hijau">Lihat Semua Peta
+          <a class="slink" href="/peta-hijau">Buka Peta Lengkap
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
         </div>
 
-        <div class="filters" role="group" aria-label="Saring taman berdasarkan suasana">
-          <button class="chip" data-f="semua" aria-pressed="true">Semua</button>
-          <button class="chip" data-f="teduh" aria-pressed="false">Teduh</button>
-          <button class="chip" data-f="olahraga" aria-pressed="false">Olahraga</button>
-          <button class="chip" data-f="anak" aria-pressed="false">Ramah anak</button>
-          <button class="chip" data-f="edukasi" aria-pressed="false">Edukasi</button>
-        </div>
-
-        <div class="rth-grid">
+        <div class="rth-grid" style="align-items: start;">
           <div>
-            <div class="mapbox">
-              <svg viewBox="0 0 420 300" role="img" aria-label="Peta sederhana sebaran ruang terbuka hijau di Surabaya">
-                <rect width="420" height="300" fill="#E4F1E6"/>
-                <path d="M0 0h420v300H0z" fill="#E9F4EB"/>
-                <path d="M70 0c14 60-8 100 6 160s-4 90 4 140" stroke="#9DC9E8" stroke-width="12" fill="none" stroke-linecap="round"/>
-                <path d="M0 214c90-16 150 10 220 2s130-22 200-12" stroke="#9DC9E8" stroke-width="9" fill="none"/>
-                <g stroke="#CFE3D5" stroke-width="5" fill="none">
-                  <path d="M0 82h420M0 150h420M140 0v300M290 0v300"/>
-                </g>
-                <rect x="300" y="30" width="120" height="270" fill="#D7EBDB"/>
-                <g fill="#1B6B3A">
-                  <path d="M110 96a13 13 0 1 1 26 0c0 10-13 22-13 22s-13-12-13-22Z"/><circle cx="123" cy="96" r="5" fill="#fff"/>
-                  <path d="M212 62a13 13 0 1 1 26 0c0 10-13 22-13 22s-13-12-13-22Z"/><circle cx="225" cy="62" r="5" fill="#fff"/>
-                  <path d="M180 176a13 13 0 1 1 26 0c0 10-13 22-13 22s-13-12-13-22Z"/><circle cx="193" cy="176" r="5" fill="#fff"/>
-                  <path d="M330 128a13 13 0 1 1 26 0c0 10-13 22-13 22s-13-12-13-22Z"/><circle cx="343" cy="128" r="5" fill="#fff"/>
-                  <path d="M266 226a13 13 0 1 1 26 0c0 10-13 22-13 22s-13-12-13-22Z"/><circle cx="279" cy="226" r="5" fill="#fff"/>
-                </g>
-                <text x="14" y="288" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#6C7E71">Peta ilustratif — ganti dengan Leaflet atau Google Maps</text>
-              </svg>
+            <div class="home-map-container">
+              <div id="homeLeafletMap" class="home-leaflet-map"></div>
             </div>
-            <a class="mapbtn" href="/peta-hijau">Buka peta interaktif</a>
+            <a class="mapbtn" href="/peta-hijau" style="margin-top: 14px; text-align: center;">
+              📍 Jelajahi Rute Lengkap di Halaman Peta Hijau
+            </a>
           </div>
 
           <div>
             <ul class="tamanlist" id="daftarTaman">
-              <li data-s="olahraga anak">
-                <img src="/images/taman/taman-bungkul.webp" alt="Taman Bungkul" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Taman Bungkul</div><div class="kc">Wonokromo</div></div>
-                <div class="fasil">
-                  <span title="Jalur olahraga"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4a2 2 0 1 0 0-.1zM9 21l2-6-2-2-1 5-2-.4 1.6-7.6 4.4-2 3 1.6 2.6 1.4-.9 1.8-2.4-1.2L13 14l3 3 1 4h-2l-1-3-2-2-1.2 5Z"/></svg></span>
-                  <span title="Area anak"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="3"/><path d="M6 21v-6l-2 2-1.6-1.2L7 10h10l4.6 5.8L20 17l-2-2v6h-3v-5H9v5Z"/></svg></span>
-                  <span title="Kuliner"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3v8a3 3 0 0 0 2 2.8V21h2v-7.2A3 3 0 0 0 12 11V3h-1.6v6H9.2V3H7.6v6H6.4V3Zm11 0c-1.8 1-3 3.4-3 6.4 0 2 .8 3.4 2 4V21h2V3Z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
-              <li data-s="teduh edukasi">
-                <img src="/images/taman/kebun-raya-mangrove.webp" alt="Kebun Raya Mangrove Gunung Anyar" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Kebun Raya Mangrove Gunung Anyar</div><div class="kc">Gunung Anyar</div></div>
-                <div class="fasil">
-                  <span title="Rindang"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 5 6 8.4 6 11.6A6 6 0 0 0 11 17.5V22h2v-4.5A6 6 0 0 0 18 11.6C18 8.4 16 5 12 2Z"/></svg></span>
-                  <span title="Edukasi"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 8l11 5 9-4.1V17h2V8Zm-6 9.3V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.7l-6 2.7Z"/></svg></span>
-                  <span title="Jalur kayu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v3H3zm0 5h18v3H3zm0 5h18v3H3z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
-              <li data-s="anak edukasi teduh">
-                <img src="/images/taman/taman-flora.webp" alt="Taman Flora Bratang" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Taman Flora (Kebun Bibit Bratang)</div><div class="kc">Gubeng</div></div>
-                <div class="fasil">
-                  <span title="Area anak"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="3"/><path d="M6 21v-6l-2 2-1.6-1.2L7 10h10l4.6 5.8L20 17l-2-2v6h-3v-5H9v5Z"/></svg></span>
-                  <span title="Rindang"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 5 6 8.4 6 11.6A6 6 0 0 0 11 17.5V22h2v-4.5A6 6 0 0 0 18 11.6C18 8.4 16 5 12 2Z"/></svg></span>
-                  <span title="Edukasi"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 8l11 5 9-4.1V17h2V8Zm-6 9.3V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.7l-6 2.7Z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
-              <li data-s="teduh">
-                <img src="/images/taman/hutan-bambu-keputih.webp" alt="Hutan Bambu Keputih" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Hutan Bambu Keputih</div><div class="kc">Sukolilo</div></div>
-                <div class="fasil">
-                  <span title="Rindang"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 5 6 8.4 6 11.6A6 6 0 0 0 11 17.5V22h2v-4.5A6 6 0 0 0 18 11.6C18 8.4 16 5 12 2Z"/></svg></span>
-                  <span title="Spot foto"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 7h3.2l1.4-2h6.8L16.8 7H20v12H4Zm8 3.2A4.3 4.3 0 1 0 12 18a4.3 4.3 0 0 0 0-7.8Z"/></svg></span>
-                  <span title="Jalur kayu"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v3H3zm0 5h18v3H3zm0 5h18v3H3z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
-              <li data-s="olahraga teduh">
-                <img src="/images/taman/kebun-bibit-wonorejo.webp" alt="Kebun Bibit Wonorejo" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Kebun Bibit Wonorejo</div><div class="kc">Rungkut</div></div>
-                <div class="fasil">
-                  <span title="Jalur olahraga"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4a2 2 0 1 0 0-.1zM9 21l2-6-2-2-1 5-2-.4 1.6-7.6 4.4-2 3 1.6 2.6 1.4-.9 1.8-2.4-1.2L13 14l3 3 1 4h-2l-1-3-2-2-1.2 5Z"/></svg></span>
-                  <span title="Rindang"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 5 6 8.4 6 11.6A6 6 0 0 0 11 17.5V22h2v-4.5A6 6 0 0 0 18 11.6C18 8.4 16 5 12 2Z"/></svg></span>
-                  <span title="Danau"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 15c3-2.4 5-2.4 8 0s5 2.4 8 0l4-2.6v6.2l-4 2.4c-3 2-5 2-8 0s-5-2-8 0Z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
-              <li data-s="anak olahraga">
-                <img src="/images/taman/taman-harmoni.webp" alt="Taman Harmoni Keputih" class="taman-thumb" loading="lazy" />
-                <div class="info"><div class="nm">Taman Harmoni Keputih</div><div class="kc">Sukolilo</div></div>
-                <div class="fasil">
-                  <span title="Area anak"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="3"/><path d="M6 21v-6l-2 2-1.6-1.2L7 10h10l4.6 5.8L20 17l-2-2v6h-3v-5H9v5Z"/></svg></span>
-                  <span title="Jalur olahraga"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4a2 2 0 1 0 0-.1zM9 21l2-6-2-2-1 5-2-.4 1.6-7.6 4.4-2 3 1.6 2.6 1.4-.9 1.8-2.4-1.2L13 14l3 3 1 4h-2l-1-3-2-2-1.2 5Z"/></svg></span>
-                  <span title="Taman bunga"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 5 6 8.4 6 11.6A6 6 0 0 0 11 17.5V22h2v-4.5A6 6 0 0 0 18 11.6C18 8.4 16 5 12 2Z"/></svg></span>
-                </div>
-                <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-              </li>
+              {parksData.slice(0, 6).map((park) => (
+                <li class="taman-home-item" data-id={park.id} data-lat={park.lat} data-lng={park.lng}>
+                  <img src={park.image} alt={park.name} class="taman-thumb" loading="lazy" />
+                  <div class="info">
+                    <div class="nm">{park.name}</div>
+                    <div class="kc">{park.area}</div>
+                  </div>
+                  <div class="fasil">
+                    <span title="Lihat di Peta" style="font-size: 11px; font-weight: 700; color: var(--g700); background: var(--g100); padding: 4px 8px; border-radius: 6px;">
+                      📍 Lihat
+                    </span>
+                  </div>
+                </li>
+              ))}
             </ul>
-            <p class="kosong hide" id="kosongTaman">Belum ada taman dengan suasana itu. Coba pilihan lain.</p>
           </div>
         </div>
       </div>
@@ -382,19 +578,20 @@ const trackList = [
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3.4" fill="#3E9B5F"/><circle cx="16.5" cy="9.5" r="2.8" fill="#8FCBA3"/><path d="M2 20c0-3.4 2.7-5.6 6-5.6s6 2.2 6 5.6Z" fill="#3E9B5F"/><path d="M14.6 20c0-2.6 1.6-4.4 4-4.4 2.2 0 3.4 1.6 3.4 4.4Z" fill="#8FCBA3"/></svg>
             Komunitas yang Bisa Kamu Ikuti
           </div>
-          <a class="slink" href="/komunitas">Lihat Semua Komunitas
+          <a class="slink" href="/komunitas">Lihat Semua ({communities.length}) Komunitas
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
         </div>
         <ul class="komlist">
-          {communityList.map((item) => (
+          {communities.slice(0, 6).map((item) => (
             <CommunityCard
+              id={item.id}
               name={item.name}
               badge={item.badge}
               scope={item.scope}
               logo={item.logo}
               description={item.description}
-              joinHref={item.joinHref}
+              joinHref="/komunitas"
               variant="simple"
             />
           ))}
@@ -412,7 +609,7 @@ const trackList = [
             <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" stroke="#3E9B5F" stroke-width="2.2" fill="none"/><circle cx="6" cy="18" r="3" fill="#3E9B5F"/><circle cx="18" cy="16" r="3" fill="#8FCBA3"/></svg>
             Musik & Gerakan Lingkungan
           </div>
-          <a class="slink" href="/musik">Daftar Lengkap & Playlist
+          <a class="slink" href="/musik">Daftar Lengkap & Audio Player
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -429,83 +626,491 @@ const trackList = [
             </li>
           ))}
         </ul>
-        <p class="footlink" style="margin-top:20px; font-size:14px; color:var(--muted); text-align:center;">
-          Punya rekomendasi band atau musisi lain? <a href="/musik">Kirim usulan</a> dan kami tambahkan ke daftar.
-        </p>
       </div>
     </div>
   </section>
 
-  <!-- ============ HOTLINE ============ -->
+  <!-- ============ HOTLINE RESMI DLH ============ -->
   <ReportBanner />
 
-  <script>
-    (function(){
-      // --- filter taman ---
-      const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
-      const taman = document.querySelectorAll<HTMLLIElement>('#daftarTaman li');
-      const kosongT = document.getElementById('kosongTaman');
-      const cari = document.getElementById('cari') as HTMLInputElement | null;
-      let aktif = 'semua';
+  <style>
+    /* Styling Poin 3: Konten Terpopuler */
+    .popular-highlight-panel {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFCF9 100%);
+      border: 1px solid var(--line-strong);
+    }
+    .popular-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .pop-column {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pop-col-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .pop-col-header h3 {
+      font-size: 16px;
+      color: var(--g900);
+    }
+    .pop-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pop-item-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #F9FAF8;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .pop-item-card:hover {
+      background: #F0F7F2;
+      border-color: var(--g300);
+      transform: translateY(-2px);
+    }
+    .pop-rank {
+      font-family: var(--logo);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--pink);
+      flex: none;
+    }
+    .pop-item-info {
+      flex: 1;
+    }
+    .pop-category-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--g700);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .pop-item-title {
+      font-size: 13.5px;
+      color: var(--g900);
+      line-height: 1.35;
+      font-weight: 700;
+    }
+    .pop-item-date {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+    .pop-comm-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex: none;
+      background: #E5E7EB;
+    }
+    .pop-comm-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pop-badge-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--g700);
+      background: var(--g100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 3px;
+    }
+    .pop-item-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .pop-edu-icon {
+      font-size: 24px;
+      flex: none;
+    }
+    .btn-pop-download {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #FFFFFF !important;
+      background: var(--g700);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
+    .btn-pop-download:hover {
+      background: var(--g900);
+    }
 
-      function saring() {
-        const q = (cari?.value || '').trim().toLowerCase();
-        let n = 0;
-        taman.forEach((li) => {
-          const okS = aktif === 'semua' || (li.dataset.s || '').indexOf(aktif) > -1;
-          const okQ = q === '' || (li.textContent || '').toLowerCase().indexOf(q) > -1;
-          const ok = okS && okQ;
-          li.classList.toggle('hide', !ok);
-          if (ok) n++;
+    /* Styling Poin 4: Dokumentasi Aksi Komunitas */
+    .badge-action-count {
+      background: var(--g100);
+      color: var(--g700);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .community-actions-showcase {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .action-card {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .action-img-box {
+      height: 96px;
+      position: relative;
+      background: #E5E7EB;
+    }
+    .action-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .action-tag {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(14, 58, 33, 0.85);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .action-body {
+      padding: 10px 12px;
+    }
+    .action-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--g900);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .action-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Styling Poin 7: Home Leaflet Map */
+    .home-map-container {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .home-leaflet-map {
+      width: 100%;
+      height: 330px;
+      z-index: 1;
+    }
+    .taman-home-item {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .taman-home-item:hover {
+      background: #F0F7F2;
+    }
+
+    @media (max-width: 900px) {
+      .popular-columns-grid {
+        grid-template-columns: 1fr;
+      }
+      .community-actions-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- Leaflet CDN JS -->
+  <script
+    is:inline
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script define:vars={{ parks: parksData.slice(0, 8) }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof L === 'undefined') return;
+
+      const mapContainer = document.getElementById('homeLeafletMap');
+      if (!mapContainer) return;
+
+      const map = L.map('homeLeafletMap', {
+        center: [-7.285, 112.755],
+        zoom: 12,
+        scrollWheelZoom: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const greenIcon = L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: `<div style="
+          background: #1B6B3A;
+          color: white;
+          width: 28px;
+          height: 28px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          display: grid;
+          place-items: center;
+          border: 2px solid white;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        ">
+          <span style="transform: rotate(45deg); font-size: 12px;">🌳</span>
+        </div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 28],
+        popupAnchor: [0, -28],
+      });
+
+      const markersMap = {};
+
+      parks.forEach((park) => {
+        const popupContent = `
+          <div style="font-family: sans-serif; max-width: 220px;">
+            <img src="${park.image}" alt="${park.name}" style="width:100%; height:90px; object-fit:cover; border-radius:8px; margin-bottom:6px;" />
+            <strong style="font-size:13.5px; color:#0E3A21; display:block;">${park.name}</strong>
+            <span style="font-size:11.5px; color:#6B7280;">${park.area} · ${park.hours}</span>
+            <div style="margin-top:6px;">
+              <a href="${park.mapsUrl}" target="_blank" rel="noopener noreferrer" style="color:#1B6B3A; font-size:11.5px; font-weight:bold; text-decoration:underline;">
+                Buka Google Maps →
+              </a>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker([park.lat, park.lng], { icon: greenIcon })
+          .addTo(map)
+          .bindPopup(popupContent);
+
+        markersMap[park.id] = marker;
+      });
+
+      // Bind klik pada list taman beranda
+      document.querySelectorAll('.taman-home-item').forEach((item) => {
+        item.addEventListener('click', () => {
+          const parkId = item.getAttribute('data-id');
+          const lat = parseFloat(item.getAttribute('data-lat'));
+          const lng = parseFloat(item.getAttribute('data-lng'));
+
+          map.flyTo([lat, lng], 14, { duration: 1 });
+          const marker = markersMap[parkId];
+          if (marker) {
+            setTimeout(() => {
+              marker.openPopup();
+            }, 500);
+          }
         });
-        if (kosongT) kosongT.classList.toggle('hide', n > 0);
+      });
+    });
+  </script>
+
+  <!-- ============ LIVE OMNISEARCH SCRIPT ============ -->
+  <script define:vars={{ searchDataset }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('heroSearchInput');
+      const form = document.getElementById('heroSearchForm');
+      const btn = document.getElementById('heroSearchBtn');
+      const dropdown = document.getElementById('heroSearchDropdown');
+      const resultsContainer = document.getElementById('heroSearchResults');
+      const tagChips = document.querySelectorAll('.quick-tag-chip');
+
+      if (!input || !dropdown || !resultsContainer) return;
+
+      function escapeHtml(str) {
+        return (str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
       }
 
-      chips.forEach((c) => {
-        c.addEventListener('click', () => {
-          chips.forEach((o) => o.setAttribute('aria-pressed', 'false'));
-          c.setAttribute('aria-pressed', 'true');
-          aktif = c.dataset.f || 'semua';
-          saring();
+      function highlightText(text, q) {
+        if (!q) return escapeHtml(text);
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedQ})`, 'gi');
+        return escapeHtml(text).replace(regex, '<mark style="background:#C6F6D5; color:#1B6B3A; font-weight:bold; border-radius:2px; padding:0 2px;">$1</mark>');
+      }
+
+      function renderResults(q) {
+        const cleanQ = (q || '').trim().toLowerCase();
+        if (cleanQ.length < 2) {
+          dropdown.hidden = true;
+          return;
+        }
+
+        const matches = searchDataset.filter((item) => {
+          const t = (item.title || '').toLowerCase();
+          const s = (item.snippet || '').toLowerCase();
+          const m = (item.meta || '').toLowerCase();
+          return t.includes(cleanQ) || s.includes(cleanQ) || m.includes(cleanQ);
+        });
+
+        if (matches.length === 0) {
+          resultsContainer.innerHTML = `
+            <div class="search-empty-state">
+              <div class="search-empty-icon">🔍</div>
+              <div style="font-weight:700; color:#111827; font-size:14px;">Tidak ditemukan hasil untuk "${escapeHtml(q)}"</div>
+              <p style="font-size:12.5px; margin-top:6px; color:#6B7280;">Coba gunakan kata kunci umum seperti <em>mangrove</em>, <em>kompos</em>, <em>taman</em>, atau <em>sampah</em>.</p>
+            </div>
+          `;
+          dropdown.hidden = false;
+          return;
+        }
+
+        // Group by category
+        const groups = {};
+        matches.forEach((item) => {
+          if (!groups[item.group]) {
+            groups[item.group] = [];
+          }
+          groups[item.group].push(item);
+        });
+
+        let html = `
+          <div class="search-dropdown-header">
+            <span>Ditemukan ${matches.length} hasil untuk "${escapeHtml(q)}"</span>
+            <span style="font-size:11px; font-weight:normal; text-transform:none;">Tekan ESC untuk tutup</span>
+          </div>
+        `;
+
+        Object.keys(groups).forEach((groupName) => {
+          const items = groups[groupName];
+          html += `<div class="search-group"><div class="search-group-title">${groupName} (${items.length})</div>`;
+          items.slice(0, 4).forEach((item) => {
+            const imgTag = item.image
+              ? `<img class="search-result-thumb" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.src='/images/brand/logo.svg'" />`
+              : `<div class="search-result-icon">🌿</div>`;
+
+            html += `
+              <a class="search-result-item" href="${item.url}">
+                ${imgTag}
+                <div class="search-result-info">
+                  <div class="search-result-title">${highlightText(item.title, q)}</div>
+                  <div class="search-result-sub">${item.meta ? `<strong>${escapeHtml(item.meta)}</strong> — ` : ''}${highlightText(item.snippet, q)}</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--g600); flex-shrink:0;">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            `;
+          });
+          html += `</div>`;
+        });
+
+        html += `
+          <div class="search-dropdown-footer">
+            Buka langsung katalog: <a href="/berita">Berita</a> · <a href="/edukasi">Modul Edukasi</a> · <a href="/peta-hijau">Peta RTH</a> · <a href="/komunitas">Komunitas</a>
+          </div>
+        `;
+
+        resultsContainer.innerHTML = html;
+        dropdown.hidden = false;
+      }
+
+      input.addEventListener('input', function (e) {
+        renderResults(e.target.value);
+      });
+
+      input.addEventListener('focus', function (e) {
+        if (e.target.value.trim().length >= 2) {
+          renderResults(e.target.value);
+        }
+      });
+
+      // Quick tags click
+      tagChips.forEach((chip) => {
+        chip.addEventListener('click', function () {
+          const query = this.getAttribute('data-query') || '';
+          input.value = query;
+          input.focus();
+          renderResults(query);
         });
       });
 
-      // --- filter berita ---
-      const berita = document.querySelectorAll<HTMLElement>('#daftarBerita .ncard');
-      const kosongB = document.getElementById('kosongBerita');
-      function saringBerita() {
-        const q = (cari?.value || '').trim().toLowerCase();
-        let n = 0;
-        berita.forEach((c) => {
-          const ok = q === '' || (c.textContent || '').toLowerCase().indexOf(q) > -1;
-          c.style.display = ok ? '' : 'none';
-          if (ok) n++;
-        });
-        if (kosongB) kosongB.classList.toggle('hide', n > 0);
+      // Navigation handler on submit
+      function handleSearchSubmit() {
+        const q = input.value.trim();
+        if (!q) return;
+        const firstItem = resultsContainer.querySelector('.search-result-item');
+        if (firstItem && !dropdown.hidden) {
+          const href = firstItem.getAttribute('href');
+          if (href) {
+            window.location.href = href;
+            return;
+          }
+        }
+        window.location.href = `/berita?q=${encodeURIComponent(q)}`;
       }
 
-      if (cari) {
-        cari.addEventListener('input', () => {
-          saring();
-          saringBerita();
+      if (btn) {
+        btn.addEventListener('click', handleSearchSubmit);
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          handleSearchSubmit();
         });
       }
 
-      // --- scroll spy menu ---
-      const sections = document.querySelectorAll('section[id]');
-      const links = document.querySelectorAll('.menu a');
-      if ('IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              links.forEach((a) => {
-                a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id);
-              });
-            }
-          });
-        }, { rootMargin: '-45% 0px -50% 0px' });
-        sections.forEach((s) => obs.observe(s));
-      }
-    })();
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function (e) {
+        const isInside = e.target.closest('#heroSearchWrapper');
+        if (!isInside && dropdown) {
+          dropdown.hidden = true;
+        }
+      });
+
+      // Close dropdown on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && dropdown) {
+          dropdown.hidden = true;
+        }
+      });
+    });
   </script>
 </Layout>
