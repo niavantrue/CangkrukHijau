@@ -40,111 +40,477 @@ const communityId = id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 {variant === 'simple' ? (
   <li data-scope={scope?.toLowerCase()} class="simple-kom-item">
-    {badge && <div class="scope">{badge}</div>}
-    <div class="simple-head">
-      {logo && <img src={logo} alt={name} class="kom-logo-thumb" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />}
-      <h3>{name}</h3>
+    <div class="simple-card-inner">
+      <div class="simple-head">
+        {logo ? (
+          <img src={logo} alt={name} class="kom-logo-thumb" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+        ) : (
+          <div class="kom-logo-fallback">🌿</div>
+        )}
+        <div>
+          {badge && <div class="scope-pill">{badge}</div>}
+          <h3 class="simple-title">{name}</h3>
+        </div>
+      </div>
+      <p class="simple-desc">{description}</p>
+      <a class="join-link" href={joinHref}>{joinText}</a>
     </div>
-    <p>{description}</p>
-    <a class="join" href={joinHref}>{joinText}</a>
   </li>
 ) : (
-  <article class={`card community-card ${isJoined ? 'is-joined' : ''}`} data-community-id={communityId} data-community-name={name}>
-    <div class="card-top">
-      {logo && <img src={logo} alt={name} class="kom-logo-avatar" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />}
-      {badge && <span class="chip">{badge}</span>}
-      {isJoined ? (
-        <span class="badge visi" style="margin-left: auto; background: var(--g500);">✓ Sudah Bergabung</span>
-      ) : (
-        scope && <span class="badge green" style="margin-left: auto;">{scope}</span>
-      )}
+  <article class={`community-card ${isJoined ? 'is-joined' : ''}`} data-community-id={communityId} data-community-name={name}>
+    <!-- Top Row: Avatar, Identity & Status -->
+    <div class="card-header">
+      <div class="card-identity">
+        <div class="avatar-wrap">
+          {logo ? (
+            <img src={logo} alt={name} class="kom-logo-avatar" loading="lazy" onerror="this.onerror=null; this.src='/images/brand/logo.svg';" />
+          ) : (
+            <div class="avatar-fallback">🌿</div>
+          )}
+        </div>
+        <div class="identity-info">
+          <div class="badge-row">
+            {badge && <span class="comm-badge">{badge}</span>}
+            {scope && <span class="scope-badge">{scope}</span>}
+          </div>
+          <h3 class="comm-name">{name}</h3>
+        </div>
+      </div>
+      
+      <div class="status-slot">
+        {isJoined && (
+          <span class="badge-joined">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="m9.55 18-5.7-5.7 1.425-1.425L9.55 15.15l10.175-10.175 1.425 1.425Z"/></svg>
+            Tergabung
+          </span>
+        )}
+      </div>
     </div>
-    <h3>{name}</h3>
-    <p>{description}</p>
-    
+
+    <!-- Description -->
+    <p class="comm-desc">{description}</p>
+
+    <!-- Location / Address Info -->
     {address && (
-      <div class="meta">
-        <strong>Kantor:</strong> {address}
+      <div class="comm-address">
+        <svg class="icon-pin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>{address}</span>
       </div>
     )}
 
-    {contacts.length > 0 && (
-      <div class="contact-list">
+    <!-- Bottom Row: Contacts & Action Button Unified Horizontally -->
+    <div class="card-bottom-row">
+      <div class="comm-contacts">
         {contacts.map((contact) => (
-          <div class="contact-item">
-            <span class="dot"></span>
-            <strong>{contact.label}:</strong>
-            <a href={contact.href} target="_blank" rel="noopener noreferrer" style="color:var(--g700); text-decoration:underline;">
-              {contact.href.replace(/^https?:\/\//, '').replace(/^mailto:/, '').replace(/^tel:/, '')}
-            </a>
-          </div>
+          <a href={contact.href} target="_blank" rel="noopener noreferrer" class={`contact-chip chip-${contact.type}`}>
+            {contact.type === 'whatsapp' && (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.23.9 2.43 1.03 2.6.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.17-.48-.29Z"/></svg>
+            )}
+            {contact.type === 'instagram' && (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            )}
+            {contact.type === 'email' && (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            )}
+            <span>{contact.label}</span>
+          </a>
         ))}
       </div>
-    )}
 
-    <div class="actions">
-      <button
-        type="button"
-        class={`btn ${isJoined ? 'btn-leave' : 'btn-join primary'}`}
-        data-action={isJoined ? 'leave' : 'join'}
-        data-id={communityId}
-        data-name={name}
-      >
-        {isJoined ? 'Batal Gabung' : 'Gabung Komunitas'}
-      </button>
-
-      {contacts.find(c => c.type === 'instagram') && (
-        <a class="btn" href={contacts.find(c => c.type === 'instagram')?.href} target="_blank" rel="noopener noreferrer">
-          Instagram
-        </a>
-      )}
-
-      {contacts.find(c => c.type === 'whatsapp') && (
-        <a class="btn" href={contacts.find(c => c.type === 'whatsapp')?.href} target="_blank" rel="noopener noreferrer">
-          WhatsApp
-        </a>
-      )}
+      <div class="card-action-slot">
+        <button
+          type="button"
+          class={`btn-action ${isJoined ? 'btn-leave' : 'btn-join'}`}
+          data-action={isJoined ? 'leave' : 'join'}
+          data-id={communityId}
+          data-name={name}
+        >
+          {isJoined ? (
+            <>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              <span>Batal Gabung</span>
+            </>
+          ) : (
+            <>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              <span>Gabung Komunitas</span>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   </article>
 )}
 
-<style>
-  .kom-logo-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    object-fit: cover;
-    background: var(--g50, #eaf5ec);
-    border: 1px solid var(--line, #e2ece3);
-    margin-right: 10px;
+<style is:global>
+  /* Detailed Community Card Styling - Clean Solid White Surface */
+  .community-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(27, 107, 58, 0.16) !important;
+    border-radius: 20px !important;
+    padding: 24px 26px !important;
+    box-shadow: 0 4px 18px rgba(14, 58, 33, 0.05) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-height: 100% !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+  }
+
+  .community-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 30px rgba(14, 58, 33, 0.10) !important;
+    border-color: #3E9B5F !important;
+  }
+
+  .community-card.is-joined {
+    border-color: #31C48D !important;
+    background: #FFFFFF !important;
+  }
+
+  .community-card .card-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+  }
+
+  .community-card .card-identity {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .community-card .avatar-wrap {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 14px !important;
+    background: #EEF8F1 !important;
+    border: 1.5px solid #BCE2CB !important;
+    box-shadow: 0 2px 8px rgba(14, 58, 33, 0.06) !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .community-card .kom-logo-avatar {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  .community-card .avatar-fallback {
+    font-size: 24px !important;
+    line-height: 1 !important;
+  }
+
+  .community-card .identity-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .community-card .badge-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 6px !important;
+  }
+
+  .community-card .comm-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    background: #EAF5EC !important;
+    color: #1B6B3A !important;
+    padding: 3px 10px !important;
+    border-radius: 100px !important;
+    border: 1px solid rgba(27, 107, 58, 0.2) !important;
+    line-height: 1.3 !important;
+  }
+
+  .community-card .scope-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    background: #EDE4FA !important;
+    color: #8256C4 !important;
+    padding: 3px 9px !important;
+    border-radius: 100px !important;
+    border: 1px solid rgba(130, 86, 196, 0.2) !important;
+    line-height: 1.3 !important;
+  }
+
+  .community-card .comm-name {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0E3A21 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    word-break: break-word !important;
+  }
+
+  .community-card .status-slot {
+    flex-shrink: 0 !important;
+  }
+
+  .community-card .badge-joined,
+  .badge-joined {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    background: #DEF7EC !important;
+    color: #03543F !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    padding: 4px 10px !important;
+    border-radius: 100px !important;
+    border: 1px solid #31C48D !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  .badge-joined svg {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+  }
+
+  .community-card .comm-desc {
+    font-size: 14px !important;
+    color: #4A6353 !important;
+    line-height: 1.55 !important;
+    margin: 6px 0 12px !important;
+    flex-grow: 1 !important;
+  }
+
+  .community-card .comm-address {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 7px !important;
+    font-size: 12.5px !important;
+    color: #3E5A47 !important;
+    background: #F0F8F3 !important;
+    border: 1px solid #D8EFE0 !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    margin-bottom: 14px !important;
+    line-height: 1.4 !important;
+  }
+
+  .community-card .icon-pin {
+    color: #1B6B3A !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
+    display: inline-block !important;
+  }
+
+  /* Bottom Row: Unified Contacts and Action Button */
+  .community-card .card-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin-top: auto !important;
+    padding-top: 14px !important;
+    border-top: 1px solid rgba(27, 107, 58, 0.12) !important;
+    width: 100% !important;
+    flex-wrap: wrap !important;
+  }
+
+  .community-card .comm-contacts {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .community-card .contact-chip {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+    border: 1px solid transparent !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .community-card .contact-chip svg {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+  }
+
+  .community-card .chip-whatsapp {
+    background: #E8F8EE !important;
+    color: #1E7E34 !important;
+    border-color: rgba(40, 167, 69, 0.25) !important;
+  }
+  .community-card .chip-whatsapp:hover {
+    background: #25D366 !important;
+    color: #ffffff !important;
+  }
+
+  .community-card .chip-instagram {
+    background: #FDF0F5 !important;
+    color: #C13584 !important;
+    border-color: rgba(193, 53, 132, 0.25) !important;
+  }
+  .community-card .chip-instagram:hover {
+    background: #E1306C !important;
+    color: #ffffff !important;
+  }
+
+  .community-card .chip-email {
+    background: #EEF4FD !important;
+    color: #1A56DB !important;
+    border-color: rgba(26, 86, 219, 0.25) !important;
+  }
+  .community-card .chip-email:hover {
+    background: #1A56DB !important;
+    color: #ffffff !important;
+  }
+
+  .community-card .card-action-slot {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .community-card .btn-action,
+  .btn-action {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    font-family: inherit !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    padding: 8px 18px !important;
+    border-radius: 100px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    border: 1px solid transparent !important;
+    line-height: 1.3 !important;
+    text-decoration: none !important;
+  }
+
+  .btn-action svg {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+  }
+
+  .btn-action.btn-join {
+    background: #1B6B3A !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(27, 107, 58, 0.25) !important;
+  }
+
+  .btn-action.btn-join:hover {
+    background: #0E3A21 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 14px rgba(14, 58, 33, 0.35) !important;
+  }
+
+  .btn-action.btn-leave {
+    background: #FDE8E8 !important;
+    color: #9B1C1C !important;
+    border-color: #F8B4B4 !important;
+  }
+
+  .btn-action.btn-leave:hover {
+    background: #F8B4B4 !important;
+    color: #771D1D !important;
+  }
+
+  /* Simple card */
+  .simple-kom-item {
+    background: #FFFFFF !important;
+    border: 1px solid #D1E5D5 !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: all 0.15s !important;
+    list-style: none !important;
+  }
+  .simple-kom-item:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 28px rgba(14, 58, 33, 0.12) !important;
+  }
+  .simple-card-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
   }
   .simple-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 6px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 8px !important;
   }
   .kom-logo-thumb {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    object-fit: cover;
-    background: var(--g50, #eaf5ec);
-    border: 1px solid var(--line, #e2ece3);
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    object-fit: cover !important;
+    background: #EEF8F1 !important;
+    border: 1px solid #D1E5D5 !important;
+    flex-shrink: 0 !important;
+    display: block !important;
   }
-  .btn-leave {
-    background: #FDE8E8 !important;
-    border-color: #F8B4B4 !important;
-    color: #9B1C1C !important;
-    cursor: pointer;
+  .kom-logo-fallback {
+    font-size: 20px !important;
   }
-  .btn-leave:hover {
-    background: #F8B4B4 !important;
+  .simple-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #0E3A21 !important;
+    line-height: 1.3 !important;
   }
-  .btn-join {
-    cursor: pointer;
+  .simple-desc {
+    font-size: 13.5px !important;
+    color: #4A6353 !important;
+    line-height: 1.5 !important;
+    margin: 6px 0 12px !important;
   }
-  .is-joined {
-    border-color: var(--g500) !important;
+  .scope-pill {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #3E9B5F !important;
+    margin-bottom: 2px !important;
+  }
+  .join-link {
+    margin-top: auto !important;
+    padding-top: 10px !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #E5588E !important;
+    text-decoration: none !important;
+  }
+  .join-link:hover {
+    text-decoration: underline !important;
   }
 </style>

@@ -289,12 +289,12 @@ const adminEmail = user.email || 'admin@cangkruk.id';
                       </td>
                       <td>
                         <a
-                          href={`https://wa.me/${String(reg.whatsapp).replace(/[^0-9]/g, '')}`}
+                          href={`https://wa.me/${String(reg.phone || reg.whatsapp || '').replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           class="table-wa-link"
                         >
-                          {reg.whatsapp}
+                          {reg.phone || reg.whatsapp || '-'}
                         </a>
                       </td>
                       <td class="cell-agenda">

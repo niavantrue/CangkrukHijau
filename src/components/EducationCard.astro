@@ -62,7 +62,9 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
           </svg>
         )}
       </slot>
-      <span class="pill p-soft">{badge}</span>
+      <div class="edu-cover-badges">
+        <span class="edu-badge-pill pill-soft">{badge}</span>
+      </div>
     </div>
     <div class="body">
       <h3>{title}</h3>
@@ -85,6 +87,11 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
           onerror="this.onerror=null; this.src='/images/brand/logo.svg';"
         />
         <div class="edu-cover-overlay"></div>
+        <!-- Badges on top of cover image with horizontal flex alignment -->
+        <div class="edu-cover-badges">
+          <span class="edu-badge-pill pill-topic">{topic}</span>
+          <span class="edu-badge-pill pill-type">{type}</span>
+        </div>
       </div>
     )}
 
@@ -93,10 +100,12 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
         <div class="edu-icon-wrap" aria-hidden="true">
           <span class="edu-icon">{icon}</span>
         </div>
-        <div class="edu-badges">
-          <span class="pill p-green">{topic}</span>
-          <span class="pill p-soft">{type}</span>
-        </div>
+        {!coverImage && (
+          <div class="edu-badges">
+            <span class="edu-badge-pill pill-topic">{topic}</span>
+            <span class="edu-badge-pill pill-type">{type}</span>
+          </div>
+        )}
       </div>
 
       <div class="edu-body">
@@ -173,24 +182,25 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    border: 1px solid var(--line);
-    border-radius: var(--r-md, 16px);
+    border: 1.5px solid var(--line, #D1E5D5);
+    border-radius: 18px;
     overflow: hidden;
     padding: 0;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     position: relative;
+    box-shadow: 0 4px 16px rgba(14, 58, 33, 0.05);
   }
 
   .edu-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(18, 60, 34, 0.1);
-    border-color: #bcdbc3;
+    box-shadow: 0 12px 30px rgba(14, 58, 33, 0.11);
+    border-color: #3E9B5F;
   }
 
   .edu-cover-wrap {
     position: relative;
     width: 100%;
-    height: 148px;
+    height: 154px;
     background: var(--g50, #eaf5ec);
     overflow: hidden;
   }
@@ -200,10 +210,78 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     height: 100%;
     object-fit: cover;
     transition: transform 0.35s ease;
+    display: block;
+  }
+
+  .edu-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+    pointer-events: none;
   }
 
   .edu-card:hover .edu-cover-img {
     transform: scale(1.05);
+  }
+
+  /* Horizontal Flex Badge Container (Never overlapping) */
+  .edu-cover-badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .edu-badges {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .edu-badge-pill {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    padding: 4px 10px !important;
+    border-radius: 100px !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    text-shadow: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    pointer-events: auto !important;
+  }
+
+  .pill-topic {
+    background: var(--g700, #1B6B3A) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  }
+
+  .pill-type {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--g900, #0E3A21) !important;
+    border: 1px solid rgba(27, 107, 58, 0.2) !important;
+    backdrop-filter: blur(4px) !important;
+  }
+
+  .pill-soft {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--g800, #134D2A) !important;
+    border: 1px solid rgba(27, 107, 58, 0.2) !important;
   }
 
   .edu-card-inner {
@@ -228,27 +306,20 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
   }
 
   .edu-icon-wrap {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     border-radius: 12px;
-    background: var(--g50, #eaf5ec);
+    background: var(--g50, #EEF8F1);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: inset 0 0 0 1px rgba(79, 174, 111, 0.15);
+    box-shadow: inset 0 0 0 1px rgba(79, 174, 111, 0.2);
   }
 
   .edu-icon {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1;
-  }
-
-  .edu-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: flex-end;
   }
 
   .edu-body {
@@ -259,8 +330,8 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
 
   .edu-title {
     font-size: 1.12rem;
-    font-weight: 700;
-    color: var(--g900, #133a22);
+    font-weight: 800;
+    color: var(--g900, #0E3A21);
     line-height: 1.35;
     margin-bottom: 10px;
     letter-spacing: -0.01em;
@@ -268,7 +339,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
 
   .edu-desc {
     font-size: 0.9rem;
-    color: var(--muted, #6c7e71);
+    color: var(--muted, #4A6353);
     line-height: 1.55;
     margin-bottom: 16px;
   }
@@ -276,8 +347,8 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
   .edu-details {
     margin-top: auto;
     margin-bottom: 16px;
-    background: #fbfdfa;
-    border: 1px solid #e7eee7;
+    background: #F8FCF9;
+    border: 1px solid rgba(27, 107, 58, 0.15);
     border-radius: 10px;
     padding: 10px 14px;
   }
@@ -286,7 +357,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     cursor: pointer;
     font-size: 0.84rem;
     font-weight: 700;
-    color: var(--g700, #1b6b3a);
+    color: var(--g700, #1B6B3A);
     user-select: none;
     display: flex;
     align-items: center;
@@ -294,7 +365,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
   }
 
   .edu-summary:hover {
-    color: var(--pink, #e5588e);
+    color: var(--pink, #E5588E);
   }
 
   .edu-highlights-list {
@@ -311,12 +382,12 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     align-items: flex-start;
     gap: 8px;
     font-size: 0.83rem;
-    color: #31423a;
+    color: #31423A;
     line-height: 1.45;
   }
 
   .check-icon {
-    color: var(--g500, #2f8a50);
+    color: var(--g500, #3E9B5F);
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -327,7 +398,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     justify-content: space-between;
     gap: 12px;
     padding-top: 16px;
-    border-top: 1px solid var(--line, #e2ece3);
+    border-top: 1px solid var(--line, #D1E5D5);
     margin-top: auto;
     flex-wrap: wrap;
   }
@@ -338,7 +409,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     gap: 6px;
     font-size: 0.82rem;
     font-weight: 600;
-    color: #6c7e71;
+    color: #4A6353;
   }
 
   .meta-item {
@@ -361,7 +432,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--g700, #1b6b3a);
+    background: var(--g700, #1B6B3A);
     color: #ffffff !important;
     padding: 7px 14px;
     border-radius: 100px;
@@ -372,7 +443,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
   }
 
   .btn-download:hover {
-    background: var(--g900, #133a22);
+    background: var(--g900, #0E3A21);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(27, 107, 58, 0.25);
   }
@@ -380,14 +451,14 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
   .btn-preview-link {
     font-size: 0.82rem;
     font-weight: 600;
-    color: #6c7e71;
+    color: #4A6353;
     padding: 6px 8px;
     border-radius: 6px;
     transition: color 0.15s, background 0.15s;
   }
 
   .btn-preview-link:hover {
-    color: var(--g700, #1b6b3a);
-    background: #eef5ef;
+    color: var(--g700, #1B6B3A);
+    background: #EEF8F1;
   }
 </style>
