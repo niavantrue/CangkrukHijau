@@ -16,7 +16,12 @@ export async function GET({ params }) {
   }
 
   const fileName = material.downloadName || `${material.id}.pdf`;
-  const filePath = path.resolve(process.cwd(), 'public/documents', fileName);
+  let filePath = path.resolve(process.cwd(), 'public/documents', fileName);
+
+  if (!fs.existsSync(filePath) && material.pdfUrl) {
+    const rawName = path.basename(decodeURIComponent(material.pdfUrl));
+    filePath = path.resolve(process.cwd(), 'public/documents', rawName);
+  }
 
   if (fs.existsSync(filePath)) {
     const fileBuffer = fs.readFileSync(filePath);

@@ -38,6 +38,7 @@ const {
 } = Astro.props;
 
 const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() : 'dokumen-edukasi.pdf');
+const encodedPdfUrl = pdfUrl ? encodeURI(pdfUrl) : '';
 ---
 
 {variant === 'journal' ? (
@@ -148,7 +149,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
           {pdfUrl && (
             <a
               class="btn btn-download"
-              href={pdfUrl}
+              href={encodedPdfUrl}
               download={effectiveDownloadName}
               title={`Unduh file ${effectiveDownloadName}`}
             >
@@ -163,7 +164,7 @@ const effectiveDownloadName = downloadName || (pdfUrl ? pdfUrl.split('/').pop() 
           {pdfUrl && (
             <a
               class="btn-preview-link"
-              href={pdfUrl}
+              href={encodedPdfUrl}
               target="_blank"
               rel="noopener noreferrer"
               title="Buka PDF di tab baru"
