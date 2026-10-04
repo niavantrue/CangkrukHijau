@@ -1,12 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { isUserAdmin } from '../../lib/reportsService.js';
 
 const user = Astro.locals.user;
+const errorParam = Astro.url.searchParams.get('error');
 
 // Jika sudah login dan memiliki akses admin, langsung redirect ke dashboard admin
-if (user) {
-  // Jika user sudah terautentikasi
+if (user && isUserAdmin(user)) {
   return Astro.redirect('/admin/dashboard');
+}
+
+let initialAlert = '';
+if (errorParam === 'unauthorized' || errorParam === 'forbidden') {
+  initialAlert = 'Akses Ditolak: Halaman yang Anda tuju hanya dapat diakses oleh akun dengan hak Administrator. Silakan masuk dengan akun admin.';
+} else if (user && !isUserAdmin(user)) {
+  initialAlert = `Akun Anda saat ini (${user.email}) tidak memiliki hak akses administrator. Silakan masuk menggunakan akun admin terdaftar.`;
 }
 ---
 
@@ -32,6 +40,12 @@ if (user) {
         <p class="intro" style="font-size: 14px; text-align: center; margin-top: 6px; color: var(--muted);">
           Masuk untuk mengelola data laporan warga, keanggotaan komunitas, dan pendaftaran peserta FGD.
         </p>
+
+        {initialAlert && (
+          <div class="auth-alert error" role="alert">
+            {initialAlert}
+          </div>
+        )}
 
         <div id="adminAuthAlert" class="auth-alert hide" role="alert"></div>
 

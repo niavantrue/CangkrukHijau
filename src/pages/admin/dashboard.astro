@@ -1,58 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { fgdAgendas } from '../../data/fgd.js';
+import { fetchReportsWithAdmin, isUserAdmin } from '../../lib/reportsService.js';
 
 const user = Astro.locals.user;
 const supabase = Astro.locals.supabase;
 
-// Proteksi halaman: jika belum login, arahkan ke /admin/login
-if (!user) {
-  return Astro.redirect('/admin/login');
+// Proteksi halaman: jika belum login atau bukan admin, arahkan ke /admin/login
+if (!user || !isUserAdmin(user)) {
+  return Astro.redirect('/admin/login?error=unauthorized');
 }
-
-// Data Default / Fallback Laporan Warga
-const initialReports = [
-  {
-    id: 'LAP-2026-001',
-    nama: 'Bambang Sudibyo',
-    lokasi: 'Bantaran Kali Jagir, Wonokromo, Surabaya',
-    deskripsi: 'Penumpukan sampah rumah tangga dan limbah plastik di tepi pintu air hilir.',
-    kontak: '081239847112',
-    tanggal: '23 Mar 2026',
-    status: 'Dalam Investigasi',
-    urgensi: 'Tinggi',
-  },
-  {
-    id: 'LAP-2026-002',
-    nama: 'Siti Nurjanah',
-    lokasi: 'Kawasan Wisata Kenjeran Baru, Bulak, Surabaya',
-    deskripsi: 'Pembakaran sampah kabel terbuka di lahan kosong yang menimbulkan asap pekat berbau kimia.',
-    kontak: '085721980344',
-    tanggal: '22 Mar 2026',
-    status: 'Ditindaklanjuti',
-    urgensi: 'Tinggi',
-  },
-  {
-    id: 'LAP-2026-003',
-    nama: 'Relawan Hijau Rungkut',
-    lokasi: 'Kawasan Sabuk Hijau Pamurbaya, Gunung Anyar',
-    deskripsi: 'Penebangan liar beberapa rumpun pohon mangrove dewasa untuk perluasan tambak liar.',
-    kontak: '088127371159',
-    tanggal: '20 Mar 2026',
-    status: 'Selesai / Terverifikasi',
-    urgensi: 'Kritis',
-  },
-  {
-    id: 'LAP-2026-004',
-    nama: 'Ahmad Fauzi',
-    lokasi: 'Taman Prestasi Surabaya, Ketabang, Genteng',
-    deskripsi: 'Fasilitas tempat sampah terpilah rusak dan saluran drainase taman tersumbat dedaunan.',
-    kontak: '081398765432',
-    tanggal: '18 Mar 2026',
-    status: 'Ditindaklanjuti',
-    urgensi: 'Sedang',
-  },
-];
 
 // Data Default / Fallback Pendaftar FGD
 const initialFgdRegistrations = [
@@ -99,16 +56,17 @@ const initialFgdRegistrations = [
 ];
 
 let fgdRegistrations = initialFgdRegistrations;
-let citizenReports = initialReports;
-let totalCommunities = 14; // default registered environmental communities
+let totalCommunities = 14;
 let totalFgdRegistrationsCount = fgdRegistrations.length;
+
+// Ambil laporan menggunakan Supabase Admin Client
+const { reports: citizenReports, source: reportsSource } = await fetchReportsWithAdmin();
 let totalReportsCount = citizenReports.length;
 
-// Ambil data real dari Supabase jika tersedia
+// Ambil data real dari Supabase untuk pendaftar FGD & total komunitas
 if (supabase) {
   try {
-    // 1. Ambil pendaftar FGD dari tabel fgd_registrations
-    const { data: dbFgdRegs, error: fgdErr } = await supabase
+    const { data: dbFgdRegs } = await supabase
       .from('fgd_registrations')
       .select('*')
       .order('created_at', { ascending: false });
@@ -118,27 +76,15 @@ if (supabase) {
       totalFgdRegistrationsCount = dbFgdRegs.length;
     }
 
-    // 2. Ambil total komunitas terdaftar dari user_communities
-    const { count: commCount, error: commErr } = await supabase
+    const { count: commCount } = await supabase
       .from('user_communities')
       .select('*', { count: 'exact', head: true });
 
     if (typeof commCount === 'number' && commCount > 0) {
       totalCommunities = Math.max(commCount, 14);
     }
-
-    // 3. Ambil laporan warga jika ada tabel citizen_reports
-    const { data: dbReports, error: repErr } = await supabase
-      .from('citizen_reports')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (dbReports && dbReports.length > 0) {
-      citizenReports = dbReports;
-      totalReportsCount = dbReports.length;
-    }
   } catch (e) {
-    // Gunakan initial data
+    // Fallback gracefully
   }
 }
 
@@ -190,10 +136,30 @@ const adminEmail = user.email || 'admin@cangkruk.id';
         </div>
       </div>
 
+      <!-- Quick Nav Tabs -->
+      <div class="admin-tabs-nav" style="display: flex; gap: 12px; margin-top: 20px;">
+        <a href="/admin/dashboard" class="tab-pill active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          <span>Ringkasan & FGD</span>
+        </a>
+        <a href="/admin/laporan" class="tab-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>Kelola Laporan Warga ({totalReportsCount})</span>
+        </a>
+      </div>
+
       <!-- Metric Stats Cards -->
       <section class="admin-metrics-grid">
         <!-- Metrik 1: Total Laporan Warga -->
-        <div class="metric-card panel">
+        <a href="/admin/laporan" class="metric-card panel" style="text-decoration: none; cursor: pointer;" title="Buka Manajemen Laporan Lengkap">
           <div class="metric-icon red-bg">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
@@ -202,9 +168,9 @@ const adminEmail = user.email || 'admin@cangkruk.id';
           <div class="metric-details">
             <span class="metric-label">Laporan Pengaduan Warga</span>
             <div class="metric-value">{totalReportsCount}</div>
-            <span class="metric-hint positive">● Membutuhkan Pemantauan Cepat</span>
+            <span class="metric-hint positive">● Kelola Status di /admin/laporan →</span>
           </div>
-        </div>
+        </a>
 
         <!-- Metrik 2: Total Komunitas Terdaftar -->
         <div class="metric-card panel">
@@ -318,46 +284,109 @@ const adminEmail = user.email || 'admin@cangkruk.id';
               </h2>
               <p class="section-desc">Pengaduan kerusakan dan pencemaran lingkungan yang masuk dari warga Surabaya.</p>
             </div>
-            <span class="badge-count">{citizenReports.length} Laporan Masuk</span>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span class="badge-count">{citizenReports.length} Laporan Masuk</span>
+              <a href="/admin/laporan" class="btn-subnav" style="background: var(--g900); color: #FFFFFF; border: none; font-size: 13px;">
+                <span>Kelola di /admin/laporan →</span>
+              </a>
+            </div>
           </div>
 
           <div class="table-responsive">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Pelapor</th>
-                  <th>Lokasi Pelanggaran</th>
-                  <th>Ringkasan Masalah</th>
-                  <th>Kontak</th>
+                  <th style="width: 105px;">ID Laporan</th>
+                  <th style="width: 120px;">Tanggal Kirim</th>
+                  <th>Pelapor & Kontak</th>
+                  <th>Kategori</th>
+                  <th>Judul & Lokasi</th>
                   <th>Urgensi</th>
-                  <th>Status</th>
+                  <th style="width: 130px;">Status Saat Ini</th>
+                  <th style="width: 155px;">Ubah Status</th>
+                  <th style="text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                {citizenReports.map((rep: any) => (
-                  <tr>
-                    <td class="cell-primary">
-                      <strong>{rep.nama}</strong>
-                    </td>
-                    <td>
-                      <span class="loc-text">{rep.lokasi}</span>
-                    </td>
-                    <td class="cell-desc">
-                      <p>{rep.deskripsi}</p>
-                    </td>
-                    <td>
-                      <span class="contact-pill">{rep.kontak || '-'}</span>
-                    </td>
-                    <td>
-                      <span class={`urgency-badge ${rep.urgensi === 'Kritis' ? 'critical' : rep.urgensi === 'Tinggi' ? 'high' : 'medium'}`}>
-                        {rep.urgensi || 'Normal'}
-                      </span>
-                    </td>
-                    <td>
-                      <span class="status-tag verified">{rep.status || 'Tercatat'}</span>
-                    </td>
-                  </tr>
-                ))}
+                {citizenReports.map((rep: any) => {
+                  const dateObj = new Date(rep.created_at);
+                  const formattedDate = !isNaN(dateObj.getTime())
+                    ? dateObj.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })
+                    : rep.created_at;
+
+                  const cleanPhone = String(rep.whatsapp || rep.kontak || '').replace(/[^0-9]/g, '');
+
+                  return (
+                    <tr id={`dash-row-${rep.id}`} data-report-id={rep.id}>
+                      <td>
+                        <span class="report-id-badge">{rep.id}</span>
+                      </td>
+                      <td class="cell-date">{formattedDate}</td>
+                      <td class="cell-primary">
+                        <strong>{rep.nama_pelapor || rep.nama}</strong>
+                        <div style="font-size: 11.5px; color: var(--muted); margin-top: 2px;">
+                          {cleanPhone ? (
+                            <a
+                              href={`https://wa.me/${cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="table-wa-link"
+                            >
+                              WA: {rep.whatsapp || rep.kontak}
+                            </a>
+                          ) : (
+                            <span>{rep.kontak || '-'}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span class="category-pill">{rep.kategori || 'Penumpukan Sampah'}</span>
+                      </td>
+                      <td class="cell-desc">
+                        <div style="font-weight: 700; color: var(--g900); font-size: 13px; margin-bottom: 2px;">
+                          {rep.judul || (rep.deskripsi ? rep.deskripsi.substring(0, 50) + '...' : 'Laporan')}
+                        </div>
+                        <span class="loc-text" style="font-size: 12px; color: var(--muted);">📍 {rep.lokasi}</span>
+                      </td>
+                      <td>
+                        <span class={`urgency-badge ${rep.urgensi === 'Kritis' ? 'critical' : rep.urgensi === 'Tinggi' ? 'high' : rep.urgensi === 'Sedang' ? 'medium' : 'normal'}`}>
+                          {rep.urgensi || 'Normal'}
+                        </span>
+                      </td>
+                      <td>
+                        <span class={`status-badge-main status-${String(rep.status || 'menunggu').toLowerCase()}`} id={`dash-badge-${rep.id}`}>
+                          <span class="status-dot"></span>
+                          <span class="status-text">{rep.status || 'Menunggu'}</span>
+                        </span>
+                      </td>
+                      <td>
+                        <select
+                          class="dash-status-select"
+                          data-id={rep.id}
+                          style="font-size: 12px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line); font-weight: 700;"
+                        >
+                          <option value="Menunggu" selected={rep.status === 'Menunggu'}>🟡 Menunggu</option>
+                          <option value="Diproses" selected={rep.status === 'Diproses'}>🔵 Diproses</option>
+                          <option value="Selesai" selected={rep.status === 'Selesai'}>🟢 Selesai</option>
+                          <option value="Ditolak" selected={rep.status === 'Ditolak'}>🔴 Ditolak</option>
+                        </select>
+                      </td>
+                      <td style="text-align: center;">
+                        <a
+                          href={`/admin/laporan?id=${rep.id}`}
+                          class="btn-detail-trigger"
+                          style="padding: 6px 10px; font-size: 12px;"
+                        >
+                          Detail →
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -674,14 +703,116 @@ const adminEmail = user.email || 'admin@cangkruk.id';
       background: #FEF08A;
       color: #713F12;
     }
-    .status-tag.verified {
+    .urgency-badge.normal {
       background: #DEF7EC;
       color: #03543F;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 100px;
+    }
+    .report-id-badge {
+      font-family: monospace;
+      font-size: 11.5px;
+      font-weight: 800;
+      background: #F3F4F6;
+      color: #1F2937;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid #E5E7EB;
       white-space: nowrap;
+    }
+    .category-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #EDF4EE;
+      color: #1A5430;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status-badge-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-badge-main.status-menunggu {
+      background: #FEF08A;
+      color: #713F12;
+      border: 1px solid #FDE047;
+    }
+    .status-badge-main.status-menunggu .status-dot {
+      background: #CA8A04;
+    }
+    .status-badge-main.status-diproses {
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+    .status-badge-main.status-diproses .status-dot {
+      background: #2563EB;
+    }
+    .status-badge-main.status-selesai {
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #BBF7D0;
+    }
+    .status-badge-main.status-selesai .status-dot {
+      background: #16A34A;
+    }
+    .status-badge-main.status-ditolak {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+    .status-badge-main.status-ditolak .status-dot {
+      background: #DC2626;
+    }
+
+    .tab-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 100px;
+      font-size: 13.5px;
+      font-weight: 700;
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .tab-pill:hover {
+      background: var(--g50);
+      color: var(--g900);
+    }
+    .tab-pill.active {
+      background: var(--g900);
+      border-color: var(--g900);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(14, 58, 33, 0.2);
+    }
+    .btn-detail-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--g50);
+      border: 1px solid var(--line);
+      color: var(--g800);
+      border-radius: 6px;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+    .btn-detail-trigger:hover {
+      background: var(--g700);
+      color: #FFFFFF;
     }
     @media (max-width: 768px) {
       .admin-top-bar {
@@ -694,4 +825,37 @@ const adminEmail = user.email || 'admin@cangkruk.id';
       }
     }
   </style>
+
+  <script>
+    document.querySelectorAll('.dash-status-select').forEach((sel) => {
+      sel.addEventListener('change', async (e) => {
+        const select = e.target as HTMLSelectElement;
+        const reportId = select.getAttribute('data-id');
+        const newStatus = select.value;
+        if (!reportId || !newStatus) return;
+
+        select.disabled = true;
+        try {
+          const res = await fetch('/api/admin/reports/update-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: reportId, status: newStatus }),
+          });
+          const json = await res.json();
+          if (!res.ok || json.error) throw new Error(json.error || 'Gagal mengubah status');
+
+          const badge = document.getElementById(`dash-badge-${reportId}`);
+          if (badge) {
+            badge.className = `status-badge-main status-${newStatus.toLowerCase()}`;
+            const txt = badge.querySelector('.status-text');
+            if (txt) txt.textContent = newStatus;
+          }
+        } catch (err: any) {
+          alert('Gagal memperbarui status: ' + (err.message || 'Kesalahan jaringan'));
+        } finally {
+          select.disabled = false;
+        }
+      });
+    });
+  </script>
 </Layout>
