@@ -275,10 +275,24 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13px;
   font-weight: 700;
   color: var(--g700);
-  max-width: 140px;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.nav-admin-badge {
+  font-size: 10px;
+  font-weight: 800;
+  background: #E02424;
+  color: #FFFFFF;
+  padding: 2px 7px;
+  border-radius: 100px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(224, 36, 36, 0.35);
 }
 
 .btn-logout {

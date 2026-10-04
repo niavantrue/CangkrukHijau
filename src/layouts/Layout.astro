@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { isUserAdmin } from '../lib/reportsService.js';
 
 interface Props {
   title?: string;
@@ -20,6 +21,15 @@ const {
 const user = Astro.locals.user;
 const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Relawan';
 const isEn = lang === 'en';
+
+// Pengecekan Peran User: Admin vs Publik
+const isAdmin = user ? (
+  user.app_metadata?.role === 'admin' ||
+  user.user_metadata?.is_admin === true ||
+  user.user_metadata?.role === 'admin' ||
+  user.app_metadata?.is_admin === true ||
+  isUserAdmin(user)
+) : false;
 ---
 
 <!DOCTYPE html>
@@ -82,18 +92,24 @@ const isEn = lang === 'en';
           </a>
         )}
         <a href="/musik" class={activeNav === 'musik' ? 'on' : ''}>{isEn ? 'Music' : 'Musik'}</a>
-        <a href="/laporan" class={activeNav === 'laporan' ? 'on' : ''}>{isEn ? 'Report' : 'Laporan'}</a>
+        <a
+          href={isAdmin ? '/admin/dashboard' : '/laporan'}
+          class={(activeNav === 'laporan' || activeNav === 'admin-dashboard' || activeNav === 'admin-laporan') ? 'on' : ''}
+        >
+          {isEn ? 'Report' : 'Laporan'}
+        </a>
       </nav>
 
       <!-- 3. Actions / User Profil & Auth (Far Right) -->
       <div class="nav-actions">
         {user ? (
           <div class="user-menu">
-            <a href="/komunitas-saya" class="user-greeting" title={user.email || ''}>
+            <a href={isAdmin ? "/admin/dashboard" : "/komunitas-saya"} class="user-greeting" title={user.email || ''}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5Zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4Z"/>
               </svg>
               <span>{userName}</span>
+              {isAdmin && <span class="nav-admin-badge" title="Status Administrator">Admin</span>}
             </a>
             <form action="/api/auth/logout" method="POST" style="display:inline; margin:0;">
               <button type="submit" class="btn-logout" title={isEn ? "Sign out" : "Keluar dari akun"}>
